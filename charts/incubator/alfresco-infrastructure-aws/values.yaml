@@ -1,0 +1,2 @@
+nfs:
+  server: fs-65b0d82c.efs.us-east-1.amazonaws.com

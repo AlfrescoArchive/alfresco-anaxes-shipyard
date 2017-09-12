@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Deploys the infrastructure required by Alfresco when deployed to AWS
+name: alfresco-infrastructure-aws
+version: 0.1.0

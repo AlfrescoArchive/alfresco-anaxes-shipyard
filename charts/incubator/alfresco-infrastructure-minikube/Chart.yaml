@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Deploys the infrastructure required by Alfresco when deployed to minikube
+name: alfresco-infrastructure-minikube
+version: 0.1.0
