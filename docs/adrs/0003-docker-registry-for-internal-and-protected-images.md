@@ -12,7 +12,7 @@ As part of our efforts around containerized deployment of the Alfresco Digital B
 
 The Nexus3 implementation in use at the time of writing does not meet our requirements around access control, security scanning, scalability and global performance, usability, or maintainability.
 
-Our IT resources are currently stretched very thin and we should avoid adding another system for them to design and maintain if possible.
+Our IT resources are currently stretched very thin and we should avoid adding another system for them to deploy and maintain if possible.
 
 ## Decision
 
