@@ -18,8 +18,12 @@ A list of candidate solutions can be found [here](https://github.com/kubernetes/
 
 We will be informing customers that we use kops internally and it's the cluster upon which we perform all our testing.
 
+We have chosen kops as it's the tool the most closely fulfils our current and future requirements, it’s produced by the same team that build Kubernetes and it’s been [endorsed](https://aws.amazon.com/blogs/compute/kubernetes-clusters-aws-kops) by AWS.
+
 ## Consequences
 
 We can provide customers with a recommended way to deploy a Kubernetes cluster and be confident our deployments will work seamlessly.
+
+This is an extremely fast moving segment of the market, several large vendors have support for or built upon Kubernetes including Microsoft, Google, Pivotal and Rancher so this decision may need re-visiting regularly.
 
 There is no easy way to produce an AWS QuickStart with the current tools. It may be technically feasible using kops but it will take a fair amount of effort.
