@@ -1,14 +1,14 @@
 # 4. k8s-cluster-creation
 
-Date: 2017-10-02
+Date: 2017-10-04
 
 ## Status
 
-**Propsosed** by Gavin Cornwell
+Accepted
 
 ## Context
 
-A majority of our customers will have not come across or used Kubernetes before we therefore need to provide these customers a way to provision a cluster quickly.
+We need to recommend a tool to those customers that do not have an existing Kubernetes cluster.
 
 A tool called minikube can be used on laptops for development and evaluation purposes. For a production ready stack we need to provide a way for customers to provision a cluster in AWS using a mechanism a less technically literate person can follow.
 
@@ -16,9 +16,9 @@ A list of candidate solutions can be found [here](https://github.com/kubernetes/
 
 ## Decision
 
-The decision is to go with ...
+We will be suggesting customers use kops to create their Kubernetes cluster because ....
 
-Details of how this decision was made can be found in [DEPLOY-35](https://issues.alfresco.com/jira/browse/DEPLOY-35).
+The summary [report of the comparison](https://ts.alfresco.com/share/page/site/DBP/document-details?nodeRef=workspace://SpacesStore/80101afd-9618-44ad-bf0c-db76fb5e747b) also contains links to the full investigation.
 
 ## Consequences
 
