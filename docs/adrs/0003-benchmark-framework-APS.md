@@ -55,9 +55,9 @@ These models can be reused for other testing such as
 
 ## Decision
 
-As part of platfrom services team we are not planning to implementing new benchmark test as it is out of scope for deployment value bundle. 
-In order to prove that APS is production ready ,we will use the existing Jmeter benchmark test created by SE. In the section below we have documented 
-what is required to implement a new benchmark for APS based on ACS for future. 
+We will use the existing Jmeter benchmark test created by SE to prove that APS is production ready . 
+As part of platfrom services team we are not planning to implementing new benchmark test for the deployment value bundle as it is not in scope.
+In the section below we have documented what is required to implement a new benchmark test for APS based on ACS. 
 
 ## Consequences
 
