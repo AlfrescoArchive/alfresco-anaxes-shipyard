@@ -1,4 +1,4 @@
-# 3. Benchmark Framework
+# 3. Benchmark Framework APS
 
 Date: 2017-09-29
 
@@ -14,6 +14,7 @@ In order to get a production ready deployment - https://issues.alfresco.com/jira
 There are two-benchmark test frameworks available 
 •	APS Benchmark using Jmeter – provided by SE https://ts.alfresco.com/share/page/site/apsbenchmark/dashboard
 •	Write a benchmark test using the Alfresco community benchmark framework.
+	https://github.com/AlfrescoBenchmark/alfresco-benchmark
 
 ### Current APS Testing
 
@@ -23,9 +24,9 @@ The current APS regression testing uses java script for REST API testing. They m
 
  The current benchmark frame has the following component  
 
-•	Management Server for creating tests, scheduling tests, and downloading test results.
-•	Driver Server(s) for executing tests (doing the actual work and calling the Alfresco servers)
-•	A framework for writing load/stress tests - This can be TAS where we have built the RESTAPI request.  
+*	Management Server for creating tests, scheduling tests, and downloading test results.
+*	Driver Server(s) for executing tests (doing the actual work and calling the Alfresco servers)
+*	A framework for writing load/stress tests - This can be TAS where we have built the RESTAPI request.  
 
 ### Steps for Creating and executing benchmark test
 
@@ -38,19 +39,19 @@ The current APS regression testing uses java script for REST API testing. They m
 
 ### Benchmark Test Driver 
 
-•	The test driver should contain details about the test scenario we want to execute in the test-context.xml 
-•	It should implement the event processor and load processor for executing the scenario.
-•	The event processor will load the scenarios and process the steps mentioned in scenario and load the results in the mongo db.
-•	The actual test scenarios can we written using TAS framework.
+*	The test driver should contain details about the test scenario we want to execute in the test-context.xml 
+*	It should implement the event processor and load processor for executing the scenario.
+*	The event processor will load the scenarios and process the steps mentioned in scenario and load the results in the mongo db.
+*	The actual test scenarios can we written using TAS framework.
 There are sample benchmark projects like Benchmark-claims where we can clone and create the driver for our needs.  
 
 ### TAS framework for RESTAPI
 
 TAS is a test automation framework written in JAVA, with a built in utility to help tester to write automation testing for RESTAPI. The tests are written using simple DSL language, where in for every REST request models are created and asserted for full JSON response.  
 These models can be reused for other testing such as  
-•	Data preparation for UI 
-•	Integration testing with other apps
-•	Benchmark testing
+*	Data preparation for UI 
+*	Integration testing with other apps
+*	Benchmark testing
 
 ## Decision
 
@@ -74,15 +75,15 @@ As the current TAS is written for ACS, it would be good idea to extract common l
 #### Task for APS benchmark
 
 There are two types of benchmark we can perform 
-•	UI scenario benchmark flow
-•	RESTAPI benchmark
+*	UI scenario benchmark flow
+*	RESTAPI benchmark
 
 #### RESTAPI benchmark Driver
 
 Create a new TAS based RESTAPI project for APS.
 Create the following benchmark driver for APS.
-•	Create a new benchmark driver for user creation / sign up like the one we have in 	ACS. It is good practice to separate user creation in a separate driver so that other 	scenarios can re used going forward.
-•	Create a new benchmark driver for RESTAPI scenario identified in deploy-87 for APS.
+*	Create a new benchmark driver for user creation / sign up like the one we have in 	ACS. It is good practice to separate user creation in a separate driver so that other 	scenarios can re used going forward.
+*	Create a new benchmark driver for RESTAPI scenario identified in deploy-87 for APS.
 
 #### UI benchmark Driver
 The APS protractor UI test should be modified to contain render login to make sure the page are loaded correctly before used in for benchmark flow.
