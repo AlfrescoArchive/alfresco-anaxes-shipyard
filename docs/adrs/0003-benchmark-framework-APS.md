@@ -12,8 +12,8 @@ Proposed
 In order to get a production ready deployment - https://issues.alfresco.com/jira/browse/PRODDEL-208 - we need to prove that system will be up and running for set of requirement defined in REQ project. Benchmark test are only to load the system based on REQ project and validate the same.
 
 There are two-benchmark test frameworks available 
-•	APS Benchmark using Jmeter – provided by SE https://ts.alfresco.com/share/page/site/apsbenchmark/dashboard
-•	Write a benchmark test using the Alfresco community benchmark framework.
+*	APS Benchmark using Jmeter – provided by SE https://ts.alfresco.com/share/page/site/apsbenchmark/dashboard
+*	Write a benchmark test using the Alfresco community benchmark framework.
 	https://github.com/AlfrescoBenchmark/alfresco-benchmark
 
 ### Current APS Testing
