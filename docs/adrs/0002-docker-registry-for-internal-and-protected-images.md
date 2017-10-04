@@ -18,7 +18,7 @@ Our IT resources are currently stretched very thin and we should avoid adding an
 
 We will use [Quay.io](https://quay.io) for the internal and protected tiers of access and use Docker Hub for public repositories (images of community versions and/or enterprise artifacts with trail licenses).
 
-The summary [report of the comparison](https://docs.google.com/document/d/1sjbH742lzGr_2g1NKOUCgD_5tnee8Q7n-6BmB6OtJIc/edit#) also contains reference links to the full investigation.
+The summary [report of the comparison](https://ts.alfresco.com/share/s/mVAV1sGIReC_iqgMN0GGnQ) also contains reference links to the full investigation.
 
 ## Consequences
 
