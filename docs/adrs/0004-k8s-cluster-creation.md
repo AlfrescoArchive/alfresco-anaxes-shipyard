@@ -16,9 +16,7 @@ A list of candidate solutions can be found [here](https://github.com/kubernetes/
 
 ## Decision
 
-We will be suggesting customers use kops to create their Kubernetes cluster because ....
-
-The summary [report of the comparison](https://ts.alfresco.com/share/page/site/DBP/document-details?nodeRef=workspace://SpacesStore/80101afd-9618-44ad-bf0c-db76fb5e747b) also contains links to the full investigation.
+We will be informing customers that we use kops internally and it's the cluster upon which we perform all our testing.
 
 ## Consequences
 
