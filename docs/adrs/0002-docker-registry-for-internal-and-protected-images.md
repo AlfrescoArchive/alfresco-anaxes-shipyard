@@ -18,6 +18,12 @@ Our IT resources are currently stretched very thin and we should avoid adding an
 
 We will use [Quay.io](https://quay.io) for the internal and protected tiers of access and use Docker Hub for public repositories (images of community versions and/or enterprise artifacts with trail licenses).
 
+We’d like to limit the introduction of additional deployments (particularly customer-facing) that our IT staff has to maintain, so we'd prefer a SaaS solution.
+
+The REST API of Quay.io allows our organization to potentially automate user provisioning/invitation and user/group management which is not available for Docker Cloud at this time.
+
+Additionally, Quay / CoreOS seems strongly committed to their SaaS offering while Docker seems entirely focused on their Enterprise ‘on-prem’ product.
+
 The summary [report of the comparison](https://ts.alfresco.com/share/s/mVAV1sGIReC_iqgMN0GGnQ) also contains reference links to the full investigation.
 
 ## Consequences
