@@ -1,4 +1,4 @@
-FROM java:8
+FROM openjdk:8-jre-alpine
 VOLUME /tmp
 ADD ./target/anaxes-hello-service-0.1-SNAPSHOT.jar anaxes-hello-service-0.1-SNAPSHOT.jar
 EXPOSE 8080
