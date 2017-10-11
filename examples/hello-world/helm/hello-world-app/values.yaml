@@ -34,6 +34,4 @@ resources: {}
   # requests:
   #  cpu: 100m
   #  memory: 128Mi
-
-# Docker registries config json in base64 to do this just run - cat ~/.docker/config.json | base64
-base64dockerconfig: 
+registryPullSecrets: registrypullsecret
