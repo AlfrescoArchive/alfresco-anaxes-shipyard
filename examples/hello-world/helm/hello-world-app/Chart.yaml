@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Hellow world poc app
+name: helloworld-app
+version: 1.0.0

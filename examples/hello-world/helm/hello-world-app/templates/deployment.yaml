@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      volumes:
+        - name: shared-jre
+          emptyDir: {}
+      imagePullSecrets:
+        - name: registrypullsecret
+      initContainers:
+        - name: jrelibs
+          image: store/oracle/serverjre:8
+          volumeMounts:
+          - name: shared-jre
+            mountPath: /home
+          # command: ["ls"]
+          # args: ["-al","/usr/java/latest"]
+          command: ["cp"]
+          args: ["-r","/usr/java/latest/","/home"]
+
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: shared-jre
+              mountPath: /usr/java/
+          env:
+            - name: PATH
+              value: $PATH:/usr/java/latest/bin
+          command: ["java"]
+          args: ["-jar","/home/helloworld-0.0.1-SNAPSHOT.jar"]
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.internalPort }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
