@@ -1,15 +1,20 @@
 package org.alfresco.deployment.sample;
 
-public class HelloTextModel
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class HelloText
 {
+    @Id
     private String key;
     private String value;
     
-    public HelloTextModel()
+    public HelloText()
     {
     }
     
-    public HelloTextModel(String key, String value)
+    public HelloText(String key, String value)
     {
         this.key = key;
         this.value = value;

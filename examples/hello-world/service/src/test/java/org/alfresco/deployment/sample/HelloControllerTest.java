@@ -18,15 +18,24 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class HelloControllerTest {
-	
-	@Autowired
-	private MockMvc mvc;
-	
-	@Test
-	public void getHello() throws Exception
-	{
-		mvc.perform(MockMvcRequestBuilders.get("/hello/test").accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(content().string(equalTo("{ \"test\": \"Hello World!\" }")));
-	}
+
+    @Autowired
+    private MockMvc mvc;
+
+    private String content = "{\"key\":\"test\",\"value\":\"Hello World!\"}";
+
+    @Test
+    public void getHello() throws Exception
+    {
+        mvc.perform(MockMvcRequestBuilders.post("/hello")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated())
+            .andExpect(content().string(equalTo(content)));
+        mvc.perform(MockMvcRequestBuilders.get("/hello/test")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().string(equalTo(content)));
+    }
 }
