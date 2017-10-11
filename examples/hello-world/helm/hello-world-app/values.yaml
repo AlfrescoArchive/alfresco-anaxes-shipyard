@@ -3,14 +3,13 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: quay.io/svidrascu/webapp
+  repository: docker-internal.alfresco.com/anaxes-hello-service
   tag: latest
 service:
   name: hello-world-app
   type: LoadBalancer
   externalPort: 80
   internalPort: 8080
-  dnsDomain: dev.alfresco.me
 ingress:
   enabled: false
   # Used to create an Ingress record.
@@ -38,4 +37,3 @@ resources: {}
 
 # Docker registries config json in base64 to do this just run - cat ~/.docker/config.json | base64
 base64dockerconfig: 
-
