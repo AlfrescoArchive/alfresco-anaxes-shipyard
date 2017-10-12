@@ -23,19 +23,47 @@ public class HelloControllerTest {
     private MockMvc mvc;
 
     private String content = "{\"key\":\"test\",\"value\":\"Hello World!\"}";
+    private String updatedContent = "{\"key\":\"test\",\"value\":\"Hello Test!\"}";
 
     @Test
     public void getHello() throws Exception
     {
+        // create a test message
         mvc.perform(MockMvcRequestBuilders.post("/hello")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated())
             .andExpect(content().string(equalTo(content)));
+
+        // retrieve the test message
         mvc.perform(MockMvcRequestBuilders.get("/hello/test")
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(equalTo(content)));
+
+        // update the test message
+        mvc.perform(MockMvcRequestBuilders.put("/hello/test")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updatedContent)
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().string(equalTo(updatedContent)));
+
+        // retrieve the updated message
+        mvc.perform(MockMvcRequestBuilders.get("/hello/test")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().string(equalTo(updatedContent)));
+
+        // delete the test message
+        mvc.perform(MockMvcRequestBuilders.delete("/hello/test")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        // ensure that the test message now returns 404
+        mvc.perform(MockMvcRequestBuilders.get("/hello/test")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
     }
 }

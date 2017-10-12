@@ -1,0 +1,87 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Anaxes Hello Service Test",
+		"_postman_id": "e04ebd92-53fb-71e9-81ff-bcae7fba253d",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create welcome message",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"key\": \"welcome\",\n\t\"value\": \"Hello World!\"\n}"
+				},
+				"url": "http://localhost:8080/hello",
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve welcome message",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"key\": \"welcome\",\n\t\"value\": \"Hello World!\"\n}"
+				},
+				"url": "http://localhost:8080/hello/welcome",
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update welcome message",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"key\": \"welcome\",\n\t\"value\": \"Hello Test!\"\n}"
+				},
+				"url": "http://localhost:8080/hello/welcome",
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete welcome message",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"key\": \"welcome\",\n\t\"value\": \"Hello Test!\"\n}"
+				},
+				"url": "http://localhost:8080/hello/welcome",
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

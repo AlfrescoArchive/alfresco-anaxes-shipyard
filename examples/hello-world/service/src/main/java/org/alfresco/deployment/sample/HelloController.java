@@ -49,7 +49,7 @@ public class HelloController
         try
         {
             helloTextRepository.delete(key);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         catch (Exception e)
         {
