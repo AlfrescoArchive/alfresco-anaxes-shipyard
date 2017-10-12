@@ -3,14 +3,14 @@ kind: Service
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    app: {{ template "name" . }}
+    app: {{ template "fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    dns: route53
+  {{ if .Values.dns.serviceDomain }}
   annotations:
-    domainName: {{ .Values.service.dnsDomain }}
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.dns.serviceDomain }}
+  {{ end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -19,5 +19,5 @@ spec:
       protocol: TCP
       name: {{ .Values.service.name }}
   selector:
-    app: {{ template "name" . }}
+    app: {{ template "fullname" . }}
     release: {{ .Release.Name }}
