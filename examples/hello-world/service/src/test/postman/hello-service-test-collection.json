@@ -8,26 +8,24 @@
 	},
 	"item": [
 		{
-			"name": "Create welcome message",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"key\": \"welcome\",\n\t\"value\": \"Hello World!\"\n}"
-				},
-				"url": "http://localhost:8080/hello",
-				"description": ""
-			},
-			"response": []
-		},
-		{
 			"name": "Retrieve welcome message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"status code is 200\"] = responseCode.code === 200;",
+							"tests[\"content type is application/json\"] = (postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\"));",
+							"",
+							"// test response body",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"key is correct\"] = jsonData.key === \"welcome\";",
+							"tests[\"value is correct\"] = jsonData.value === \"Hello World!\";"
+						]
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -46,7 +44,99 @@
 			"response": []
 		},
 		{
+			"name": "Create test message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"status code is 201\"] = responseCode.code === 201;",
+							"tests[\"content type is application/json\"] = (postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\"));",
+							"",
+							"// test response body",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"key is present\"] = jsonData.key !== undefined;",
+							"tests[\"value is correct\"] = jsonData.value === \"Testing 1,2,3\";",
+							"",
+							"// store the message key ",
+							"postman.setGlobalVariable(\"messageKey\", jsonData.key);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"key\": \"{{$guid}}\",\n\t\"value\": \"Testing 1,2,3\"\n}"
+				},
+				"url": "http://localhost:8080/hello",
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve test message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"status code is 200\"] = responseCode.code === 200;",
+							"tests[\"content type is application/json\"] = (postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\"));",
+							"",
+							"// test response body",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"key is correct\"] = jsonData.key === postman.getGlobalVariable(\"messageKey\");",
+							"tests[\"value is correct\"] = jsonData.value === \"Testing 1,2,3\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"key\": \"welcome\",\n\t\"value\": \"Hello World!\"\n}"
+				},
+				"url": "http://localhost:8080/hello/{{messageKey}}",
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "Update welcome message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"status code is 200\"] = responseCode.code === 200;",
+							"tests[\"content type is application/json\"] = (postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\"));",
+							"",
+							"// test response body",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"key is correct\"] = jsonData.key === postman.getGlobalVariable(\"messageKey\");",
+							"tests[\"value is correct\"] = jsonData.value === \"Testing 1,2,3,4,5\";"
+						]
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -57,17 +147,53 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"key\": \"welcome\",\n\t\"value\": \"Hello Test!\"\n}"
+					"raw": "{\n\t\"key\": \"{{messageKey}}\",\n\t\"value\": \"Testing 1,2,3,4,5\"\n}"
 				},
-				"url": "http://localhost:8080/hello/welcome",
+				"url": "http://localhost:8080/hello/{{messageKey}}",
 				"description": ""
 			},
 			"response": []
 		},
 		{
 			"name": "Delete welcome message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:8080/hello/{{messageKey}}",
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve deleted test message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"status code is 404\"] = responseCode.code === 404;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -76,9 +202,9 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"key\": \"welcome\",\n\t\"value\": \"Hello Test!\"\n}"
+					"raw": "{\n\t\"key\": \"welcome\",\n\t\"value\": \"Hello World!\"\n}"
 				},
-				"url": "http://localhost:8080/hello/welcome",
+				"url": "http://localhost:8080/hello/{{messageKey}}",
 				"description": ""
 			},
 			"response": []

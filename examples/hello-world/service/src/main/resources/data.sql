@@ -1,0 +1,1 @@
+INSERT INTO hello_text VALUES ('welcome', 'Hello World!');
