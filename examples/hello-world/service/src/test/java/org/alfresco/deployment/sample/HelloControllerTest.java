@@ -1,5 +1,6 @@
 package org.alfresco.deployment.sample;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,7 +27,17 @@ public class HelloControllerTest {
     private String updatedContent = "{\"key\":\"test\",\"value\":\"Hello Test!\"}";
 
     @Test
-    public void getHello() throws Exception
+    public void testWelcomeMessage() throws Exception
+    {
+        // ensure the welcome message is present
+        mvc.perform(MockMvcRequestBuilders.get("/hello/welcome")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("Hello World!")));
+    }
+
+    @Test
+    public void testHelloAPI() throws Exception
     {
         // create a test message
         mvc.perform(MockMvcRequestBuilders.post("/hello")
