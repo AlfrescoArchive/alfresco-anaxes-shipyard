@@ -35,12 +35,24 @@ spec:
             - containerPort: {{ .Values.service.internalPort }}
           livenessProbe:
             httpGet:
+              scheme: HTTP
               path: /health
               port: {{ .Values.service.internalPort }}
+            initialDelaySeconds: 300
+            periodSeconds: 60
+            timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
           readinessProbe:
             httpGet:
+              scheme: HTTP
               path: /health
               port: {{ .Values.service.internalPort }}
+            initialDelaySeconds: 240
+            periodSeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 10
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
