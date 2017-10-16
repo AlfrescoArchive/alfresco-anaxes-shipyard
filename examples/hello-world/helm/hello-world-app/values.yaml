@@ -8,13 +8,12 @@ image:
   imagePullPolicy: Always
 service:
   name: hello-world-app
-  type: LoadBalancer
+  #If running on AWS choose LoadBalancer as service Type
+  type: NodePort
   externalPort: 80
   internalPort: 8080
 registryPullSecrets: registrypullsecret
 
-#PostgresSetting
-postgresPassword: postgres
 
 #DNS settings AWS
 dns:
