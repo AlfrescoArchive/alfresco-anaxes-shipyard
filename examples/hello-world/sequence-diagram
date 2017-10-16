@@ -1,0 +1,26 @@
+@startuml
+
+Title: Hello World App
+
+actor "User" as U
+participant "Browser" as B
+participant "UI Layer" as UI
+participant "RestApi" as RA
+participant "Database" as DB
+
+U -> B: Navigate\nhomepage
+B -> RA: GET /hello
+RA -> DB:Query table\nfor key "welcome"
+DB -> RA:Return value "Hello World"
+|||
+RA -> UI:Response 200 OK
+note right
+response format:
+{"test":<text-from-db>}
+end note
+UI -> B: Return\nhome page
+B -> U: Render\nhome page
+
+||45||
+
+@enduml
