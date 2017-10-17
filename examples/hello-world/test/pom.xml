@@ -4,7 +4,7 @@
 
 	<groupId>org.alfresco.deployment</groupId>
 	<artifactId>anaxes-hello-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<url>http://maven.apache.org</url>
 	<repositories>
 		<repository>
@@ -16,6 +16,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<apache.httpcomponents.httpclient>4.5.3</apache.httpcomponents.httpclient>
 		<com.googlecode.json-simple>1.1.1</com.googlecode.json-simple>
+		<common.lang>2.6</common.lang>
 	</properties>
 
 	<dependencies>
@@ -32,10 +33,15 @@
 			<version>${apache.httpcomponents.httpclient}</version>
 		</dependency>
 		<dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>${com.googlecode.json-simple}</version>
-        </dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${common.lang}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>${com.googlecode.json-simple}</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>
@@ -65,19 +71,6 @@
 			</testResource>
 		</testResources>
 		<plugins>
-			<plugin>
-				<artifactId>maven-shade-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<shadedArtifactAttached>true</shadedArtifactAttached>
-				</configuration>
-			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>

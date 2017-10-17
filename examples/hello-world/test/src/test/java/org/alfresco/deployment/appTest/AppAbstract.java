@@ -19,18 +19,15 @@ public class AppAbstract
      */
     
     @BeforeSuite 
-    public void initialSetup() 
+    public void initialSetup() throws Exception
     {
-        try
-        {
             appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
             appUrl = readProperty("app.url");
+            if(appUrl.isEmpty())
+            {
+            	throw new Exception("please set the app-url details in the properties file");
+            }
             url = new URL(appUrl);
-        }
-        catch (Exception e)
-        {
-            logger.error("Failed to load  App properties  :" + this.getClass(), e);
-        }
         
     }
     

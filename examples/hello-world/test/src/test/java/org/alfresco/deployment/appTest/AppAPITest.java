@@ -1,5 +1,7 @@
 package org.alfresco.deployment.appTest;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -25,6 +27,8 @@ public class AppAPITest extends AppAbstract
     private static Log logger = LogFactory.getLog(AppAPITest.class);
     private CloseableHttpClient client;
     private CloseableHttpResponse response;
+    private String key;
+    private String value;
 
     /**
      * Test to check if we pass a invalid app like just the url without body it does not give 200 status
@@ -69,7 +73,7 @@ public class AppAPITest extends AppAbstract
     @Test(priority = 2)
     public void validCreateRequest() throws Exception
     {
-        StringEntity params = new StringEntity("{\"key\":\"test\",\"value\":\"substest!\"} ");
+        StringEntity params = new StringEntity(setValues());
         logger.info("POST request");
         client = HttpClientBuilder.create().build();
         HttpPost postRequest = new HttpPost(appUrl);
@@ -89,14 +93,14 @@ public class AppAPITest extends AppAbstract
     @Test(priority = 3, dependsOnMethods = { "validCreateRequest" })
     public void validGetOfCreateRequest() throws Exception
     {
-        logger.info("Get for the previous posted request " + appUrl + "/test");
+        logger.info("Get for the previous posted request " + appUrl +"/" + key);
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl + "/test");
+        HttpGet getRequest = new HttpGet(appUrl + "/" + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 200),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
         String jsonOutput = jsonResponse(response);
-        Assert.assertTrue((jsonOutput.equals("substest!")), String.format("The json object value [%s] is not matching", jsonOutput));
+        Assert.assertTrue((jsonOutput.equals(value)), String.format("The json object value [%s] is not matching", jsonOutput));
     }
 
     /**
@@ -108,13 +112,15 @@ public class AppAPITest extends AppAbstract
     @Test(priority = 4)
     public void validUpdateRequest() throws Exception
     {
-        StringEntity params = new StringEntity("{\"key\":\"test\",\"value\":\"substestUpdate!\"} ");
-        logger.info("Update request " + appUrl + "/test");
+    	value = RandomStringUtils.randomAlphanumeric(4);
+    	String entityValue = "{\"key\":\""+key+"\",\"value\":\""+value+ "\"}";
+        StringEntity params = new StringEntity(entityValue);
+        logger.info("Update request " + appUrl + key);
         client = HttpClientBuilder.create().build();
-        HttpPut postRequest = new HttpPut(appUrl + "/test");
-        postRequest.setHeader("Content-Type", "application/json");
-        postRequest.setEntity(params);
-        response = (CloseableHttpResponse) client.execute(postRequest);
+        HttpPut putRequest = new HttpPut(appUrl + "/" + key);
+        putRequest.setHeader("Content-Type", "application/json");
+        putRequest.setEntity(params);
+        response = (CloseableHttpResponse) client.execute(putRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 200),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
     }
@@ -128,14 +134,14 @@ public class AppAPITest extends AppAbstract
     @Test(priority = 5, dependsOnMethods = { "validUpdateRequest" })
     public void validGetOfUpdateRequest() throws Exception
     {
-        logger.info("Get for the previous updated request " + appUrl + "/test");
+        logger.info("Get for the previous updated request " + appUrl + "/" + key);
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl + "/test");
+        HttpGet getRequest = new HttpGet(appUrl + "/" + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 200),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
         String jsonOutput = jsonResponse(response);
-        Assert.assertTrue((jsonOutput.equals("substestUpdate!")), String.format("The json object value [%s] is not matching", jsonOutput));
+        Assert.assertTrue((jsonOutput.equals(value)), String.format("The json object value [%s] is not matching json response [%s]", jsonOutput, value));
     }
 
     /**
@@ -146,9 +152,9 @@ public class AppAPITest extends AppAbstract
     @Test(priority = 6)
     public void validDeleteRequest() throws Exception
     {
-        logger.info("Delete Request " + appUrl + "/test");
+        logger.info("Delete Request " + appUrl + "/" + key);
         client = HttpClientBuilder.create().build();
-        HttpDelete postRequest = new HttpDelete(appUrl + "/test");
+        HttpDelete postRequest = new HttpDelete(appUrl + "/" + key);
         response = (CloseableHttpResponse) client.execute(postRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 204),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
@@ -163,9 +169,9 @@ public class AppAPITest extends AppAbstract
     @Test(priority = 7, dependsOnMethods = { "validDeleteRequest" })
     public void validGetOfDeleteRequest() throws Exception
     {
-        logger.info("get Request for the deleted data " + appUrl + "/test");
+        logger.info("get Request for the deleted data " + appUrl + "/" + key);
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl + "/test");
+        HttpGet getRequest = new HttpGet(appUrl + "/" + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 404),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
@@ -189,7 +195,17 @@ public class AppAPITest extends AppAbstract
     @AfterMethod
     private void closeResponse() throws Exception
     {
+    	if(response != null )
+    	{
         response.close();
+    	}
+    }
+    
+    private String setValues()
+    {
+     	key = RandomStringUtils.randomAlphanumeric(4);
+    	value = RandomStringUtils.randomAlphanumeric(4);
+    	return("{\"key\":\""+key+"\",\"value\":\""+value+"\"}");
     }
 
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="0" total="8" passed="8">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="318" started-at="2017-10-17T12:03:13Z" finished-at="2017-10-17T12:03:14Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="318" started-at="2017-10-17T12:03:13Z" finished-at="2017-10-17T12:03:14Z">
+      <class name="org.alfresco.deployment.appTest.AppAPITest">
+        <test-method status="PASS" signature="initialSetup()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="initialSetup" is-config="true" duration-ms="7" started-at="2017-10-17T13:03:13Z" finished-at="2017-10-17T13:03:13Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initialSetup -->
+        <test-method status="PASS" signature="invalidAppRequestURL()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="invalidAppRequestURL" duration-ms="227" started-at="2017-10-17T13:03:13Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- invalidAppRequestURL -->
+        <test-method status="PASS" signature="closeResponse()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="closeResponse" is-config="true" duration-ms="1" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeResponse -->
+        <test-method status="PASS" signature="validAppRestRequest()[pri:1, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="validAppRestRequest" duration-ms="19" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validAppRestRequest -->
+        <test-method status="PASS" signature="validCreateRequest()[pri:2, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="validCreateRequest" duration-ms="10" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validCreateRequest -->
+        <test-method status="PASS" signature="closeResponse()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="closeResponse" is-config="true" duration-ms="0" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeResponse -->
+        <test-method status="PASS" signature="closeResponse()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="closeResponse" is-config="true" duration-ms="1" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeResponse -->
+        <test-method status="PASS" signature="validGetOfCreateRequest()[pri:3, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="validGetOfCreateRequest" duration-ms="7" started-at="2017-10-17T13:03:14Z" depends-on-methods="org.alfresco.deployment.appTest.AppAPITest.validCreateRequest" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validGetOfCreateRequest -->
+        <test-method status="PASS" signature="validUpdateRequest()[pri:4, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="validUpdateRequest" duration-ms="9" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validUpdateRequest -->
+        <test-method status="PASS" signature="closeResponse()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="closeResponse" is-config="true" duration-ms="0" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeResponse -->
+        <test-method status="PASS" signature="closeResponse()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="closeResponse" is-config="true" duration-ms="1" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeResponse -->
+        <test-method status="PASS" signature="validGetOfUpdateRequest()[pri:5, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="validGetOfUpdateRequest" duration-ms="8" started-at="2017-10-17T13:03:14Z" depends-on-methods="org.alfresco.deployment.appTest.AppAPITest.validUpdateRequest" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validGetOfUpdateRequest -->
+        <test-method status="PASS" signature="closeResponse()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="closeResponse" is-config="true" duration-ms="0" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeResponse -->
+        <test-method status="PASS" signature="validDeleteRequest()[pri:6, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="validDeleteRequest" duration-ms="7" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validDeleteRequest -->
+        <test-method status="PASS" signature="closeResponse()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="closeResponse" is-config="true" duration-ms="1" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeResponse -->
+        <test-method status="PASS" signature="validGetOfDeleteRequest()[pri:7, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="validGetOfDeleteRequest" duration-ms="6" started-at="2017-10-17T13:03:14Z" depends-on-methods="org.alfresco.deployment.appTest.AppAPITest.validDeleteRequest" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validGetOfDeleteRequest -->
+        <test-method status="PASS" signature="closeResponse()[pri:0, instance:org.alfresco.deployment.appTest.AppAPITest@5b275dab]" name="closeResponse" is-config="true" duration-ms="0" started-at="2017-10-17T13:03:14Z" finished-at="2017-10-17T13:03:14Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeResponse -->
+      </class> <!-- org.alfresco.deployment.appTest.AppAPITest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
