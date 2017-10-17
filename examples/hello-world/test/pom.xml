@@ -1,0 +1,103 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.alfresco.deployment</groupId>
+	<artifactId>anaxes-hello-test</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<url>http://maven.apache.org</url>
+	<repositories>
+		<repository>
+			<id>alfresco-internal</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/internal</url>
+		</repository>
+	</repositories>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<apache.httpcomponents.httpclient>4.5.3</apache.httpcomponents.httpclient>
+		<com.googlecode.json-simple>1.1.1</com.googlecode.json-simple>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${apache.httpcomponents.httpclient}</version>
+		</dependency>
+		<dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>${com.googlecode.json-simple}</version>
+        </dependency>
+	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<id>alfresco-internal</id>
+			<name>Alfresco Releases Repository</name>
+			<url>https://artifacts.alfresco.com/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>alfresco-internal-snapshots</id>
+			<name>Alfresco Snapshots Repository </name>
+			<url>https://artifacts.alfresco.com/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<shadedArtifactAttached>true</shadedArtifactAttached>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>-Xms512m -Xmx1024m</argLine>
+					<workingDirectory>target</workingDirectory>
+					<suiteXmlFiles>
+						<suiteXmlFile>src/test/resources/${suiteXml}</suiteXmlFile>
+					</suiteXmlFiles>
+					<configuration>
+						<excludedGroups>development</excludedGroups>
+					</configuration>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
