@@ -25,13 +25,15 @@ kubectl create namespace example
 ```
 
 2. Go within the helm folder and add your base64 value for the dockercfg, this will help you with the registry authentications.
-add the base64 string in the .dockerconfigjson: base64
-You can get the base64 value by running
+
+Add the base64 string in the .dockerconfigjson: base64
+
+You can get the base64 value by running:
 ```bash
 cat ~/.docker/config.json | base64 
 ```
 
-3. reate your secret in your previously defined namespace
+3. Create your secret in your previously defined namespace
 
 ```bash
 kubectl create -f secrets.yaml -namespace example
@@ -61,7 +63,7 @@ For LoadBalancer service type:
 ```
 For ClusterIp service type:
 ```bash
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  echo "Visit http://127.0.0.1:80/hello/welcome to use your application"
-  kubectl port-forward $POD_NAME 80:{{ .Values.service.externalPort }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "fullname" . }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8088/hello/welcome to use your application"
+  kubectl port-forward $POD_NAME 8088:{{ .Values.service.internalPort }}
 ```
