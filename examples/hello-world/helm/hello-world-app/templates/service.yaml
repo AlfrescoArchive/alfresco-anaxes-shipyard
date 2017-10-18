@@ -1,9 +1,32 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "fullname" . }}-service
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "fullname" . }}-service
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  {{ if .Values.dns.serviceDomain }}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.dns.serviceDomain }}
+  {{ end }}
+spec:
+  ports:
+    - port: {{ .Values.serviceImage.internalPort }}
+      targetPort: {{ .Values.serviceImage.internalPort }}
+      protocol: TCP
+      name: {{ .Values.service.name }}-service
+  selector:
+    app: {{ template "fullname" . }}-service
+    release: {{ .Release.Name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}-ui
+  labels:
+    app: {{ template "fullname" . }}-ui
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -15,9 +38,9 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.externalPort }}
-      targetPort: {{ .Values.service.internalPort }}
+      targetPort: {{ .Values.uiImage.internalPort }}
       protocol: TCP
-      name: {{ .Values.service.name }}
+      name: {{ .Values.service.name }}-ui
   selector:
-    app: {{ template "fullname" . }}
+    app: {{ template "fullname" . }}-ui
     release: {{ .Release.Name }}
