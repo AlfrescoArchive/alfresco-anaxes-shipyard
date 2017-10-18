@@ -35,29 +35,33 @@ NOTE: If you're using Docker for Mac ensure your "Securely store docker logins i
 
 3. Navigate to the helm folder and insert the base64 string generated in the previous step to <code>.dockerconfigjson</code> in <code>secrets.yaml</code>
 
-4. Create your secret in your previously defined namespace
+4. Create your secret in your previously defined namespace.
 
 ```bash
 kubectl create -f secrets.yaml --namespace example
 ```
 
-5. Deploy the helm chart in your namespace
+5. Deploy the helm chart in your namespace.
+
 ```bash
 helm install hello-world-app --namespace=example
 ```
 
-NOTE: If you are using an AWS Kubernetes cluster set the service to type LoadBalancer to prompt AWS to create an ELB that will allow access to the app.
-
-
-
 ## Running on minikube
 
-1. Find the IP address of your minikube cluster by running the following command:
+1. Run the following command to get a list of your releases:
 
 ```bash
-minikube ip
+helm ls
 ```
-TODO: Finish steps
+
+2. Run the command below with your release name and namespace to get the base URL for the application:
+
+```bash
+<code-root>/examples/hello-world/scripts/get-app-url.sh [release] [namespace]
+```
+
+3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the service's REST API.
 
 ## Running on AWS
 
@@ -67,32 +71,16 @@ TODO: Finish steps
 helm install hello-world-app --set service.type=LoadBalancer --namespace=example
 ```
 
-2. Find the DNS hostname of the ELB by running the following command:
+2. Run the following command to get a list of your releases:
 
 ```bash
-kubectl get services --namespace dev-gav -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}'
+helm ls
 ```
 
-TODO: Finish steps
+3. Run the command below with your release name and namespace to get the base URL for the application:
 
-## Appendix
-
-For NodePort service type:
 ```bash
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT/hello/welcome
+<code-root>/examples/hello-world/scripts/get-app-url.sh [release] [namespace]
 ```
 
-For LoadBalancer service type:
-```bash
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-  echo http://$SERVICE_IP:{{ .Values.service.externalPort }}/hello/welcome
-```
-
-For ClusterIp service type:
-```bash
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "fullname" . }}" -o jsonpath="{.items[0].metadata.name}")
-  echo "Visit http://127.0.0.1:8088/hello/welcome to use your application"
-  kubectl port-forward $POD_NAME 8088:{{ .Values.service.internalPort }}
-```
+4. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the service's REST API.
