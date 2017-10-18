@@ -1,5 +1,7 @@
 package org.alfresco.deployment.appTest;
 
+import java.io.File;
+
 import org.apache.commons.lang.RandomStringUtils;
 
 import org.apache.commons.logging.Log;
@@ -31,12 +33,13 @@ public class AppAPITest extends AppAbstract
     private String value;
 
     /**
-     * Test to check if we pass a invalid app like just the url without body it does not give 200 status
+     * Test to check if we pass a invalid app like just the url without body it
+     * does not give 200 status
      * 
      * @throws Exception
      */
     @Test(priority = 0)
-    public void invalidAppRequestURL() throws Exception
+    public void testInvalidAppRequestURL() throws Exception
     {
         logger.info("Test to validate the rest request for the following app :" + appUrl);
         client = HttpClientBuilder.create().build();
@@ -47,33 +50,35 @@ public class AppAPITest extends AppAbstract
     }
 
     /**
-     * Test case to validate post a valid get app request the response code is correct and json object is correct.
+     * Test case to validate post a valid get app request the response code is
+     * correct and json object is correct.
      * 
      * @throws Exception
      * @author sprasanna
      */
     @Test(priority = 1)
-    public void validAppRestRequest() throws Exception
+    public void testValidAppRequestURL() throws Exception
     {
         logger.info("Test to validate the rest request for the following app :" + appUrl + "/welcome");
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl + "/welcome");
+        HttpGet getRequest = new HttpGet(appUrl + File.separator + "welcome");
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 200),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
-        String jsonOutput = jsonResponse(response);
+        String jsonOutput = extractValue(response);
         Assert.assertTrue((jsonOutput.equals("Hello World!")), String.format("The json object value [%s] is not matching", jsonOutput));
     }
 
     /**
-     * Test case to validate post a valid get app request the response code is correct and json object is correct.
+     * Test case to validate post a valid get app request the response code is
+     * correct and json object is correct.
      * 
      * @throws Exception
      */
     @Test(priority = 2)
-    public void validCreateRequest() throws Exception
+    public void testCreateRequest() throws Exception
     {
-        StringEntity params = new StringEntity(setValues());
+        StringEntity params = new StringEntity(generateJsonBody());
         logger.info("POST request");
         client = HttpClientBuilder.create().build();
         HttpPost postRequest = new HttpPost(appUrl);
@@ -82,25 +87,7 @@ public class AppAPITest extends AppAbstract
         response = (CloseableHttpResponse) client.execute(postRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 201),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
-    }
-
-    /**
-     * Test case to validate get of previous posted request response code is correct and json object is correct.
-     * 
-     * @throws Exception
-     */
-
-    @Test(priority = 3, dependsOnMethods = { "validCreateRequest" })
-    public void validGetOfCreateRequest() throws Exception
-    {
-        logger.info("Get for the previous posted request " + appUrl +"/" + key);
-        client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl + "/" + key);
-        response = (CloseableHttpResponse) client.execute(getRequest);
-        Assert.assertTrue((response.getStatusLine().getStatusCode() == 200),
-                String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
-        String jsonOutput = jsonResponse(response);
-        Assert.assertTrue((jsonOutput.equals(value)), String.format("The json object value [%s] is not matching", jsonOutput));
+        testGetResponse(key, value);
     }
 
     /**
@@ -109,39 +96,21 @@ public class AppAPITest extends AppAbstract
      * @throws Exception
      * @author sprasanna
      */
-    @Test(priority = 4)
-    public void validUpdateRequest() throws Exception
+    @Test(priority = 3)
+    public void testUpdateRequest() throws Exception
     {
-    	value = RandomStringUtils.randomAlphanumeric(4);
-    	String entityValue = "{\"key\":\""+key+"\",\"value\":\""+value+ "\"}";
+        value = RandomStringUtils.randomAlphanumeric(4);
+        String entityValue = "{\"key\":\"" + key + "\",\"value\":\"" + value + "\"}";
         StringEntity params = new StringEntity(entityValue);
         logger.info("Update request " + appUrl + key);
         client = HttpClientBuilder.create().build();
-        HttpPut putRequest = new HttpPut(appUrl + "/" + key);
+        HttpPut putRequest = new HttpPut(appUrl + File.separator + key);
         putRequest.setHeader("Content-Type", "application/json");
         putRequest.setEntity(params);
         response = (CloseableHttpResponse) client.execute(putRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 200),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
-    }
-
-    /**
-     * Test case to validate get updateCase
-     * 
-     * @throws Exception
-     */
-
-    @Test(priority = 5, dependsOnMethods = { "validUpdateRequest" })
-    public void validGetOfUpdateRequest() throws Exception
-    {
-        logger.info("Get for the previous updated request " + appUrl + "/" + key);
-        client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl + "/" + key);
-        response = (CloseableHttpResponse) client.execute(getRequest);
-        Assert.assertTrue((response.getStatusLine().getStatusCode() == 200),
-                String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
-        String jsonOutput = jsonResponse(response);
-        Assert.assertTrue((jsonOutput.equals(value)), String.format("The json object value [%s] is not matching json response [%s]", jsonOutput, value));
+        testGetResponse(key, value);
     }
 
     /**
@@ -149,15 +118,16 @@ public class AppAPITest extends AppAbstract
      * 
      * @throws Exception
      */
-    @Test(priority = 6)
+    @Test(priority = 4)
     public void validDeleteRequest() throws Exception
     {
         logger.info("Delete Request " + appUrl + "/" + key);
         client = HttpClientBuilder.create().build();
-        HttpDelete postRequest = new HttpDelete(appUrl + "/" + key);
+        HttpDelete postRequest = new HttpDelete(appUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(postRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 204),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
+
     }
 
     /**
@@ -166,12 +136,12 @@ public class AppAPITest extends AppAbstract
      * @throws Exception
      */
 
-    @Test(priority = 7, dependsOnMethods = { "validDeleteRequest" })
+    @Test(priority = 5, dependsOnMethods = { "validDeleteRequest" })
     public void validGetOfDeleteRequest() throws Exception
     {
         logger.info("get Request for the deleted data " + appUrl + "/" + key);
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl + "/" + key);
+        HttpGet getRequest = new HttpGet(appUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 404),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
@@ -179,12 +149,13 @@ public class AppAPITest extends AppAbstract
 
     /**
      * Method which will retrive data from the response for the given value
+     * 
      * @param response
      * @return
      * @throws Exception
      */
-    
-    private String jsonResponse(CloseableHttpResponse response) throws Exception
+
+    private String extractValue(CloseableHttpResponse response) throws Exception
     {
         String json_string = EntityUtils.toString(response.getEntity());
         JSONParser parser = new JSONParser();
@@ -195,17 +166,36 @@ public class AppAPITest extends AppAbstract
     @AfterMethod
     private void closeResponse() throws Exception
     {
-    	if(response != null )
-    	{
-        response.close();
-    	}
+        if (response != null)
+        {
+            response.close();
+        }
     }
-    
-    private String setValues()
+
+    private String generateJsonBody()
     {
-     	key = RandomStringUtils.randomAlphanumeric(4);
-    	value = RandomStringUtils.randomAlphanumeric(4);
-    	return("{\"key\":\""+key+"\",\"value\":\""+value+"\"}");
+        key = RandomStringUtils.randomAlphanumeric(4);
+        value = RandomStringUtils.randomAlphanumeric(4);
+        return ("{\"key\":\"" + key + "\",\"value\":\"" + value + "\"}");
+    }
+
+    /**
+     * Test case to validate get of previous posted request response code is
+     * correct and json object is correct.
+     * 
+     * @throws Exception
+     */
+
+    private void testGetResponse(String Key, String Value) throws Exception
+    {
+        logger.info("Get for the previous posted request " + appUrl + "/" + key);
+        client = HttpClientBuilder.create().build();
+        HttpGet getRequest = new HttpGet(appUrl + File.separator + key);
+        response = (CloseableHttpResponse) client.execute(getRequest);
+        Assert.assertTrue((response.getStatusLine().getStatusCode() == 200),
+                String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
+        String jsonOutput = extractValue(response);
+        Assert.assertTrue((jsonOutput.equals(value)), String.format("The json object value [%s] is not matching", jsonOutput));
     }
 
 }
