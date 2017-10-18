@@ -89,11 +89,13 @@ public class AppAPITest extends AppAbstract
         postRequest.setEntity(jsonBody);
         response = (CloseableHttpResponse) client.execute(postRequest);
         validateResponse(key, value, response,201);
+        closeResponse();
         
         logger.info("Get request for created content");
         getRequest = new HttpGet(appUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse(key, value, response,200);
+        closeResponse();
         
         logger.info("Update request for the same key " + key);
         value = RandomStringUtils.randomAlphanumeric(4);
@@ -104,23 +106,27 @@ public class AppAPITest extends AppAbstract
         putRequest.setEntity(jsonBody);
         response = (CloseableHttpResponse) client.execute(putRequest);
         validateResponse(key, value, response,200);
+        closeResponse();
         
         logger.info("Get request for updated content");
         getRequest = new HttpGet(appUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse(key, value, response,200);
+        closeResponse();
         
         logger.info("delete request for the same key " + key);
         HttpDelete deleteRequest = new HttpDelete(appUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(deleteRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 204),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
+        closeResponse();
         
         logger.info("Get request for put content");
         getRequest = new HttpGet(appUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 404),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
+        closeResponse();
     }
 
 
@@ -140,7 +146,6 @@ public class AppAPITest extends AppAbstract
         return ((String) obj.get("value"));
     }
 
-    @AfterMethod
     private void closeResponse() throws Exception
     {
         if (response != null)
@@ -169,6 +174,15 @@ public class AppAPITest extends AppAbstract
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
         String outputValue = extractValue(response);
         Assert.assertTrue((outputValue.equals(value)), String.format("The json object value [%s] is not matching", outputValue));
+    }
+    
+    @AfterMethod
+    private void closeClient() throws Exception
+    {
+        if (client != null)
+        {
+            client.close();
+        }
     }
 
 }
