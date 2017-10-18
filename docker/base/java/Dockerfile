@@ -3,7 +3,7 @@
 # Version 0.1
 
 # This is an initial iteration and subject to change
-FROM centos:7
+FROM centos:7.4.1708
 
 ENV JAVA_PKG=server-jre-8u*-linux-x64.tar.gz \
     JAVA_HOME=/usr/java/default
