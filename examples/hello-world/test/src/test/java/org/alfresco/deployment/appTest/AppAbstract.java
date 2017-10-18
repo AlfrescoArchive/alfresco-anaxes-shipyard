@@ -3,15 +3,12 @@ package org.alfresco.deployment.appTest;
 import java.net.URL;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeSuite;
 
 public class AppAbstract
 {
     protected static String appUrl;
     Properties appProperty = new Properties();
-    private static  Log logger = LogFactory.getLog(AppAbstract.class);
     protected static URL url ;
 
     /**
