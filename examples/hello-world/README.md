@@ -3,9 +3,9 @@
 To get familiar with how an Alfresco Engineer or a Solution Developer can build and use a deployment package for Kubernetes we have created a simple hello world app that you can use for reference as you get started.
 
 The application consists of several components:
-- database to store the data, postgres in our case
-- backend rest service to Create/Read/Update/Delete entries in the db
-- frontend app to proxy the backend service
+- Database to store the data, postgres in our case
+- Backend rest service to Create/Read/Update/Delete entries in the db
+- Frontend app to proxy the backend service
 
 The interactions between the components is shown in the following diagram:
 
@@ -43,11 +43,19 @@ kubectl create -f secrets.yaml --namespace example
 
 5. Deploy the helm chart in your namespace.
 
+If you're deploying to your local minikube use the following command:
+
 ```bash
 helm install hello-world-app --namespace=example
 ```
 
-## Running on minikube
+If you're deploying to an AWS cluster use the command below. This will cause Kubernetes to generate an Elastic Load Balancer providing access to the application.
+
+```bash
+helm install hello-world-app --set service.type=LoadBalancer --namespace=example
+```
+
+## Running the App
 
 1. Run the following command to get a list of your releases:
 
@@ -55,32 +63,10 @@ helm install hello-world-app --namespace=example
 helm ls
 ```
 
-2. Run the command below with your release name and namespace to get the base URL for the application:
+2. Run the command below with the appropriate release name and namespace to get the base URL for the application:
 
 ```bash
 <code-root>/examples/hello-world/scripts/get-app-url.sh [release] [namespace]
 ```
 
-3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the service's REST API.
-
-## Running on AWS
-
-1. To get access to app we need Kubernetes to generate an ELB, to do this change the service type to LoadBalancer:
-
-```bash
-helm install hello-world-app --set service.type=LoadBalancer --namespace=example
-```
-
-2. Run the following command to get a list of your releases:
-
-```bash
-helm ls
-```
-
-3. Run the command below with your release name and namespace to get the base URL for the application:
-
-```bash
-<code-root>/examples/hello-world/scripts/get-app-url.sh [release] [namespace]
-```
-
-4. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the service's REST API.
+3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the backend service's REST API.
