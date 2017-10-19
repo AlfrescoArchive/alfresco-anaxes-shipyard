@@ -7,7 +7,8 @@ import org.testng.annotations.BeforeSuite;
 
 public class AppAbstract
 {
-    protected static String appUrl;
+    protected static String appServicesUrl;
+    protected static String appUIUrl;
     Properties appProperty = new Properties();
     protected static URL url ;
 
@@ -19,12 +20,13 @@ public class AppAbstract
     public void initialSetup() throws Exception
     {
             appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
-            appUrl = readProperty("app.url");
-            if(appUrl.isEmpty() || !(appUrl.contains("hello")))
+            appServicesUrl = readProperty("app.services.url");
+            appUIUrl=readProperty("app.ui.url");
+            if(appServicesUrl.isEmpty() || !(appServicesUrl.contains("hello"))|| (appUIUrl.isEmpty()))
             {
             	throw new Exception("please set the app-url details in the properties file");
             }
-            url = new URL(appUrl);
+            url = new URL(appServicesUrl);
         
     }
     
