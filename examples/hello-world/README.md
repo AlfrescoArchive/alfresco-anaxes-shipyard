@@ -7,6 +7,10 @@ The application consists of several components:
 - Backend rest service to Create/Read/Update/Delete entries in the db
 - Frontend app to proxy the backend service
 
+The components, how they are packaged and deployed is shown in the diagram below:
+
+![Component-diagram](./diagrams/component-diagram.png "component-diagram")
+
 The interactions between the components is shown in the following diagram:
 
 ![Sequence-diagram](./diagrams/sequence-diagram.png "sequence-diagram")
