@@ -59,6 +59,21 @@ If you're deploying to an AWS cluster use the command below. This will cause Kub
 helm install hello-world-app --set service.type=LoadBalancer --namespace=example
 ```
 
+6. Check that the deployment worked by running the command below:
+
+```bash
+kubectl get pods --namespace example
+```
+
+You should see out output something similar to below. The first time you deploy the status column will say <code>ContainerCreating</code> for a while as it needs to download the docker image. If the status column shows an error take a look at the Troubleshooting section.
+
+<pre>
+NAME                                                     READY     STATUS    RESTARTS   AGE
+idolized-mole-hello-world-app-service-1321691706-z432h   1/1       Running   1          1d
+idolized-mole-hello-world-app-ui-2002392249-q6vtt        1/1       Running   0          1d
+idolized-mole-postgresql-3970244539-7d535                1/1       Running   0          1d
+</pre>
+
 ## Running the App
 
 1. Run the following command to get a list of your releases:
@@ -73,4 +88,28 @@ helm ls
 <code-root>/examples/hello-world/scripts/get-app-url.sh [release] [namespace]
 ```
 
-3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the backend service's REST API.
+3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the backend service's REST API. The screenshot below shows what you should see.
+
+![UI](./diagrams/app-ui.png)
+
+## Troubleshooting
+
+If the deployment is not working correctly list the pods by executing:
+
+```bash
+kubectl get pods --namespace example
+```
+
+If a pod is showing an error in the Status column run the following command to get more detailed information:
+
+```bash
+kubectl describe pod <pod-name> --namespace example
+```
+
+If the events indicate there is a problem fetching the docker image check that the secret created in the Deploy section contains credentials. The easiest way to do this is to use the Kubernetes dashboard as shown in the screenshot below. Click the eye icon to see the secret contents.
+
+![Secret](./diagrams/secrets-in-dashboard.png)
+
+To get to the dashboard if you're using minikube type <code>minikube dashboard</code>. If you're using an AWS based Kubernetes cluster, typically you'll use https://api-server-hostname/ui. You'll need to contact your administrator for authentication details or examine your local kubeconfig file.
+
+If the credentials are missing check they are present in ~/.docker/config.json, especially if you're running on a Mac as the "Securely store docker logins in macOS keychain" preference maybe enabled.
