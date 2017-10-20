@@ -7,8 +7,7 @@ import org.testng.annotations.BeforeSuite;
 public class AppAbstract
 {
     protected static String appServicesUrl;
-    private static String appUrl;
-    protected static String appUIUrl;
+    protected static String appUrl;
     Properties appProperty = new Properties();
 
     /**
@@ -25,7 +24,6 @@ public class AppAbstract
             	throw new Exception("please set the app-url details in the properties file");
             }
             appServicesUrl = appUrl + "/" + "hello";
-            appUIUrl = appUrl;
         
     }
     

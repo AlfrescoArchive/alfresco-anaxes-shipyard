@@ -31,7 +31,7 @@ public class AppUITest extends AppAbstract
         {
         logger.info("Test the UI is working correctly");
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUIUrl);
+        HttpGet getRequest = new HttpGet(appUrl);
         response = client.execute(getRequest);
         rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
