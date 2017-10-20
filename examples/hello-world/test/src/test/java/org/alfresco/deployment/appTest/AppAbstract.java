@@ -1,6 +1,5 @@
 package org.alfresco.deployment.appTest;
 
-import java.net.URL;
 import java.util.Properties;
 
 import org.testng.annotations.BeforeSuite;
@@ -8,9 +7,9 @@ import org.testng.annotations.BeforeSuite;
 public class AppAbstract
 {
     protected static String appServicesUrl;
+    private static String appUrl;
     protected static String appUIUrl;
     Properties appProperty = new Properties();
-    protected static URL url ;
 
     /**
      * The before suit will load test properties file and load the same.
@@ -20,13 +19,13 @@ public class AppAbstract
     public void initialSetup() throws Exception
     {
             appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
-            appServicesUrl = readProperty("app.services.url");
-            appUIUrl=readProperty("app.ui.url");
-            if(appServicesUrl.isEmpty() || !(appServicesUrl.contains("hello"))|| (appUIUrl.isEmpty()))
+            appUrl = readProperty("app.url");
+            if(appUrl.isEmpty())
             {
             	throw new Exception("please set the app-url details in the properties file");
             }
-            url = new URL(appServicesUrl);
+            appServicesUrl = appUrl + "/" + "hello";
+            appUIUrl = appUrl;
         
     }
     
