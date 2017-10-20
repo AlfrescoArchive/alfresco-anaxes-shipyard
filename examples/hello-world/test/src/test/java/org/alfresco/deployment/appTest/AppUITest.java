@@ -41,8 +41,9 @@ public class AppUITest extends AppAbstract
         {
             result.append(line);
         }
-        Assert.assertFalse(result.toString().contains("error"), String.format("The page is not loaded correctly it contains error"));
-        Assert.assertTrue(result.toString().contains("<title>Demo Application</title>"), String.format("The title is not displayed correctly"));
+        String htmlOutput = result.toString();
+        Assert.assertFalse(htmlOutput.contains("error"), String.format("The page is not loaded correctly it contains error [%s]", htmlOutput));
+        Assert.assertTrue(htmlOutput.contains("<title>Demo Application</title>"), String.format("The title is not displayed correctly and the result is [%s]",htmlOutput));
     }
      finally
      {
