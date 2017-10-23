@@ -132,7 +132,6 @@ public class AppAPITest extends AppAbstract
      * @return
      * @throws Exception
      */
-
     private void closeResponse() throws Exception
     {
         if (response != null)
@@ -152,7 +151,6 @@ public class AppAPITest extends AppAbstract
      * 
      * @throws Exception
      */
-
     private void validateResponse(String key, String value, CloseableHttpResponse response, int statusCode) throws Exception
     {
 
