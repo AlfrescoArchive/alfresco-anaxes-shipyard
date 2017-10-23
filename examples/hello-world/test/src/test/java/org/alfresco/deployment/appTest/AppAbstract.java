@@ -14,7 +14,6 @@ public class AppAbstract
     /**
      * The before suit will load test properties file and load the same.
      */
-    
     @BeforeSuite 
     public void initialSetup() throws Exception
     {
