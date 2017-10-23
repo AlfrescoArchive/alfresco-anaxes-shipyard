@@ -3,7 +3,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: external-dns
-  namespace: dev-sergiu
 spec:
   strategy:
     type: Recreate
