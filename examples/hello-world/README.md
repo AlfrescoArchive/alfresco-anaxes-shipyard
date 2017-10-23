@@ -19,7 +19,7 @@ The interactions between the components is shown in the following diagram:
 
 - A running Kubernetes cluster (this can be [minikube](https://kubernetes.io/docs/getting-started-guides/minikube/) or a cluster on [AWS](https://aws.amazon.com/blogs/compute/kubernetes-clusters-aws-kops/))
 - [Helm](https://github.com/kubernetes/helm/blob/master/docs/install.md) client is installed locally and deployed to your cluster
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) is insallted and configured for your cluster
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) is installed and configured for your cluster
 
 ## How to Deploy
 
@@ -129,6 +129,6 @@ If the events indicate there is a problem fetching the docker image check that t
 
 ![Secret](./diagrams/secrets-in-dashboard.png)
 
-To get to the dashboard if you're using minikube type <code>minikube dashboard</code>. If you're using an AWS based Kubernetes cluster, typically you'll use https://api-server-hostname/ui. You'll need to contact your administrator for authentication details or examine your local kubeconfig file.
+To get to the dashboard if you're using minikube type <code>minikube dashboard</code>. If you're using an AWS based Kubernetes cluster, typically you'll use <code>https://api-server-hostname/ui</code>. You'll need to contact your administrator for authentication details or examine your local kubeconfig file.
 
 If the credentials are missing check they are present in ~/.docker/config.json, especially if you're running on a Mac as the "Securely store docker logins in macOS keychain" preference maybe enabled.
