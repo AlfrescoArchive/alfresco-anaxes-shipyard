@@ -5,6 +5,8 @@ import { AdfModule } from './adf.module';
 import { HomeComponent } from './home/home.component';
 import { AppComponent } from './app.component';
 
+import {HttpModule} from '@angular/http';
+
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent }
@@ -17,7 +19,8 @@ const appRoutes: Routes = [
       appRoutes // ,
       // { enableTracing: true } // <-- debugging purposes only
     ),
-    AdfModule
+    AdfModule,
+    HttpModule
   ],
   declarations: [
     AppComponent,

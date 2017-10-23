@@ -1,15 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Http, Response } from '@angular/http';
+import 'rxjs/add/operator/map';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
-  constructor() { }
-
-  ngOnInit() {
+  private apiUrl = '/hello/welcome';
+  data: any ={};
+  msg;
+  constructor(private http:Http) {
+    console.log(this.getResponse());
   }
 
+  getResponse() {
+    return this.http.get(this.apiUrl).map((res: Response) => res.json()).subscribe(data => {
+      console.log(data.value);
+      this.msg=data.value;
+      this.data = data
+    })
+  }
 }
