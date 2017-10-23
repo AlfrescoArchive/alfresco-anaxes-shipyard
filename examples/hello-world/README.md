@@ -44,6 +44,25 @@ NOTE: If you're using Docker for Mac ensure your "Securely store docker logins i
 ```bash
 kubectl create -f secrets.yaml --namespace example
 ```
+5. Update the chart dependencies - this will pull the postgres chart used to deploy the db.
+
+To do this you must first make sure you have initialized helm in your cluster.
+```bash
+helm init
+```
+Afterwards update the dependencies:
+```bash
+helm dep update hello-world-app
+
+Hang tight while we grab the latest from your chart repositories...
+...Unable to get an update from the "local" chart repository (http://127.0.0.1:8879/charts):
+        Get http://127.0.0.1:8879/charts/index.yaml: dial tcp 127.0.0.1:8879: getsockopt: connection refused
+...Successfully got an update from the "stable" chart repository
+Update Complete. ⎈Happy Helming!⎈
+Saving 1 charts
+Downloading postgresql from repo https://kubernetes-charts.storage.googleapis.com
+Deleting outdated charts
+```
 
 5. Deploy the helm chart in your namespace.
 
