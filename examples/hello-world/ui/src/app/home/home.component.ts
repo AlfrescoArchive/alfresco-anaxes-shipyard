@@ -17,7 +17,7 @@ export class HomeComponent {
 
   getResponse() {
     return this.http.get(this.apiUrl).map((res: Response) => res.json()).subscribe(data => {
-      console.log(data.value);
+      data.value;
       this.msg=data.value;
       this.data = data
     })
