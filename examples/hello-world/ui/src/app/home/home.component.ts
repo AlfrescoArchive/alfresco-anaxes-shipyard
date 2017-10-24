@@ -12,14 +12,14 @@ export class HomeComponent {
   data: any ={};
   msg;
   constructor(private http:Http) {
-    console.log(this.getResponse());
+    this.getResponse();
   }
 
   getResponse() {
-    return this.http.get(this.apiUrl).map((res: Response) => res.json()).subscribe(data => {
-      data.value;
-      this.msg=data.value;
-      this.data = data
-    })
+    return this.http.get(this.apiUrl).
+      map((res: Response) => res.json()).subscribe(data => {
+        this.msg=data.value;
+        this.data = data
+      })
   }
 }
