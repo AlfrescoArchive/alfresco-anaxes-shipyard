@@ -14,7 +14,9 @@
     </parent>
 
     <properties>
+        <dockerfile.version>1.3.3</dockerfile.version>
         <java.version>1.8</java.version>
+        <postgres.version>9.4.1212</postgres.version>
     </properties>
 
     <dependencies>
@@ -25,7 +27,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.4.1212</version>
+            <version>${postgres.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -50,26 +52,67 @@
     <build>
         <plugins>
             <plugin>
+                <!-- The plugin is used to create the Dockerfile using the dynamic jar name, 
+                    i.e. ${project.build.finalName}.jar -->
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/docker</directory>
+                                    <includes>
+                                        <include>Dockerfile</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <delimiters>
+                                <delimiter>${*}</delimiter>
+                            </delimiters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.3.3</version>
+                <version>${dockerfile.version}</version>
                 <executions>
                     <execution>
-                        <id>default</id>
+                        <id>build-image</id>
                         <goals>
                             <goal>build</goal>
-                            <goal>push</goal>
                         </goals>
+                        <configuration>
+                            <repository>docker-internal.alfresco.com/${project.artifactId}</repository>
+                            <contextDirectory>${basedir}/target</contextDirectory>
+                            <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>tag-image</id>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <repository>docker-internal.alfresco.com/${project.artifactId}</repository>
+                            <contextDirectory>${basedir}/target</contextDirectory>
+                            <tag>${project.version}</tag>
+                            <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <repository>anaxes-hello-service</repository>
-                    <tag>${project.version}</tag>
-                </configuration>
             </plugin>
         </plugins>
     </build>

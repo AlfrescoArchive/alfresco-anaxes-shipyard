@@ -1,0 +1,33 @@
+@startuml
+
+Title: Hello World App Component Diagram
+
+left to right direction
+
+() Browser as B
+
+node "Kubernetes Cluster" {
+    package "UI pod" {
+        cloud "UI container" {
+            component [ADF App\n(Node.js)] as UI
+        }
+    }
+
+    package "Service pod" {
+        cloud "Service container" {
+            component [Hello Service\n(Spring Boot)] as Svc
+        }
+    }
+
+    package "DB pod" {
+        cloud "DB container" {
+            database Postgres as DB
+        }
+    }
+}
+
+B ---> UI
+UI ---> Svc
+Svc ---> DB
+
+@enduml 

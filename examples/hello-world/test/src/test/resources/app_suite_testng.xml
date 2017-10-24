@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="RegressionSuite" preserve-order="true" verbose="2"
+	thread-count="0" parallel="false" configfailurepolicy="continue">
+	<test name="APITest">
+		<classes>
+			<class name="org.alfresco.deployment.appTest.AppAPITest" />
+		</classes>
+	</test>
+	<test name="UITest">
+		<classes>
+			<class name="org.alfresco.deployment.appTest.AppUITest">
+			</class>
+		</classes>
+	</test>
+</suite>
