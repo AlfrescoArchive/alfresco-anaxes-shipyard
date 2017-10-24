@@ -17,14 +17,13 @@ public class AppAbstract
     @BeforeSuite 
     public void initialSetup() throws Exception
     {
-            appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
-            appUrl = readProperty("app.url");
-            if(appUrl.isEmpty() || !(appUrl.contains("hello")))
-            {
-            	throw new Exception("please set the app-url details in the properties file");
-            }
-            url = new URL(appUrl);
-        
+        appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
+        appUrl = readProperty("app.url");
+        if(appUrl.isEmpty() || !(appUrl.contains("hello")))
+        {
+            throw new Exception("please set the app-url details in the properties file");
+        }
+        url = new URL(appUrl);
     }
     
     private String readProperty(String propertyType)
