@@ -22,7 +22,7 @@ This allows us to start from a popular OS and Java runtime which are already in 
 
 The CentOS image also contains very few known vulnerabilities which we can easily patch at the moment.
 
-While Alpine is an attractive choice due to its simplicity, it may be more difficult to debug and support, and the majority of our components are not yet architected to take advantage of the smaller size and lwoer resource consumption.
+While Alpine is an attractive choice due to its simplicity, it may be more difficult to debug and support, and the majority of our components are not yet architected to take advantage of the smaller size and lower resource consumption.
 
 While distribution workarounds mentioned above were considered, it was felt that they are not common practice and are likely to produce more problems than they solve.
 
