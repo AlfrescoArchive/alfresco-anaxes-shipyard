@@ -12,6 +12,9 @@ hs_err_pid*
 *.iml
 *.iws
 
+# Visual Studio Code
+.vscode/
+
 # Mac
 .DS_Store
 
@@ -27,8 +30,8 @@ target
 cloud-formation-deploy.yaml
 
 # Kubernetes Helm
-#requirements.lock
-#**/charts/*.tgz
+requirements.lock
+**/charts/*.tgz
 
 # Alfresco
 *.log
