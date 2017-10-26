@@ -17,6 +17,7 @@
         <dockerfile.version>1.3.3</dockerfile.version>
         <java.version>1.8</java.version>
         <postgres.version>9.4.1212</postgres.version>
+        <docker.repo>quay.io/alfresco</docker.repo>
     </properties>
 
     <dependencies>
@@ -52,7 +53,7 @@
     <build>
         <plugins>
             <plugin>
-                <!-- The plugin is used to create the Dockerfile using the dynamic jar name, 
+                <!-- The plugin is used to create the Dockerfile using the dynamic jar name,
                     i.e. ${project.build.finalName}.jar -->
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
@@ -95,7 +96,7 @@
                             <goal>build</goal>
                         </goals>
                         <configuration>
-                            <repository>docker-internal.alfresco.com/${project.artifactId}</repository>
+                            <repository>${docker.repo}/${project.artifactId}</repository>
                             <contextDirectory>${basedir}/target</contextDirectory>
                             <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
                         </configuration>
@@ -106,7 +107,7 @@
                             <goal>tag</goal>
                         </goals>
                         <configuration>
-                            <repository>docker-internal.alfresco.com/${project.artifactId}</repository>
+                            <repository>${docker.repo}/${project.artifactId}</repository>
                             <contextDirectory>${basedir}/target</contextDirectory>
                             <tag>${project.version}</tag>
                             <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
