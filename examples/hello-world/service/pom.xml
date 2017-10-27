@@ -95,11 +95,6 @@
                         <goals>
                             <goal>build</goal>
                         </goals>
-                        <configuration>
-                            <repository>${docker.repo}/${project.artifactId}</repository>
-                            <contextDirectory>${basedir}/target</contextDirectory>
-                            <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>tag-image</id>
@@ -107,13 +102,21 @@
                             <goal>tag</goal>
                         </goals>
                         <configuration>
-                            <repository>${docker.repo}/${project.artifactId}</repository>
-                            <contextDirectory>${basedir}/target</contextDirectory>
-                            <tag>${project.version}</tag>
-                            <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
+                          <tag>${project.version}</tag>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>push-image</id>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
                 </executions>
+                <configuration>
+                    <repository>${docker.repo}/${project.artifactId}</repository>
+                    <contextDirectory>${basedir}/target</contextDirectory>
+                    <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
+                </configuration>
             </plugin>
         </plugins>
     </build>
