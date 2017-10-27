@@ -1,46 +1,36 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}-service
+  name: {{ template "hello-world.fullname" . }}-service
   labels:
-    app: {{ template "fullname" . }}-service
+    app: {{ template "hello-world.fullname" . }}-service
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-  {{ if .Values.dns.serviceDomain }}
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: {{ .Values.dns.serviceDomain }}
-  {{ end }}
 spec:
   ports:
     - port: {{ .Values.serviceImage.internalPort }}
       targetPort: {{ .Values.serviceImage.internalPort }}
-      protocol: TCP
       name: {{ .Values.service.name }}-service
   selector:
-    app: {{ template "fullname" . }}-service
+    app: {{ template "hello-world.fullname" . }}-service
     release: {{ .Release.Name }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}-ui
+  name: {{ template "hello-world.fullname" . }}-ui
   labels:
-    app: {{ template "fullname" . }}-ui
+    app: {{ template "hello-world.fullname" . }}-ui
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-  {{ if .Values.dns.serviceDomain }}
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: {{ .Values.dns.serviceDomain }}
-  {{ end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.externalPort }}
       targetPort: {{ .Values.uiImage.internalPort }}
-      protocol: TCP
       name: {{ .Values.service.name }}-ui
   selector:
-    app: {{ template "fullname" . }}-ui
+    app: {{ template "hello-world.fullname" . }}-ui
     release: {{ .Release.Name }}

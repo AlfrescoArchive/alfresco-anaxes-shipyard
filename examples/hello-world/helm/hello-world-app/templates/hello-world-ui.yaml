@@ -1,9 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}-ui
+  name: {{ template "hello-world.fullname" . }}-ui
   labels:
-    app: {{ template "fullname" . }}-ui
+    app: {{ template "hello-world.fullname" . }}-ui
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}-ui
+        app: {{ template "hello-world.fullname" . }}-ui
         release: {{ .Release.Name }}
     spec:
       imagePullSecrets:
@@ -23,7 +23,7 @@ spec:
           imagePullPolicy: {{ .Values.uiImage.pullPolicy }}
           env:
             - name: SERVICE_HOST
-              value: {{ template "fullname" . }}-service
+              value: {{ template "hello-world.fullname" . }}-service
             - name: SERVICE_PORT
               value: "{{ .Values.serviceImage.internalPort }}"
           ports:
@@ -36,8 +36,6 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 5
             timeoutSeconds: 10
-            successThreshold: 1
-            failureThreshold: 3
           readinessProbe:
             httpGet:
               scheme: HTTP
@@ -46,11 +44,9 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 10
           resources:
-{{ toYaml .Values.resources | indent 12 }}
-    {{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
-    {{- end }}
+            {{ toYaml .Values.resources | indent 12 }}
+            {{- if .Values.nodeSelector }}
+            nodeSelector:
+              {{ toYaml .Values.nodeSelector | indent 8 }}
+              {{- end }}

@@ -18,14 +18,3 @@ service:
   type: NodePort
   externalPort: 80
 registryPullSecrets: registrypullsecret
-
-
-#DNS settings AWS
-dns:
-  create: false
-  # owner for the txt dns entry ex: helloworld
-  ownerId: 
-  # you route53 hosted zone ex: example.com
-  domain: 
-  # the dns entry for your service ex: svidrascu.helloworld.dev.alfresco.me.
-  serviceDomain: 
