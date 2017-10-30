@@ -3,13 +3,13 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 serviceImage:
-  repository: docker-internal.alfresco.com/anaxes-hello-service
-  tag: latest
+  repository: quay.io/alfresco/anaxes-hello-service
+  tag: 0.1-SNAPSHOT
   imagePullPolicy: Always
   internalPort: 8080
 uiImage:
-  repository: docker-internal.alfresco.com/anaxes-hello-ui
-  tag: latest
+  repository: quay.io/alfresco/alfresco-sample-app-ui
+  tag: 0.1.0
   imagePullPolicy: Always
   internalPort: 4200
 service:
