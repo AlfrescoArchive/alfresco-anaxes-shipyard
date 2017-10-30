@@ -5,7 +5,7 @@ Build: mvn clean package
 To run just the UI locally: npm start
 To run UI with backend: 
     
-    change in "src/assets/app.config.json" TARGETHOST and TARGETPORT to the ip and port where your service is running. Then run "npm start".
+    change in "src/assets/app.config.json" HELLO_BACKEND_HOST and HELLO_BACKEND_HOST to the host and port where your service is running. Then run "npm start".
 
 Build Docker Image:
     
