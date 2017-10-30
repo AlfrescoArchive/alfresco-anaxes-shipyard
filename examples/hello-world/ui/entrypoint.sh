@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-sed -i s/TARGETHOST/"$SERVICE_HOST"/g proxy.conf.json
-sed -i s/TARGETPORT/"$SERVICE_PORT"/g proxy.conf.json
+sed -i s/HELLO_BACKEND_HOST/"$HELLO_BACKEND_HOST"/g /usr/share/nginx/html/app.config.json
+sed -i s/HELLO_BACKEND_PORT/"$HELLO_BACKEND_PORT"/g /usr/share/nginx/html/app.config.json
 
-npm start
+nginx -g "daemon off;"

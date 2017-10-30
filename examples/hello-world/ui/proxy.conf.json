@@ -1,6 +1,0 @@
-{
-    "*" : {
-    "target" : "http://TARGETHOST:TARGETPORT/",
-    "secure" : false
-    }
-}
