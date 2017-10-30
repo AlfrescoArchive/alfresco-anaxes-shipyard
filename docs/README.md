@@ -1,4 +1,4 @@
-# How to run a Kubernetes cluster?
+# How to run a Kubernetes cluster
 
 ## Locally via Minikube
 
@@ -24,15 +24,15 @@ minikube start
 
 2. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
 
-3. If you want to access the dashboard: 
+3. If you want to access the dashboard:
 
 ```bash
- minikube dashboard 
+ minikube dashboard
 ```
 
 ### Stop and Delete Minikube Resources
 
-1. Stop Kubernetes Cluster: 
+1. Stop Kubernetes Cluster:
 
 ```bash
 minikube stop
@@ -51,7 +51,7 @@ minikube delete
 
 *Useful resource*: https://kubernetes.io/docs/getting-started-guides/minikube/
 
-## In AWS (using `kops`)
+## In AWS via Kops
 
 ### Download Tools for AWS Deployment
 
@@ -63,7 +63,7 @@ minikube delete
 
     c. [AWS CLI](https://aws.amazon.com/cli/) (Note: install `awscli`, and not `aws-shell`).
 
-    d. A compatible of [python](https://www.python.org) 
+    d. A compatible of [python](https://www.python.org)
 
 1. Install [kops](https://github.com/kubernetes/kops#installing)
 
@@ -80,7 +80,6 @@ minikube delete
     This will take a few minutes to create the EC2 instances, set up Kubernetes and make the ELB available.
 
     Note: currently you need a default RSA ssh key prior to creating the cluster.
-
 
 1. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
 
