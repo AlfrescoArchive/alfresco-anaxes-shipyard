@@ -1,17 +1,37 @@
-# Learning Resources 
+# How to run a Kubernetes cluster?
 
-## How to run Kubernetes cluster locally?
+## Locally
 
-1. Install Minikube. https://kubernetes.io/docs/tasks/tools/install-minikube/
-2. Start Kubernetes Cluster. https://kubernetes.io/docs/getting-started-guides/minikube/#starting-a-cluster
+1. Install prerequisites for Minikube:
 
-*Note*: Minikube runs a single-node Kubernetes cluster inside a VM on your laptop.
+    a. Hypervisor (e.g. [VirtualBox](https://www.virtualbox.org/wiki/Downloads))
 
-3. Install Helm. https://github.com/kubernetes/helm/blob/master/docs/install.md#installing-the-helm-client
-4. If you want to access the dashboard: minikube dashboard https://kubernetes.io/docs/getting-started-guides/minikube/#dashboard.
-4. Stop Kubernetes Cluster. https://kubernetes.io/docs/getting-started-guides/minikube/#stopping-a-cluster
-5. Delete Kubernetes Cluster. https://kubernetes.io/docs/getting-started-guides/minikube/#deleting-a-cluster
+    b. [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
-*Notes*: Features that require a Cloud Provider will not work in Minikube. (e.g. LoadBalancers)
+2. Install [Minikube](https://github.com/kubernetes/minikube/releases).
+3. Start Kubernetes Cluster:
+```
+minikube start
+```
+4. Install [Helm](https://github.com/kubernetes/helm/blob/master/docs/install.md#installing-the-helm-client).
+5. If you want to access the dashboard: 
+```
+ minikube dashboard 
+```
+6. Stop Kubernetes Cluster: 
+```
+minikube stop
+```
+7. Delete Kubernetes Cluster:
+```
+minikube delete
+```
 
-## How to run Kubernetes cluster on AWS?
+*Notes*: 
+
+1. Features that require a Cloud Provider will not work in Minikube. (e.g. LoadBalancers)
+2. Minikube runs a single-node Kubernetes cluster inside a VM on your laptop.
+
+*Useful resource*: https://kubernetes.io/docs/getting-started-guides/minikube/
+## In AWS
+ 
