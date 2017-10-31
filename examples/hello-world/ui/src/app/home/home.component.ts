@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { AppConfigService } from 'ng2-alfresco-core';
 import 'rxjs/add/operator/map';
 @Component({
   selector: 'app-home',
@@ -8,10 +9,12 @@ import 'rxjs/add/operator/map';
 })
 export class HomeComponent {
 
-  private apiUrl = '/hello/welcome';
+  private apiUrl;
   data: any ={};
   msg;
-  constructor(private http:Http) {
+  constructor(private http:Http,
+              appConfig: AppConfigService) {
+    this.apiUrl = appConfig.get('backEndHost') + "/welcome";
     this.getResponse();
   }
 
