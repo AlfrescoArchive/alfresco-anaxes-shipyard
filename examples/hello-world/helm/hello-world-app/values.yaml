@@ -18,7 +18,7 @@ ui:
     repository: quay.io/alfresco/alfresco-sample-app-ui
     tag: 0.1.0
     pullPolicy: Always
-    internalPort: 4200
+    internalPort: 80
   service:
     name: hello-world-app-ui
     # If running on AWS choose LoadBalancer as service Type

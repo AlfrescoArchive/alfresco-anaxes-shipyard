@@ -44,16 +44,15 @@ NOTE: If you're using Docker for Mac ensure your "Securely store docker logins i
 ```bash
 kubectl create -f secrets.yaml --namespace example
 ```
-5. Update the chart dependencies - this will pull the postgres chart used to deploy the db.
+5. Update the chart dependencies to pull the postgres chart used to deploy the db.
 
-To do this you must first make sure you have initialized helm in your cluster.
-```bash
-helm init
-```
-Afterwards update the dependencies:
 ```bash
 helm dep update hello-world-app
+```
 
+You should see output something similar to below.
+
+<pre>
 Hang tight while we grab the latest from your chart repositories...
 ...Unable to get an update from the "local" chart repository (http://127.0.0.1:8879/charts):
         Get http://127.0.0.1:8879/charts/index.yaml: dial tcp 127.0.0.1:8879: getsockopt: connection refused
@@ -62,9 +61,9 @@ Update Complete. ⎈Happy Helming!⎈
 Saving 1 charts
 Downloading postgresql from repo https://kubernetes-charts.storage.googleapis.com
 Deleting outdated charts
-```
+</pre>
 
-5. Deploy the helm chart in your namespace.
+6. Deploy the helm chart in your namespace.
 
 If you're deploying to your local minikube use the following command:
 
@@ -75,22 +74,22 @@ helm install hello-world-app --namespace=example
 If you're deploying to an AWS cluster use the command below. This will cause Kubernetes to generate an Elastic Load Balancer providing access to the application.
 
 ```bash
-helm install hello-world-app --set service.type=LoadBalancer --namespace=example
+helm install hello-world-app --set ui.service.type=LoadBalancer --namespace=example
 ```
 
-6. Check that the deployment worked by running the command below:
+7. Check that the deployment worked by running the command below:
 
 ```bash
 kubectl get pods --namespace example
 ```
 
-You should see out output something similar to below. The first time you deploy the status column will say <code>ContainerCreating</code> for a while as it needs to download the docker image. If the status column shows an error take a look at the Troubleshooting section.
+You should see output something similar to below. The first time you deploy the status column will say <code>ContainerCreating</code> for a while as it needs to download the docker image. If the status column shows an error take a look at the Troubleshooting section.
 
 <pre>
-NAME                                                     READY     STATUS    RESTARTS   AGE
-idolized-mole-hello-world-app-service-1321691706-z432h   1/1       Running   1          1d
-idolized-mole-hello-world-app-ui-2002392249-q6vtt        1/1       Running   0          1d
-idolized-mole-postgresql-3970244539-7d535                1/1       Running   0          1d
+NAME                                                       READY     STATUS    RESTARTS   AGE
+yucky-dragonfly-hello-world-app-backend-1490554866-6r84w   1/1       Running   0          1h
+yucky-dragonfly-hello-world-app-ui-2548061476-4szl0        1/1       Running   0          1h
+yucky-dragonfly-postgresql-925877059-5tk09                 1/1       Running   0          1h
 </pre>
 
 ## Running the App
