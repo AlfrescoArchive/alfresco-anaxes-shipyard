@@ -1,9 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "hello-world.fullname" . }}-service
+  name: {{ template "hello-world.fullname" . }}-backend
   labels:
-    app: {{ template "hello-world.fullname" . }}-service
+    app: {{ template "hello-world.fullname" . }}-backend
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -12,15 +12,15 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "hello-world.fullname" . }}-service
+        app: {{ template "hello-world.fullname" . }}-backend
         release: {{ .Release.Name }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.registryPullSecrets }}
       containers:
-        - name: {{ .Chart.Name }}-service
-          image: "{{ .Values.serviceImage.repository }}:{{ .Values.serviceImage.tag }}"
-          imagePullPolicy: {{ .Values.serviceImage.pullPolicy }}
+        - name: {{ .Chart.Name }}-backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
           env:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://{{ .Release.Name }}-postgresql/postgres
@@ -32,12 +32,12 @@ spec:
                   name: {{ .Release.Name }}-postgresql
                   key: postgres-password
           ports:
-            - containerPort: {{ .Values.serviceImage.internalPort }}
+            - containerPort: {{ .Values.backend.image.internalPort }}
           livenessProbe:
             httpGet:
               scheme: HTTP
               path: /health
-              port: {{ .Values.serviceImage.internalPort }}
+              port: {{ .Values.backend.image.internalPort }}
             initialDelaySeconds: 15
             periodSeconds: 5
             timeoutSeconds: 10
@@ -45,7 +45,7 @@ spec:
             httpGet:
               scheme: HTTP
               path: /health
-              port: {{ .Values.serviceImage.internalPort }}
+              port: {{ .Values.backend.image.internalPort }}
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 5

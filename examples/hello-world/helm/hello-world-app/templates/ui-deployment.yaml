@@ -19,20 +19,20 @@ spec:
         - name: {{ .Values.registryPullSecrets }}
       containers:
         - name: {{ .Chart.Name }}-ui
-          image: "{{ .Values.uiImage.repository }}:{{ .Values.uiImage.tag }}"
-          imagePullPolicy: {{ .Values.uiImage.pullPolicy }}
+          image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}"
+          imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
           env:
             - name: SERVICE_HOST
-              value: {{ template "hello-world.fullname" . }}-service
+              value: {{ template "hello-world.fullname" . }}-backend
             - name: SERVICE_PORT
-              value: "{{ .Values.serviceImage.internalPort }}"
+              value: "{{ .Values.backend.image.internalPort }}"
           ports:
-            - containerPort: {{ .Values.uiImage.internalPort }}
+            - containerPort: {{ .Values.ui.image.internalPort }}
           livenessProbe:
             httpGet:
               scheme: HTTP
               path: /
-              port: {{ .Values.uiImage.internalPort }}
+              port: {{ .Values.ui.image.internalPort }}
             initialDelaySeconds: 15
             periodSeconds: 5
             timeoutSeconds: 10
@@ -40,7 +40,7 @@ spec:
             httpGet:
               scheme: HTTP
               path: /
-              port: {{ .Values.uiImage.internalPort }}
+              port: {{ .Values.ui.image.internalPort }}
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 5
