@@ -37,3 +37,8 @@ requirements.lock
 *.log
 *.log.*
 *.lic
+test-output
+
+package-lock.json
+node-modules
+examples/ui/dist
