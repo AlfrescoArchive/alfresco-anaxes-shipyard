@@ -16,7 +16,7 @@ backend:
 ui:
   image:
     repository: quay.io/alfresco/alfresco-sample-app-ui
-    tag: 0.1.0
+    tag: 0.1-SNAPSHOT
     pullPolicy: Always
     internalPort: 80
   service:
