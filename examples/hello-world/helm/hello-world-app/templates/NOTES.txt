@@ -1,1 +1,2 @@
-Get the application URL by running "scripts/get-app-url.sh {{ .Release.Name }} {{ .Release.Namespace }}".
+Get the UI URL by running "scripts/get-app-url.sh {{ .Release.Name }} {{ .Release.Namespace }}".
+Get the backend URL by running "scripts/get-backend-url.sh {{ .Release.Name }} {{ .Release.Namespace }}".
