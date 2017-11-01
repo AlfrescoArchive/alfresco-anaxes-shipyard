@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "hello-world.fullname" . }}-backend
+  labels:
+    app: {{ template "hello-world.fullname" . }}-backend
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "hello-world.fullname" . }}-backend
+        release: {{ .Release.Name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.registryPullSecrets }}
+      containers:
+        - name: {{ .Chart.Name }}-backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://{{ .Release.Name }}-postgresql/postgres
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: postgres-password
+          ports:
+            - containerPort: {{ .Values.backend.image.internalPort }}
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /health
+              port: {{ .Values.backend.image.internalPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /health
+              port: {{ .Values.backend.image.internalPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
