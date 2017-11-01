@@ -71,10 +71,10 @@ If you're deploying to your local minikube use the following command:
 helm install hello-world-app --namespace=example
 ```
 
-If you're deploying to an AWS cluster use the command below. This will cause Kubernetes to generate an Elastic Load Balancer providing access to the application.
+If you're deploying to an AWS cluster use the command below. This will cause Kubernetes to generate an Elastic Load Balancer providing access to the application and service.
 
 ```bash
-helm install hello-world-app --set ui.service.type=LoadBalancer --namespace=example
+helm install hello-world-app --set ui.service.type=LoadBalancer --set backend.service.type=LoadBalancer --namespace=example
 ```
 
 7. Check that the deployment worked by running the command below:

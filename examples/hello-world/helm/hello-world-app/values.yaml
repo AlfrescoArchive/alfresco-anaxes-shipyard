@@ -12,6 +12,9 @@ backend:
     internalPort: 8080
   service:
     name: hello-world-app-backend
+    # If running on AWS choose LoadBalancer as service Type
+    type: NodePort
+    externalPort: 80
 
 ui:
   image:

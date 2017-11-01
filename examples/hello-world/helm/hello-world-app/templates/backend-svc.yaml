@@ -8,8 +8,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+  type: {{ .Values.backend.service.type }}
   ports:
-    - port: {{ .Values.backend.image.internalPort }}
+    - port: {{ .Values.backend.service.externalPort }}
       targetPort: {{ .Values.backend.image.internalPort }}
       name: {{ .Values.backend.service.name }}
   selector:
