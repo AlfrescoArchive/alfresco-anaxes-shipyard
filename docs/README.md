@@ -11,7 +11,7 @@
     b. [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
     c. [Helm Client](https://docs.helm.sh/using_helm/#installing-helm)
-    
+
     d. [Docker](https://docs.docker.com/engine/installation/#desktop)
 
 1. Install [Minikube](https://github.com/kubernetes/minikube/releases).
@@ -53,7 +53,7 @@ minikube delete
 1. Features that require a Cloud Provider will not work in Minikube. (e.g. LoadBalancers)
 1. Minikube runs a single-node Kubernetes cluster inside a VM on your laptop.
 
-*Useful resource*: https://kubernetes.io/docs/getting-started-guides/minikube/
+*Useful resource*: [Running Kubernetes Locally via Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/).
 
 ## In AWS via Kops
 
@@ -67,7 +67,7 @@ minikube delete
 
     c. [AWS CLI](https://aws.amazon.com/cli/) (Note: install `awscli`, and not `aws-shell`).
 
-    d. A compatible of [python](https://www.python.org)
+    d. A compatible version of [python](https://www.python.org)
 
 1. Install [kops](https://github.com/kubernetes/kops#installing)
 
@@ -96,8 +96,3 @@ minikube delete
 1. Delete the S3 Bucket
 
     If you followed the advice to create a versioned bucket, you will need to [delete all the versioned objects](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html) before deleting the bucket.
-
-*Notes*:
-
-1. This is a single-AZ deployment, and thus is not HA.
-1. This cluster is using kubenet. [Other CNI implementations can be installed](https://github.com/kubernetes/kops/blob/master/docs/networking.md).
