@@ -22,6 +22,8 @@
 minikube start
 ```
 
+*Note*: When starting Minikube it is recommended to give it plenty of memory for hosting containers. You can do this by adding parameter --memory=6144 to minikube start command.
+
 2. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
 
 3. If you want to access the dashboard:
