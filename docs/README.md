@@ -6,11 +6,13 @@
 
 1. Install Prerequisites for Minikube:
 
-    a. Hypervisor (e.g. [VirtualBox](https://www.virtualbox.org/wiki/Downloads))
+    a. [Hypervisor](https://kubernetes.io/docs/tasks/tools/install-minikube/#install-a-hypervisor)
 
     b. [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
     c. [Helm Client](https://docs.helm.sh/using_helm/#installing-helm)
+    
+    d. [Docker](https://docs.docker.com/engine/installation/#desktop)
 
 1. Install [Minikube](https://github.com/kubernetes/minikube/releases).
 
