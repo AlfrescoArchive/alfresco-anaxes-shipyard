@@ -6,10 +6,13 @@ import { HomeComponent } from './home/home.component';
 import { AppComponent } from './app.component';
 
 import {HttpModule} from '@angular/http';
+import { CustomHomeComponent } from './customHome/customHome.component';
 
 
 const appRoutes: Routes = [
-  { path: '', component: HomeComponent }
+  { path: '', component: HomeComponent },
+  { path: 'hello/welcome', redirectTo: 'hello/welcome', pathMatch: 'full' },
+  { path: 'hello/:id', component: CustomHomeComponent }
 ];
 
 @NgModule({
@@ -24,7 +27,8 @@ const appRoutes: Routes = [
   ],
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    CustomHomeComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

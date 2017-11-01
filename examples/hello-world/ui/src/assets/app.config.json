@@ -1,3 +1,3 @@
 {
-    "backEndHost": "http://HELLO_BACKEND_HOST:HELLO_BACKEND_PORT/hello"
+    "backEndHost": "http://HELLO_BACKEND_HOST:HELLO_BACKEND_PORT/"
 }
