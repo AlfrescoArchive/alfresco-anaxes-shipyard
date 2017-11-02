@@ -5,7 +5,7 @@ To get familiar with how an Alfresco Engineer or a Solution Developer can build 
 The application consists of several components:
 - Database to store the data, postgres in our case
 - Backend rest service to Create/Read/Update/Delete entries in the db
-- Frontend app to proxy the backend service
+- Frontend app as a UI for the backend service
 
 The components, how they are packaged and deployed is shown in the diagram below:
 
@@ -29,7 +29,7 @@ The interactions between the components is shown in the following diagram:
 kubectl create namespace example 
 ```
 
-2. Generate a base64 value for your dockercfg, this will allow Kubernetes to access docker-internal.alfresco.com
+2. Generate a base64 value for your dockercfg, this will allow Kubernetes to access quay.io
 
 ```bash
 cat ~/.docker/config.json | base64 
