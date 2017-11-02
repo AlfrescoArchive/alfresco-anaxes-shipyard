@@ -112,7 +112,7 @@ helm ls
 2. Run the command below with the appropriate release name and namespace to get the base URL for the UI:
 
 ```bash
-<code-root>/examples/hello-world/scripts/get-app-url.sh [release] [namespace]
+<code-root>/examples/hello-world/scripts/get-ui-url.sh [release] [namespace]
 ```
 
 3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the backend service's REST API. The screenshot below shows what you should see.
