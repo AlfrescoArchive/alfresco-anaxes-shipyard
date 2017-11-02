@@ -37,9 +37,9 @@ import java.util.List;
 public class CorsConfiguration
 {
     private static final Log logger = LogFactory.getLog(CorsConfiguration.class);
+    private static final String ALLOW_ALL = "*";
 
-
-    @Value("${cors.allowedOrigins}")
+    @Value("#{'${cors.allowedOrigins}'.split(',')}")
     private List<String> allowedOrigins = new ArrayList<String>();
 
     public CorsConfiguration()
@@ -103,6 +103,11 @@ public class CorsConfiguration
                 {
                     logger.info("Removing empty origin from list.");
                     iter.remove();
+                }
+                else if (origin.equals(ALLOW_ALL))
+                {
+                    logger.info("All origins will be allowed.");
+                    return new String[]{"*"};
                 }
                 else if (!urlValidator.isValid(origin))
                 {
