@@ -39,6 +39,21 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
@@ -52,7 +67,7 @@
     <build>
         <plugins>
             <plugin>
-                <!-- The plugin is used to create the Dockerfile using the dynamic jar name, 
+                <!-- The plugin is used to create the Dockerfile using the dynamic jar name,
                     i.e. ${project.build.finalName}.jar -->
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
