@@ -1,9 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "hello-world.fullname" . }}-ui
+  name: {{ template "hello-world-ui.fullname" . }}
   labels:
-    app: {{ template "hello-world.fullname" . }}-ui
+    app: {{ template "hello-world-ui.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "hello-world.fullname" . }}-ui
+        app: {{ template "hello-world-ui.fullname" . }}
         release: {{ .Release.Name }}
     spec:
       imagePullSecrets:
@@ -23,7 +23,7 @@ spec:
           imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
           env:
             - name: HELLO_BACKEND_HOST
-              value: {{ template "hello-world.fullname" . }}-backend
+              value: {{ template "hello-world-backend.fullname" . }}
             - name: HELLO_BACKEND_PORT
               value: "{{ .Values.backend.image.internalPort }}"
           ports:
