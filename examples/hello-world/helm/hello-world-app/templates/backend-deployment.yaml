@@ -1,9 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "hello-world.fullname" . }}-backend
+  name: {{ template "hello-world-backend.fullname" . }}
   labels:
-    app: {{ template "hello-world.fullname" . }}-backend
+    app: {{ template "hello-world-backend.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "hello-world.fullname" . }}-backend
+        app: {{ template "hello-world-backend.fullname" . }}
         release: {{ .Release.Name }}
     spec:
       imagePullSecrets:
