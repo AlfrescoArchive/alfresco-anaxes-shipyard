@@ -13,11 +13,16 @@
 
 package org.alfresco.deployment.appTest;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.testng.annotations.BeforeSuite;
 
 import io.fabric8.kubernetes.api.model.Service;
@@ -65,6 +70,7 @@ public class AppAbstract
         {
             throw new Exception("Cluster is not set up correctly");
         }
+        testServiceUp();
         restApiUrl = restApiUrl + "/hello";
     }
 
@@ -153,5 +159,33 @@ public class AppAbstract
             }
         }
         throw new NullArgumentException("The service was never up and running after " + i + "tries");
+    }
+
+    /**
+     * Validate the service is up and running
+     * 
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    private void testServiceUp() throws InterruptedException, IOException
+    {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        int i = 0;
+        while (i <= RETRY_COUNT)
+        {
+            try
+            {
+                new HttpGet(restApiUrl);
+                break;
+            }
+            catch (Throwable e)
+            {
+                logger.info(String.format("the host is ready " + i));
+                Thread.sleep(10000);
+                i++;
+            }
+
+        }
+        httpClient.close();
     }
 }
