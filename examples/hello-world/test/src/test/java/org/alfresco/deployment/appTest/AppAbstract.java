@@ -104,7 +104,7 @@ public class AppAbstract
         List<Service> service = retryUntilServiceAvailable(nameSpace);
         for (Service each : service)
         {
-
+            logger.info("each.getMetadata().getName().contains(runType " + each.getMetadata().getName().contains(runType));
             if (each.getMetadata().getName().contains(runType))
             {
                 url = each.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
