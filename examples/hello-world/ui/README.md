@@ -8,9 +8,7 @@ To run just the UI locally:
 
     npm start
 
-To run UI with backend, change `HELLO_BACKEND_HOST` and `HELLO_BACKEND_HOST` in `src/assets/app.config.json` to the host and port where your service is running. Then run:
-
-    npm start
+To run UI with backend, change `HELLO_BACKEND_HOST` and `HELLO_BACKEND_HOST` in `src/assets/app.config.json` to the host and port where your service is running. Then run: `npm start`
 
 Build Docker Image:
     
