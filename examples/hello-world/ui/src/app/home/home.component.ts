@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { Component, OnInit } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { AppConfigService } from 'ng2-alfresco-core';

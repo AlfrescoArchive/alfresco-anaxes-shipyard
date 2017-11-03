@@ -17,6 +17,7 @@
         <dockerfile.version>1.3.3</dockerfile.version>
         <java.version>1.8</java.version>
         <postgres.version>9.4.1212</postgres.version>
+        <docker.repo>quay.io/alfresco</docker.repo>
     </properties>
 
     <dependencies>
@@ -109,11 +110,6 @@
                         <goals>
                             <goal>build</goal>
                         </goals>
-                        <configuration>
-                            <repository>docker-internal.alfresco.com/${project.artifactId}</repository>
-                            <contextDirectory>${basedir}/target</contextDirectory>
-                            <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>tag-image</id>
@@ -121,13 +117,39 @@
                             <goal>tag</goal>
                         </goals>
                         <configuration>
-                            <repository>docker-internal.alfresco.com/${project.artifactId}</repository>
-                            <contextDirectory>${basedir}/target</contextDirectory>
-                            <tag>${project.version}</tag>
-                            <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
+                          <tag>${project.version}</tag>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>push-image</id>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
                 </executions>
+                <configuration>
+                    <repository>${docker.repo}/${project.artifactId}</repository>
+                    <contextDirectory>${basedir}/target</contextDirectory>
+                    <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <version>0.12</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
