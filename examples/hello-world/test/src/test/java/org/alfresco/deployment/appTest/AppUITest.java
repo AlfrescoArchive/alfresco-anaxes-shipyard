@@ -18,7 +18,6 @@ package org.alfresco.deployment.appTest;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -45,7 +44,7 @@ public class AppUITest extends AppAbstract
         BufferedReader rd = null ;
         try
         {
-        logger.info("Test the UI is working correctly");
+        logger.info("Test the UI is working correctly for the url "+ appUrl);
         client = HttpClientBuilder.create().build();
         HttpGet getRequest = new HttpGet(appUrl);
         response = client.execute(getRequest);

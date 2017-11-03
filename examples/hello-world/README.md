@@ -35,15 +35,24 @@ kubectl create namespace example
 cat ~/.docker/config.json | base64 
 ```
 
-NOTE: If you're using Docker for Mac ensure your "Securely store docker logins in macOS keychain" preference is OFF before running this step.
+NOTE: If you're using Docker for Mac ensure your "Securely store docker logins in macOS keychain" preference is OFF (as shown in the diagram below) before running this step.
 
-3. Navigate to the helm folder and insert the base64 string generated in the previous step to <code>.dockerconfigjson</code> in <code>secrets.yaml</code>
+[Docker Preferences](./diagrams/docker-preferences.png)
+
+3. Navigate to the 'examples' folder and insert the base64 string generated in the previous step to <code>.dockerconfigjson</code> in <code>secrets.yaml</code>
 
 4. Create your secret in your previously defined namespace.
 
 ```bash
 kubectl create -f secrets.yaml --namespace example
 ```
+
+You should see the output below.
+
+<pre>
+secret "quay-registry-secret" created
+</pre>
+
 5. Update the chart dependencies to pull the postgres chart used to deploy the db.
 
 ```bash
@@ -63,7 +72,7 @@ Downloading postgresql from repo https://kubernetes-charts.storage.googleapis.co
 Deleting outdated charts
 </pre>
 
-6. Deploy the helm chart in your namespace.
+6. Navigate to the 'hello-world/helm' folder and deploy the helm chart in your namespace.
 
 If you're deploying to your local minikube use the following command:
 
@@ -92,7 +101,7 @@ yucky-dragonfly-hello-world-app-ui-2548061476-4szl0        1/1       Running   0
 yucky-dragonfly-postgresql-925877059-5tk09                 1/1       Running   0          1h
 </pre>
 
-## Running the App
+## Accessing the UI
 
 1. Run the following command to get a list of your releases:
 
@@ -100,15 +109,75 @@ yucky-dragonfly-postgresql-925877059-5tk09                 1/1       Running   0
 helm ls
 ```
 
-2. Run the command below with the appropriate release name and namespace to get the base URL for the application:
+2. Run the command below with the appropriate release name and namespace to get the base URL for the UI:
 
 ```bash
-<code-root>/examples/hello-world/scripts/get-app-url.sh [release] [namespace]
+<code-root>/examples/hello-world/scripts/get-ui-url.sh [release] [namespace]
 ```
 
 3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the backend service's REST API. The screenshot below shows what you should see.
 
 ![UI](./diagrams/app-ui.png)
+
+## Accessing the REST API
+
+1. Run the following command to get a list of your releases:
+
+```bash
+helm ls
+```
+
+2. Run the command below with the appropriate release name and namespace to get the base URL for the REST API:
+
+```bash
+<code-root>/examples/hello-world/scripts/get-backend-url.sh [release] [namespace]
+```
+
+3. Use the following curl command to test the REST API.
+
+```bash
+curl [url-from-step-2]/welcome
+```
+
+You should see the following output:
+
+<pre>
+{"key":"welcome","value":"Hello World!"}
+</pre>
+
+## Cleaning Up
+
+1. Run the following command to get a list of your releases:
+
+```bash
+helm ls
+```
+
+2. Run the command below with the appropriate release name to uninstall the deployment:
+
+```bash
+helm delete [release-name]
+```
+
+3. Ensure everything has been removed by running the following command:
+
+```bash
+helm status [release-name]
+```
+
+You should see the following output:
+
+<pre>
+LAST DEPLOYED: Thu Nov  2 12:16:56 2017
+NAMESPACE: example
+STATUS: DELETED
+</pre>
+
+4. Delete the namespace.
+
+```bash
+kubectl delete namespace example
+```
 
 ## Troubleshooting
 
@@ -128,6 +197,6 @@ If the events indicate there is a problem fetching the docker image check that t
 
 ![Secret](./diagrams/secrets-in-dashboard.png)
 
-To get to the dashboard if you're using minikube type <code>minikube dashboard</code>. If you're using an AWS based Kubernetes cluster, typically you'll use <code>https://api-server-hostname/ui</code>. You'll need to contact your administrator for authentication details or examine your local kubeconfig file.
+To get to the dashboard if you're using minikube type <code>minikube dashboard</code>. If you're using an AWS based Kubernetes cluster, type <code>kubectl proxy</code> and then navigate to <code>http://localhost:8081/ui</code> in a browser.
 
 If the credentials are missing check they are present in ~/.docker/config.json, especially if you're running on a Mac as the "Securely store docker logins in macOS keychain" preference maybe enabled.

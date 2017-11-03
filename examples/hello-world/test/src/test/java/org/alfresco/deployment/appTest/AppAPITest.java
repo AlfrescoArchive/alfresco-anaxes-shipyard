@@ -55,9 +55,9 @@ public class AppAPITest extends AppAbstract
     @Test(priority = 0)
     public void testInvalidAppRequestURL() throws Exception
     {
-        logger.info("Test to validate the rest request for the following app :" + appUrl);
+        logger.info("Test to validate the rest request for the following app :" + restApiUrl);
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl);
+        HttpGet getRequest = new HttpGet(restApiUrl);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertFalse((response.getStatusLine().getStatusCode() == 200),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
@@ -73,9 +73,9 @@ public class AppAPITest extends AppAbstract
     @Test(priority = 1)
     public void testValidAppRequestURL() throws Exception
     {
-        logger.info("Test to validate the rest request for the following app :" + appUrl + "/welcome");
+        logger.info("Test to validate the rest request for the following app :" + restApiUrl + "/welcome");
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl + File.separator + "welcome");
+        HttpGet getRequest = new HttpGet(restApiUrl + File.separator + "welcome");
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse("welcome", "Hello World!", response, 200);
     }
@@ -97,7 +97,7 @@ public class AppAPITest extends AppAbstract
         logger.info("Create request");
         jsonBody = new StringEntity(generateJsonBody(key, value));
         client = HttpClientBuilder.create().build();
-        HttpPost postRequest = new HttpPost(appUrl);
+        HttpPost postRequest = new HttpPost(restApiUrl);
         postRequest.setHeader("Content-Type", "application/json");
         postRequest.setEntity(jsonBody);
         response = (CloseableHttpResponse) client.execute(postRequest);
@@ -105,7 +105,7 @@ public class AppAPITest extends AppAbstract
         closeResponse();
 
         logger.info("Get request for created content");
-        getRequest = new HttpGet(appUrl + File.separator + key);
+        getRequest = new HttpGet(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse(key, value, response, 200);
         closeResponse();
@@ -113,7 +113,7 @@ public class AppAPITest extends AppAbstract
         logger.info("Update request for the same key " + key);
         value = RandomStringUtils.randomAlphanumeric(4);
         jsonBody = new StringEntity(generateJsonBody(key, value));
-        HttpPut putRequest = new HttpPut(appUrl + File.separator + key);
+        HttpPut putRequest = new HttpPut(restApiUrl + File.separator + key);
         putRequest.setHeader("Content-Type", "application/json");
         putRequest.setEntity(jsonBody);
         response = (CloseableHttpResponse) client.execute(putRequest);
@@ -121,20 +121,20 @@ public class AppAPITest extends AppAbstract
         closeResponse();
 
         logger.info("Get request for updated content");
-        getRequest = new HttpGet(appUrl + File.separator + key);
+        getRequest = new HttpGet(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse(key, value, response, 200);
         closeResponse();
 
         logger.info("delete request for the same key " + key);
-        HttpDelete deleteRequest = new HttpDelete(appUrl + File.separator + key);
+        HttpDelete deleteRequest = new HttpDelete(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(deleteRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 204),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
         closeResponse();
 
         logger.info("Get request for put content");
-        getRequest = new HttpGet(appUrl + File.separator + key);
+        getRequest = new HttpGet(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 404),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));

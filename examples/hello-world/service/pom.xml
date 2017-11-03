@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.alfresco.deployment</groupId>
-    <artifactId>anaxes-hello-service</artifactId>
+    <artifactId>anaxes-hello-world-service</artifactId>
     <version>0.1-SNAPSHOT</version>
 
     <parent>
@@ -14,9 +14,13 @@
     </parent>
 
     <properties>
-        <dockerfile.version>1.3.3</dockerfile.version>
+        <!-- Spring Boot Java version as specified here: https://docs.spring.io/spring-boot/docs/1.5.2.RELEASE/reference/htmlsingle/#using-boot-maven-java-version -->
         <java.version>1.8</java.version>
-        <postgres.version>9.4.1212</postgres.version>
+        <!-- dependency versions -->
+        <dependency.postgres.version>9.4.1212</dependency.postgres.version>
+        <dependency.plugin.dockerfile.version>1.3.3</dependency.plugin.dockerfile.version>
+        <dependency.plugin.rat.version>0.12</dependency.plugin.rat.version>
+        <!-- docker registry location -->
         <docker.repo>quay.io/alfresco</docker.repo>
     </properties>
 
@@ -28,7 +32,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgres.version}</version>
+            <version>${dependency.postgres.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,7 +92,7 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${dockerfile.version}</version>
+                <version>${dependency.plugin.dockerfile.version}</version>
                 <executions>
                     <execution>
                         <id>build-image</id>
@@ -121,7 +125,7 @@
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
-                <version>0.12</version>
+                <version>${dependency.plugin.rat.version}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
