@@ -39,7 +39,7 @@ public class AppAbstract
     {
         appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
         clusterType = readProperty("cluster.type");
-        clusterNamespace = readProperty("cluster.namespace");
+        clusterNamespace = readProperty("cluster.namespace").toLowerCase();
         if (clusterNamespace == null)
         {
             throw new IllegalStateException("Cluster namespace is required , please set namespace details in the properties file");
