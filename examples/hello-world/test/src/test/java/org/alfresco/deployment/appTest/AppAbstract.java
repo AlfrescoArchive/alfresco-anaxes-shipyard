@@ -39,11 +39,12 @@ public class AppAbstract
     {
         appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
         clusterType = readProperty("cluster.type");
-        clusterNamespace = readProperty("cluster.namespace").toLowerCase();
+        clusterNamespace = readProperty("cluster.namespace");
         if (clusterNamespace == null)
         {
             throw new IllegalStateException("Cluster namespace is required , please set namespace details in the properties file");
         }
+        clusterNamespace = clusterNamespace.toLowerCase();
         if ((clusterType == null) || ("minikube".equalsIgnoreCase(clusterType)))
         {
             restApiUrl = getUrlForMinikube(clusterNamespace, "backend");
