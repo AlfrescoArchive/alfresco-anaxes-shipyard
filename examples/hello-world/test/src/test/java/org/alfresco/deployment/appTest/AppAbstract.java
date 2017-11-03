@@ -70,8 +70,8 @@ public class AppAbstract
         {
             throw new Exception("Cluster is not set up correctly");
         }
-        testServiceUp();
         restApiUrl = restApiUrl + "/hello";
+        testServiceUp();
     }
 
     private String readProperty(String propertyType)
@@ -101,35 +101,39 @@ public class AppAbstract
 
     /**
      * To find the load balancer required for testing
-     * 
-     * @throws InterruptedException
+     * @throws Exception 
      */
-    private String getUrlForAWS(String nameSpace, String runType) throws InterruptedException
+    private String getUrlForAWS(String nameSpace, String runType) throws Exception
     {
         String url = null;
         List<Service> service = retryUntilServiceAvailable(nameSpace);
         for (Service each : service)
         {
-            logger.info(each.getMetadata().getName());
             if (each.getMetadata().getName().contains(runType))
             {
                 int i = 0;
                 while (i <= RETRY_COUNT)
                 {
-                    if (each.getStatus().getLoadBalancer().getIngress() == null)
+                    if (each.getStatus().getLoadBalancer().getIngress().size() == 0)
                     {
 
-                        logger.info("retrying to get the url value correctly");
+                        logger.info("retrying to get the url value correctly "+ i);
                         Thread.sleep(10000);
                         i++;
                     }
                     else
                     {
                         url = each.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
+                        logger.info("got the url details ");
                         break;
                     }
                 }
             }
+            
+        }
+        if (url == null)
+        {
+            throw new Exception("The url is null and not set correctly");
         }
         return "http://" + url;
     }
@@ -163,11 +167,9 @@ public class AppAbstract
 
     /**
      * Validate the service is up and running
-     * 
-     * @throws InterruptedException
-     * @throws IOException
+     * @throws Exception 
      */
-    private void testServiceUp() throws InterruptedException, IOException
+    private void testServiceUp() throws Exception
     {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         int i = 0;
@@ -178,14 +180,14 @@ public class AppAbstract
                 new HttpGet(restApiUrl);
                 break;
             }
-            catch (Throwable e)
+            catch (Exception e)
             {
                 logger.info(String.format("the host is ready " + i));
                 Thread.sleep(10000);
                 i++;
             }
-
         }
         httpClient.close();
+        throw new Exception("The service is not up even after 5 retries ");
     }
 }
