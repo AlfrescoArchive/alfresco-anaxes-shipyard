@@ -23,6 +23,7 @@ import org.testng.annotations.BeforeSuite;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.utils.NullArgumentException;
 
 public class AppAbstract
 {
@@ -76,7 +77,7 @@ public class AppAbstract
      * To find the get service url of minikube
      * @throws InterruptedException 
      */
-    private String getUrlForMinikube(String nameSpace, String runType) throws InterruptedException
+    private String getUrlForMinikube(String nameSpace, String runType) throws Exception
     {
         String url = client.getMasterUrl().toString();
         List<Service> service = retryUntilServiceAvailable(nameSpace);
@@ -95,7 +96,7 @@ public class AppAbstract
      * To find the load balancer required for testing
      * @throws InterruptedException 
      */
-    private String getUrlForAWS(String nameSpace, String runType) throws InterruptedException
+    private String getUrlForAWS(String nameSpace, String runType) throws Exception
     {
         String url = null;
         List<Service> service = retryUntilServiceAvailable(nameSpace);
@@ -121,7 +122,7 @@ public class AppAbstract
         while (i<= RETRY_COUNT)
         {
             service = client.services().inNamespace(nameSpace).list().getItems(); 
-            if (service.isEmpty())
+            if ((service ==null) || (service.isEmpty()))
             {
                 logger.info(String.format("the service is empty for round [%s] so planning to wait 10 seconds",i));
                 Thread.sleep(10000);
@@ -130,9 +131,9 @@ public class AppAbstract
             else
             {
                 logger.info(String.format("the service is back after [%s] retries",i));
-                break;
+                return service;
             }
         }
-        return service;
+       throw new NullArgumentException("The service was never up and running after "+ i + "tries");
     }
     }
