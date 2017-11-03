@@ -128,6 +128,7 @@ public class AppAbstract
                         break;
                     }
                 }
+                break;
             }
             
         }
@@ -182,12 +183,12 @@ public class AppAbstract
             }
             catch (Exception e)
             {
-                logger.info(String.format("the host is ready " + i));
+                logger.info(String.format("the test is failing and need to re try as dns is not ready " + i));
                 Thread.sleep(10000);
                 i++;
             }
         }
         httpClient.close();
-        throw new Exception("The service is not up even after 5 retries ");
+        throw new Exception("The get request is failing and not up even after 5 retries ");
     }
 }
