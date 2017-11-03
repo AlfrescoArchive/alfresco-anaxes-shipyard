@@ -38,15 +38,15 @@ spec:
               scheme: HTTP
               path: /health
               port: {{ .Values.backend.image.internalPort }}
-            initialDelaySeconds: 15
+            initialDelaySeconds: 30
             periodSeconds: 5
-            timeoutSeconds: 10
+            timeoutSeconds: 5
           readinessProbe:
             httpGet:
               scheme: HTTP
               path: /health
               port: {{ .Values.backend.image.internalPort }}
-            initialDelaySeconds: 5
+            initialDelaySeconds: 20
             periodSeconds: 5
             timeoutSeconds: 5
           resources:

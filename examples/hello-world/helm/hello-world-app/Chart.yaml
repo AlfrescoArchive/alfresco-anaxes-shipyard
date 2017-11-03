@@ -1,7 +1,13 @@
 name: hello-world-app
 version: 0.1
 description: Hello world sample app to demonstrate deployment capabilities
+keywords:
+  - alfresco
+  - anaxes
+  - hello
+  - world
+home: https://github.com/Alfresco/alfresco-anaxes-shipyard/examples/hello-world
 sources:
-- https://github.com/Alfresco/alfresco-anaxes-shipyard/examples/hello-world/helm
+  - https://github.com/Alfresco/alfresco-anaxes-shipyard/examples/hello-world/helm
 maintainers:
-- name: Alfresco
+  - name: Alfresco
