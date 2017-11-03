@@ -42,9 +42,9 @@ public class AppAbstract
         clusterNamespace = readProperty("cluster.namespace");
         if (clusterNamespace == null)
         {
-            throw new Exception("Cluster namespace is required , please set namespace details");
+            throw new IllegalStateException("Cluster namespace is required , please set namespace details in the properties file");
         }
-        if ((clusterType.equalsIgnoreCase("minikube")) || (clusterType == null))
+        if ((clusterType == null) || ("minikube".equalsIgnoreCase(clusterType)))
         {
             restApiUrl = getUrlForMinikube(clusterNamespace, "backend");
             appUrl = getUrlForMinikube(clusterNamespace, "ui");

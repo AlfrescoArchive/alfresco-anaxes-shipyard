@@ -52,8 +52,8 @@ public class AppAPITest extends AppAbstract
      * 
      * @throws Exception
      */
-    @Test(priority = 0)
-    public void testInvalidAppRequestURL() throws Exception
+    @Test(priority=0)
+    public void testInvalidApiRequest() throws Exception
     {
         logger.info("Test to validate the rest request for the following app :" + restApiUrl);
         client = HttpClientBuilder.create().build();
@@ -70,8 +70,8 @@ public class AppAPITest extends AppAbstract
      * @throws Exception
      * @author sprasanna
      */
-    @Test(priority = 1)
-    public void testValidAppRequestURL() throws Exception
+    @Test(priority=1)
+    public void testValidApiRequest() throws Exception
     {
         logger.info("Test to validate the rest request for the following app :" + restApiUrl + "/welcome");
         client = HttpClientBuilder.create().build();
@@ -87,8 +87,8 @@ public class AppAPITest extends AppAbstract
      * 
      * @throws Exception
      */
-    @Test(priority = 2)
-    public void testHelloWorldAPI() throws Exception
+    @Test(priority=2)
+    public void testHelloWorldApiRequest() throws Exception
     {
         HttpGet getRequest;
         StringEntity jsonBody;

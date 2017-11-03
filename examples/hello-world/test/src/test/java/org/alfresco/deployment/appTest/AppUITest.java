@@ -37,7 +37,7 @@ public class AppUITest extends AppAbstract
      * @throws
      */
     @Test
-    public void testApp() throws Exception
+    public void testHelloWorldAppUrl() throws Exception
     { 
         CloseableHttpClient client = null;
         CloseableHttpResponse response= null;
