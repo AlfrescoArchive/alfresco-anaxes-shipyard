@@ -107,19 +107,19 @@ public class AppAbstract
             logger.info(each.getMetadata().getName());
             if (each.getMetadata().getName().contains(runType))
             {
-                url = each.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
                 int i = 0;
                 while (i <= RETRY_COUNT)
                 {
-                    if (url == null)
+                    if (each.getStatus().getLoadBalancer().getIngress() == null)
                     {
+
                         logger.info("retrying to get the url value correctly");
                         Thread.sleep(10000);
-                        url = each.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
                         i++;
                     }
                     else
                     {
+                        url = each.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
                         break;
                     }
                 }
@@ -140,7 +140,7 @@ public class AppAbstract
         while (i <= RETRY_COUNT)
         {
             service = client.services().inNamespace(nameSpace).list().getItems();
-            if ((service.size() == 0) || (service == null))
+            if ((service.size() == 0))
             {
                 logger.info(String.format("the service is empty for round [%s] so planning to wait 10 seconds", i));
                 Thread.sleep(10000);
