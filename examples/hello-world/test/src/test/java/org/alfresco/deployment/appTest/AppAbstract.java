@@ -122,6 +122,8 @@ public class AppAbstract
         while (i<= RETRY_COUNT)
         {
             service = client.services().inNamespace(nameSpace).list().getItems(); 
+            logger.info("service.size() " + service.size());
+            logger.info(service == null);
             if ((service.size() == 0) || (service == null))
             {
                 logger.info(String.format("the service is empty for round [%s] so planning to wait 10 seconds",i));
