@@ -16,6 +16,8 @@ package org.alfresco.deployment.appTest;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeSuite;
 
 import io.fabric8.kubernetes.api.model.Service;
@@ -30,6 +32,8 @@ public class AppAbstract
     private static String clusterNamespace;
     Properties appProperty = new Properties();
     KubernetesClient client = new DefaultKubernetesClient();
+    final int RETRY_COUNT =5;
+    private static Log logger = LogFactory.getLog(AppAbstract.class);
 
     /**
      * The before suit will load test properties file and load the same.
@@ -70,11 +74,12 @@ public class AppAbstract
 
     /**
      * To find the get service url of minikube
+     * @throws InterruptedException 
      */
-    private String getUrlForMinikube(String nameSpace, String runType)
+    private String getUrlForMinikube(String nameSpace, String runType) throws InterruptedException
     {
         String url = client.getMasterUrl().toString();
-        List<Service> service = client.services().inNamespace(nameSpace).list().getItems();
+        List<Service> service = retryUntilServiceAvailable(nameSpace);
         for (Service each : service)
         {
             if (each.getMetadata().getName().contains(runType))
@@ -88,11 +93,12 @@ public class AppAbstract
 
     /**
      * To find the load balancer required for testing
+     * @throws InterruptedException 
      */
-    private String getUrlForAWS(String nameSpace, String runType)
+    private String getUrlForAWS(String nameSpace, String runType) throws InterruptedException
     {
         String url = null;
-        List<Service> service = client.services().inNamespace(nameSpace).list().getItems();
+        List<Service> service = retryUntilServiceAvailable(nameSpace);
         for (Service each : service)
         {
 
@@ -104,4 +110,29 @@ public class AppAbstract
         return "http://" + url;
     }
 
-}
+   /**
+    * re try until the service is available 
+ * @throws InterruptedException 
+    */
+    private List<Service> retryUntilServiceAvailable(String nameSpace) throws InterruptedException
+    {
+        List<Service> service = null;
+        int i = 0;
+        while (i<= RETRY_COUNT)
+        {
+            service = client.services().inNamespace(nameSpace).list().getItems(); 
+            if (service.isEmpty())
+            {
+                logger.info(String.format("the service is empty for round [%s] so planning to wait 10 seconds",i));
+                Thread.sleep(10000);
+                i++;
+            }
+            else
+            {
+                logger.info(String.format("the service is back after [%s] retries",i));
+                break;
+            }
+        }
+        return service;
+    }
+    }
