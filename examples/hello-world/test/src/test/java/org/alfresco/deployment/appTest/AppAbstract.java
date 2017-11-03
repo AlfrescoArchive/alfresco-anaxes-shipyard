@@ -33,7 +33,7 @@ public class AppAbstract
     private static String clusterNamespace;
     Properties appProperty = new Properties();
     KubernetesClient client = new DefaultKubernetesClient();
-    final int RETRY_COUNT =5;
+    final int RETRY_COUNT = 5;
     private static Log logger = LogFactory.getLog(AppAbstract.class);
 
     /**
@@ -75,7 +75,8 @@ public class AppAbstract
 
     /**
      * To find the get service url of minikube
-     * @throws InterruptedException 
+     * 
+     * @throws InterruptedException
      */
     private String getUrlForMinikube(String nameSpace, String runType) throws Exception
     {
@@ -89,14 +90,15 @@ public class AppAbstract
                 url = url.replace(":8443", ":" + each.getSpec().getPorts().get(0).getNodePort());
             }
         }
-        return url ;
+        return url;
     }
 
     /**
      * To find the load balancer required for testing
-     * @throws InterruptedException 
+     * 
+     * @throws InterruptedException
      */
-    private String getUrlForAWS(String nameSpace, String runType) throws Exception
+    private String getUrlForAWS(String nameSpace, String runType) throws InterruptedException
     {
         String url = null;
         List<Service> service = retryUntilServiceAvailable(nameSpace);
@@ -106,36 +108,50 @@ public class AppAbstract
             if (each.getMetadata().getName().contains(runType))
             {
                 url = each.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
+                int i = 0;
+                while (i <= RETRY_COUNT)
+                {
+                    if (url == null)
+                    {
+                        logger.info("retrying to get the url value correctly");
+                        Thread.sleep(10000);
+                        url = each.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
+                        i++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
             }
         }
         return "http://" + url;
     }
 
-   /**
-    * re try until the service is available 
- * @throws InterruptedException 
-    */
+    /**
+     * re try until the service is available
+     * 
+     * @throws InterruptedException
+     */
     private List<Service> retryUntilServiceAvailable(String nameSpace) throws InterruptedException
     {
         List<Service> service;
         int i = 0;
-        while (i<= RETRY_COUNT)
+        while (i <= RETRY_COUNT)
         {
-            service = client.services().inNamespace(nameSpace).list().getItems(); 
-            logger.info("service.size() " + service.size());
-            logger.info(service == null);
+            service = client.services().inNamespace(nameSpace).list().getItems();
             if ((service.size() == 0) || (service == null))
             {
-                logger.info(String.format("the service is empty for round [%s] so planning to wait 10 seconds",i));
+                logger.info(String.format("the service is empty for round [%s] so planning to wait 10 seconds", i));
                 Thread.sleep(10000);
                 i++;
             }
             else
             {
-                logger.info(String.format("the service is back after [%s] retries",i));
+                logger.info(String.format("the service is back after [%s] retries", i));
                 return service;
             }
         }
-       throw new NullArgumentException("The service was never up and running after "+ i + "tries");
+        throw new NullArgumentException("The service was never up and running after " + i + "tries");
     }
-    }
+}
