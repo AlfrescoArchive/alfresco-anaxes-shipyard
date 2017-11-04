@@ -13,13 +13,12 @@
 
 package org.alfresco.deployment.appTest;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -28,7 +27,6 @@ import org.testng.annotations.BeforeSuite;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.utils.NullArgumentException;
 
 public class AppAbstract
 {
@@ -38,7 +36,8 @@ public class AppAbstract
     private static String clusterNamespace;
     Properties appProperty = new Properties();
     KubernetesClient client = new DefaultKubernetesClient();
-    final int RETRY_COUNT = 5;
+    final int RETRY_COUNT = 10;
+    final long TIMER = 20000;
     private static Log logger = LogFactory.getLog(AppAbstract.class);
 
     /**
@@ -55,7 +54,7 @@ public class AppAbstract
             throw new IllegalStateException("Cluster namespace is required , please set namespace details in the properties file");
         }
         clusterNamespace = clusterNamespace.toLowerCase();
-        if ((clusterType == null) || ("minikube".equalsIgnoreCase(clusterType)))
+        if ((clusterType.isEmpty()) || ("minikube".equalsIgnoreCase(clusterType)))
         {
             restApiUrl = getUrlForMinikube(clusterNamespace, "backend");
             appUrl = getUrlForMinikube(clusterNamespace, "ui");
@@ -66,10 +65,6 @@ public class AppAbstract
             appUrl = getUrlForAWS(clusterNamespace, "ui");
         }
 
-        if (restApiUrl.isEmpty() || appUrl.isEmpty())
-        {
-            throw new Exception("Cluster is not set up correctly");
-        }
         restApiUrl = restApiUrl + "/hello";
         testServiceUp();
     }
@@ -87,108 +82,108 @@ public class AppAbstract
     private String getUrlForMinikube(String nameSpace, String runType) throws Exception
     {
         String url = client.getMasterUrl().toString();
-        List<Service> service = retryUntilServiceAvailable(nameSpace);
-        for (Service each : service)
+        url = url.replace("https", "http");
+        int i = 0;
+        long sleepCount = 0;
+        while ((i <= RETRY_COUNT) & (url.contains(":8443")))
         {
-            if (each.getMetadata().getName().contains(runType))
+            List<Service> service = client.services().inNamespace(nameSpace).list().getItems();
+            for (Service each : service)
             {
-                url = url.replace("https", "http");
-                url = url.replace(":8443", ":" + each.getSpec().getPorts().get(0).getNodePort());
+                if (each.getMetadata().getName().contains(runType))
+                {
+                    if (each.getSpec().getPorts().size() != 0)
+                    {
+                        url = url.replace(":8443", ":" + each.getSpec().getPorts().get(0).getNodePort());
+                        logger.info("URL details " + url + " in total seconds " + sleepCount / 1000);
+                    }
+                    break;
+                }
             }
+            Thread.sleep(TIMER);
+            i++;
+            sleepCount = sleepCount + TIMER;
+            logger.info("Retried to get the URL  - number of retries " + i + "total time taken " + sleepCount / 1000);
+
+        }
+        if (url.contains(":8443"))
+        {
+            throw new Exception("the minikube service url is not available to continue testing - Total seconds - " + sleepCount / 1000);
         }
         return url;
     }
 
     /**
      * To find the load balancer required for testing
-     * @throws Exception 
+     * 
+     * @throws Exception
      */
     private String getUrlForAWS(String nameSpace, String runType) throws Exception
     {
         String url = null;
-        List<Service> service = retryUntilServiceAvailable(nameSpace);
-        for (Service each : service)
+        int i = 0;
+        long sleepCount = 0;
+        while ((i <= RETRY_COUNT) & (url == null))
         {
-            if (each.getMetadata().getName().contains(runType))
+            List<Service> service = client.services().inNamespace(nameSpace).list().getItems();
+            for (Service each : service)
             {
-                int i = 0;
-                while (i <= RETRY_COUNT)
+                if (each.getMetadata().getName().contains(runType))
                 {
-                    if (each.getStatus().getLoadBalancer().getIngress().size() == 0)
-                    {
-
-                        logger.info("retrying to get the url value correctly "+ i);
-                        Thread.sleep(10000);
-                        i++;
-                    }
-                    else
+                    if (each.getStatus().getLoadBalancer().getIngress().size() != 0)
                     {
                         url = each.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
-                        logger.info("got the url details ");
-                        break;
+                        logger.info("URL details " + url + " in total seconds " + sleepCount / 1000);
                     }
+                    break;
                 }
-                break;
             }
-            
+            Thread.sleep(TIMER);
+            i++;
+            sleepCount = sleepCount + TIMER;
+            logger.info("retrying to get the url - number of retries " + i + "-total time taken " + sleepCount / 1000);
+
         }
         if (url == null)
         {
-            throw new Exception("The url is null and not set correctly");
+            throw new Exception("the aws service url is not available to continue testing -  Total seconds - " + sleepCount / 1000);
         }
         return "http://" + url;
     }
 
     /**
-     * re try until the service is available
-     * 
-     * @throws InterruptedException
-     */
-    private List<Service> retryUntilServiceAvailable(String nameSpace) throws InterruptedException
-    {
-        List<Service> service;
-        int i = 0;
-        while (i <= RETRY_COUNT)
-        {
-            service = client.services().inNamespace(nameSpace).list().getItems();
-            if ((service.size() == 0))
-            {
-                logger.info(String.format("the service is empty for round [%s] so planning to wait 10 seconds", i));
-                Thread.sleep(10000);
-                i++;
-            }
-            else
-            {
-                logger.info(String.format("the service is back after [%s] retries", i));
-                return service;
-            }
-        }
-        throw new NullArgumentException("The service was never up and running after " + i + "tries");
-    }
-
-    /**
      * Validate the service is up and running
-     * @throws Exception 
+     * 
+     * @throws Exception
      */
     private void testServiceUp() throws Exception
     {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        CloseableHttpResponse response = null;
         int i = 0;
         while (i <= RETRY_COUNT)
         {
-            try
+            logger.info("Validate whether the DNS is all up and running");
+            HttpGet getRequest = new HttpGet(restApiUrl);
+            response = httpClient.execute(getRequest);
+            if (response.getStatusLine().getStatusCode() == 405)
             {
-                new HttpGet(restApiUrl);
+                logger.info("DNS is up and running after so many retries  " + i);
+                httpClient.close();
                 break;
             }
-            catch (Exception e)
+            else
             {
-                logger.info(String.format("the test is failing and need to re try as dns is not ready " + i));
-                Thread.sleep(10000);
+                logger.info(String.format("re trying as dns is not ready - retry count " + i));
+                response.close();
+                Thread.sleep(TIMER);
                 i++;
             }
         }
-        httpClient.close();
-        throw new Exception("The get request is failing and not up even after 5 retries ");
+        if (i > RETRY_COUNT)
+        {
+            throw new Exception("DNS not ready");
+        }
+
     }
 }
