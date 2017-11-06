@@ -52,6 +52,8 @@ public class AppUITest extends AppAbstract
             // wait for the URL to become available
             waitForURL(uiUrl);
         }
+        
+        logger.info("Testing UI URL:" + uiUrl);
     }
     
     /**
@@ -67,27 +69,27 @@ public class AppUITest extends AppAbstract
         BufferedReader rd = null ;
         try
         {
-        logger.info("Test the UI is working correctly for the url "+ uiUrl);
-        client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(uiUrl);
-        response = client.execute(getRequest);
-        rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
-        StringBuffer result = new StringBuffer();
-        String line = "";
-        while ((line = rd.readLine()) != null)
-        {
-            result.append(line);
+            client = HttpClientBuilder.create().build();
+            HttpGet getRequest = new HttpGet(uiUrl);
+            response = client.execute(getRequest);
+            rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+    
+            StringBuffer result = new StringBuffer();
+            String line = "";
+            while ((line = rd.readLine()) != null)
+            {
+                result.append(line);
+            }
+            String htmlOutput = result.toString();
+            
+            Assert.assertFalse(htmlOutput.contains("error"), String.format("The page is not loaded correctly it contains error [%s]", htmlOutput));
+            Assert.assertTrue(htmlOutput.contains("<title>Demo Application</title>"), String.format("The title is not displayed correctly and the result is [%s]",htmlOutput));
         }
-        String htmlOutput = result.toString();
-        Assert.assertFalse(htmlOutput.contains("error"), String.format("The page is not loaded correctly it contains error [%s]", htmlOutput));
-        Assert.assertTrue(htmlOutput.contains("<title>Demo Application</title>"), String.format("The title is not displayed correctly and the result is [%s]",htmlOutput));
+        finally
+        {
+            if (rd != null) rd.close();
+            if (response != null) response.close();
+            if (client != null) client.close();
+        }
     }
-     finally
-     {
-         if (rd != null) rd.close();
-         if (response != null) response.close();
-         if (client != null) client.close();
-     }
-   }
 }

@@ -79,7 +79,6 @@ public class AppAbstract
         if (clusterType == null || clusterType.isEmpty() || "minikube".equalsIgnoreCase(clusterType))
         {
             isMinikubeCluster = true;
-            logger.info("Detected a minikube cluster");
         }
     }
 
@@ -96,7 +95,7 @@ public class AppAbstract
     /**
      * Finds a service url running in minikube.
      */
-    protected String getUrlForMinikube(String runType)
+    protected String getUrlForMinikube(String runType) throws Exception
     {
         logger.info("Retrieving " + runType + " URL for minikube...");
 
@@ -104,30 +103,44 @@ public class AppAbstract
         logger.info("cluster URL: " + clusterUrl);
         
         int nodePort = -1;
-        
-        // find the port number for the given 'runType'
-        List<Service> services = client.services().inNamespace(clusterNamespace).list().getItems();
-        logger.info("Found " + services.size() + " services");
-        for (Service service : services)
+        int i = 0;
+        long sleepTotal = 0;
+        while ((i <= RETRY_COUNT) & (nodePort == -1))
         {
-            if (service.getMetadata().getName().contains(runType))
+            // find the port number for the given 'runType'
+            List<Service> services = client.services().inNamespace(clusterNamespace).list().getItems();
+            logger.info("Found " + services.size() + " services");
+            for (Service service : services)
             {
-                logger.info("Looking up port for service: " + service.getMetadata().getName());
-                if (service.getSpec().getPorts().size() != 0)
+                if (service.getMetadata().getName().contains(runType))
                 {
-                    nodePort = service.getSpec().getPorts().get(0).getNodePort();
-                    break;
+                    logger.info("Looking up nodePort for service: " + service.getMetadata().getName());
+                    if (service.getSpec().getPorts().size() != 0)
+                    {
+                        nodePort = service.getSpec().getPorts().get(0).getNodePort();
+                        break;
+                    }
                 }
             }
+            
+            // try again if url was not found
+            if (nodePort == -1)
+            {
+                logger.info("nodePort is not available, sleeping for " + (SLEEP_DURATION/1000) + " seconds, retry count: " + i);
+                Thread.sleep(SLEEP_DURATION);
+                i++;
+                sleepTotal = sleepTotal + SLEEP_DURATION;
+            }
         }
-
+        
         if (nodePort != -1)
         {
             return clusterUrl.replace("https", "http").replace("8443", Integer.toString(nodePort));
         }
         else
         {
-            throw new IllegalStateException("Failed to find nodePort for runType '" + runType + "' in namespace: " + clusterNamespace);
+            throw new IllegalStateException("Failed to find nodePort for runType '" + runType + 
+                        "' in namespace '" + clusterNamespace + "' after " + sleepTotal + " seconds");
         }
     }
 

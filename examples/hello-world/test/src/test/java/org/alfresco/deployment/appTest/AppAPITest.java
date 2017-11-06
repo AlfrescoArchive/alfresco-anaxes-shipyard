@@ -76,6 +76,8 @@ public class AppAPITest extends AppAbstract
         }
         buffer.append("hello");
         restApiUrl = buffer.toString();
+        
+        logger.info("Testing REST API URL:" + restApiUrl);
     }
 
     /**
@@ -87,7 +89,6 @@ public class AppAPITest extends AppAbstract
     @Test(priority=0)
     public void testInvalidApiRequest() throws Exception
     {
-        logger.info("Test to validate the rest request for the following app :" + restApiUrl);
         client = HttpClientBuilder.create().build();
         HttpGet getRequest = new HttpGet(restApiUrl);
         response = (CloseableHttpResponse) client.execute(getRequest);
@@ -105,7 +106,6 @@ public class AppAPITest extends AppAbstract
     @Test(priority=1)
     public void testValidApiRequest() throws Exception
     {
-        logger.info("Test to validate the rest request for the following app :" + restApiUrl + "/welcome");
         client = HttpClientBuilder.create().build();
         HttpGet getRequest = new HttpGet(restApiUrl + File.separator + "welcome");
         response = (CloseableHttpResponse) client.execute(getRequest);
@@ -126,7 +126,8 @@ public class AppAPITest extends AppAbstract
         StringEntity jsonBody;
         String key = RandomStringUtils.randomAlphanumeric(4);
         String value = RandomStringUtils.randomAlphanumeric(4);
-        logger.info("Create request");
+        
+        // test message creation
         jsonBody = new StringEntity(generateJsonBody(key, value));
         client = HttpClientBuilder.create().build();
         HttpPost postRequest = new HttpPost(restApiUrl);
@@ -136,13 +137,13 @@ public class AppAPITest extends AppAbstract
         validateResponse(key, value, response, 201);
         closeResponse();
 
-        logger.info("Get request for created content");
+        // retrieve new message
         getRequest = new HttpGet(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse(key, value, response, 200);
         closeResponse();
 
-        logger.info("Update request for the same key " + key);
+        // update message
         value = RandomStringUtils.randomAlphanumeric(4);
         jsonBody = new StringEntity(generateJsonBody(key, value));
         HttpPut putRequest = new HttpPut(restApiUrl + File.separator + key);
@@ -152,20 +153,20 @@ public class AppAPITest extends AppAbstract
         validateResponse(key, value, response, 200);
         closeResponse();
 
-        logger.info("Get request for updated content");
+        // get updated message
         getRequest = new HttpGet(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse(key, value, response, 200);
         closeResponse();
 
-        logger.info("delete request for the same key " + key);
+        // delete message
         HttpDelete deleteRequest = new HttpDelete(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(deleteRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 204),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
         closeResponse();
 
-        logger.info("Get request for put content");
+        // make sure message has been deleted
         getRequest = new HttpGet(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 404),
