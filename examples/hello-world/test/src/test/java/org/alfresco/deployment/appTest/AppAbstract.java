@@ -30,6 +30,9 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 
 public class AppAbstract
 {
+    private static final String CLUSTER_TYPE = "cluster.type";
+    private static final String CLUSTER_NAMESPACE = "cluster.namespace";
+    
     protected static String restApiUrl;
     protected static String appUrl;
     private static String clusterType;
@@ -41,15 +44,28 @@ public class AppAbstract
     private static Log logger = LogFactory.getLog(AppAbstract.class);
 
     /**
-     * The before suit will load test properties file and load the same.
+     * The before suite will load test properties file and load the same.
      */
     @BeforeSuite
     public void initialSetup() throws Exception
     {
+        // load properties file
         appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
-        clusterType = readProperty("cluster.type");
-        clusterNamespace = readProperty("cluster.namespace");
-
+        
+        // get cluster type, first check environment variable, fall back to properties file
+        clusterType = System.getenv(CLUSTER_TYPE);
+        if (clusterType == null)
+        {
+            clusterType = readProperty("cluster.type");
+        }
+        
+        // get cluster namespace, first check environment variable, fall back to properties file
+        clusterNamespace = System.getenv(CLUSTER_NAMESPACE);
+        if (clusterNamespace == null)
+        {
+            clusterNamespace = readProperty("cluster.namespace");
+        }
+        
         logger.info("clusterType: " + clusterType);
         logger.info("clusterNamespace: " + clusterNamespace);
 
@@ -57,8 +73,11 @@ public class AppAbstract
         {
             throw new IllegalStateException("Cluster namespace is required , please set namespace details in the properties file");
         }
+        
+        // ensure namespace is lower case
         clusterNamespace = clusterNamespace.toLowerCase();
-        if ((clusterType.isEmpty()) || ("minikube".equalsIgnoreCase(clusterType)))
+        
+        if (clusterType == null || clusterType.isEmpty() || "minikube".equalsIgnoreCase(clusterType))
         {
             restApiUrl = getUrlForMinikube(clusterNamespace, "backend");
             appUrl = getUrlForMinikube(clusterNamespace, "ui");
@@ -70,6 +89,10 @@ public class AppAbstract
         }
 
         restApiUrl = restApiUrl + "/hello";
+        
+        logger.info("UI URL: " + appUrl);
+        logger.info("API URL: " + restApiUrl);
+        
         testServiceUp();
     }
 
@@ -85,19 +108,23 @@ public class AppAbstract
      */
     private String getUrlForMinikube(String nameSpace, String runType) throws Exception
     {
-        logger.info("Retrieving URL for minikube...");
+        logger.info("Retrieving " + runType + " URL for minikube...");
 
         String url = client.getMasterUrl().toString();
+        logger.info("cluster URL: " + url);
+        
         url = url.replace("https", "http");
         int i = 0;
         long sleepCount = 0;
         while ((i <= RETRY_COUNT) & (url.contains(":8443")))
         {
             List<Service> service = client.services().inNamespace(nameSpace).list().getItems();
+            logger.info("Found " + service.size() + " services");
             for (Service each : service)
             {
                 if (each.getMetadata().getName().contains(runType))
                 {
+                    logger.info("Looking up hostname for service: " + each.getMetadata().getName());
                     if (each.getSpec().getPorts().size() != 0)
                     {
                         url = url.replace(":8443", ":" + each.getSpec().getPorts().get(0).getNodePort());
@@ -126,7 +153,7 @@ public class AppAbstract
      */
     private String getUrlForAWS(String nameSpace, String runType) throws Exception
     {
-        logger.info("Retrieving URL for AWS...");
+        logger.info("Retrieving " + runType + " URL for AWS...");
 
         String url = null;
         int i = 0;
@@ -168,31 +195,33 @@ public class AppAbstract
      */
     private void testServiceUp() throws Exception
     {
+        logger.info("Validating whether the REST API URL is available...");
+        
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         CloseableHttpResponse response = null;
         int i = 0;
         while (i <= RETRY_COUNT)
         {
-            logger.info("Validate whether the DNS is all up and running");
             HttpGet getRequest = new HttpGet(restApiUrl);
             response = httpClient.execute(getRequest);
             if (response.getStatusLine().getStatusCode() == 405)
             {
-                logger.info("DNS is up and running after so many retries  " + i);
+                logger.info("REST API is available, taking " + i + " retries");
                 httpClient.close();
                 break;
             }
             else
             {
-                logger.info(String.format("re trying as dns is not ready - retry count " + i));
+                logger.info(String.format("REST API is not available, re-trying - retry count: " + i));
                 response.close();
                 Thread.sleep(TIMER);
                 i++;
             }
         }
+        
         if (i > RETRY_COUNT)
         {
-            throw new Exception("DNS not ready");
+            throw new IllegalStateException("REST API is not available");
         }
 
     }
