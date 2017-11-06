@@ -13,6 +13,7 @@
 
 package org.alfresco.deployment.appTest;
 
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Properties;
 
@@ -40,7 +41,7 @@ public class AppAbstract
     Properties appProperty = new Properties();
     KubernetesClient client = new DefaultKubernetesClient();
     final int RETRY_COUNT = 10;
-    final long TIMER = 20000;
+    final long TIMER = 6000;
     private static Log logger = LogFactory.getLog(AppAbstract.class);
 
     /**
@@ -204,17 +205,22 @@ public class AppAbstract
         while (i <= RETRY_COUNT)
         {
             HttpGet getRequest = new HttpGet(restApiUrl);
-            response = httpClient.execute(getRequest);
-            if (response.getStatusLine().getStatusCode() == 405)
+            try
             {
-                logger.info("REST API is available, taking " + i + " retries");
+                response = httpClient.execute(getRequest);
+                
+                // any response here means the URL is accessible 
+                logger.info("REST API is available, took " + i + " retries");
                 httpClient.close();
                 break;
             }
-            else
+            catch (UnknownHostException uhe)
             {
                 logger.info(String.format("REST API is not available, re-trying - retry count: " + i));
-                response.close();
+                if (response != null)
+                {
+                    response.close();
+                }
                 Thread.sleep(TIMER);
                 i++;
             }
