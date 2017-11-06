@@ -25,12 +25,35 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.testng.Assert;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 public class AppUITest extends AppAbstract
 {
     private static Log logger = LogFactory.getLog(AppUITest.class);
+    
+    private String uiUrl;
 
+    @BeforeSuite
+    public void setup() throws Exception
+    {
+        // do common setup
+        commonSetup();
+        
+        // get the appropriate URL
+        if (isMinikubeCluster())
+        {
+            uiUrl = getUrlForMinikube("ui");
+        }
+        else
+        {
+            uiUrl = getUrlForAWS("ui");
+            
+            // wait for the URL to become available
+            waitForURL(uiUrl);
+        }
+    }
+    
     /**
      * Test to check the UI response is correct
      * @throws Exception
@@ -44,9 +67,9 @@ public class AppUITest extends AppAbstract
         BufferedReader rd = null ;
         try
         {
-        logger.info("Test the UI is working correctly for the url "+ appUrl);
+        logger.info("Test the UI is working correctly for the url "+ uiUrl);
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl);
+        HttpGet getRequest = new HttpGet(uiUrl);
         response = client.execute(getRequest);
         rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
@@ -62,9 +85,9 @@ public class AppUITest extends AppAbstract
     }
      finally
      {
-         rd.close();
-         response.close();
-         client.close();
+         if (rd != null) rd.close();
+         if (response != null) response.close();
+         if (client != null) client.close();
      }
    }
 }

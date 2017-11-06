@@ -33,6 +33,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -45,6 +46,37 @@ public class AppAPITest extends AppAbstract
     private static Log logger = LogFactory.getLog(AppAPITest.class);
     private CloseableHttpClient client;
     private CloseableHttpResponse response;
+    
+    private String restApiUrl;
+
+    @BeforeSuite
+    public void setup() throws Exception
+    {
+        // do common setup
+        commonSetup();
+        
+        // get the appropriate URL
+        if (isMinikubeCluster())
+        {
+            restApiUrl = getUrlForMinikube("backend");
+        }
+        else
+        {
+            restApiUrl = getUrlForAWS("backend");
+            
+            // wait for the URL to become available
+            waitForURL(restApiUrl);
+        }
+        
+        // add the /hello to the base url
+        StringBuffer buffer = new StringBuffer(restApiUrl);
+        if (!restApiUrl.endsWith("/"))
+        {
+            buffer.append("/");
+        }
+        buffer.append("hello");
+        restApiUrl = buffer.toString();
+    }
 
     /**
      * Test to check if we pass a invalid app like just the url without body it
