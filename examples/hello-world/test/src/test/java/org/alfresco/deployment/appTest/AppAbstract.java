@@ -41,7 +41,7 @@ public class AppAbstract
     Properties appProperty = new Properties();
     KubernetesClient client = new DefaultKubernetesClient();
     final int RETRY_COUNT = 10;
-    final long TIMER = 6000;
+    final long TIMER = 15000;
     private static Log logger = LogFactory.getLog(AppAbstract.class);
 
     /**
@@ -53,14 +53,14 @@ public class AppAbstract
         // load properties file
         appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
         
-        // get cluster type, first check environment variable, fall back to properties file
+        // get cluster type, first check system property, fall back to properties file
         clusterType = System.getProperty(CLUSTER_TYPE);
         if (clusterType == null)
         {
             clusterType = readProperty("cluster.type");
         }
         
-        // get cluster namespace, first check environment variable, fall back to properties file
+        // get cluster namespace, first check system property, fall back to properties file
         clusterNamespace = System.getProperty(CLUSTER_NAMESPACE);
         if (clusterNamespace == null)
         {
@@ -228,7 +228,7 @@ public class AppAbstract
         
         if (i > RETRY_COUNT)
         {
-            throw new IllegalStateException("REST API is not available");
+            throw new IllegalStateException("REST API is not available at: " + restApiUrl);
         }
 
     }
