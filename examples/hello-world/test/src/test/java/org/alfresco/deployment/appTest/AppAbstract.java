@@ -53,14 +53,14 @@ public class AppAbstract
         appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
         
         // get cluster type, first check environment variable, fall back to properties file
-        clusterType = System.getenv(CLUSTER_TYPE);
+        clusterType = System.getProperty(CLUSTER_TYPE);
         if (clusterType == null)
         {
             clusterType = readProperty("cluster.type");
         }
         
         // get cluster namespace, first check environment variable, fall back to properties file
-        clusterNamespace = System.getenv(CLUSTER_NAMESPACE);
+        clusterNamespace = System.getProperty(CLUSTER_NAMESPACE);
         if (clusterNamespace == null)
         {
             clusterNamespace = readProperty("cluster.namespace");
@@ -154,7 +154,8 @@ public class AppAbstract
     private String getUrlForAWS(String nameSpace, String runType) throws Exception
     {
         logger.info("Retrieving " + runType + " URL for AWS...");
-
+        logger.info("cluster URL: " + client.getMasterUrl().toString());
+        
         String url = null;
         int i = 0;
         long sleepCount = 0;
