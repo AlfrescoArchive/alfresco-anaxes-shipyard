@@ -18,6 +18,7 @@ package org.alfresco.deployment.appTest;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -25,7 +26,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.testng.Assert;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class AppUITest extends AppAbstract
@@ -34,7 +35,7 @@ public class AppUITest extends AppAbstract
     
     private String uiUrl;
 
-    @BeforeSuite
+    @BeforeClass
     public void setup() throws Exception
     {
         // do common setup
@@ -53,7 +54,7 @@ public class AppUITest extends AppAbstract
             waitForURL(uiUrl);
         }
         
-        logger.info("Testing UI URL:" + uiUrl);
+        logger.info("Testing UI URL: " + uiUrl);
     }
     
     /**

@@ -19,7 +19,6 @@ package org.alfresco.deployment.appTest;
 import java.io.File;
 
 import org.apache.commons.lang.RandomStringUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -31,12 +30,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Test;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 /**
  * regression test for sample App to validate the api request.
@@ -49,7 +49,7 @@ public class AppAPITest extends AppAbstract
     
     private String restApiUrl;
 
-    @BeforeSuite
+    @BeforeClass
     public void setup() throws Exception
     {
         // do common setup
@@ -77,7 +77,7 @@ public class AppAPITest extends AppAbstract
         buffer.append("hello");
         restApiUrl = buffer.toString();
         
-        logger.info("Testing REST API URL:" + restApiUrl);
+        logger.info("Testing REST API URL: " + restApiUrl);
     }
 
     /**
