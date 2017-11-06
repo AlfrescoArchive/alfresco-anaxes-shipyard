@@ -49,6 +49,10 @@ public class AppAbstract
         appProperty.load(this.getClass().getClassLoader().getResourceAsStream("test.properties"));
         clusterType = readProperty("cluster.type");
         clusterNamespace = readProperty("cluster.namespace");
+
+        logger.info("clusterType: " + clusterType);
+        logger.info("clusterNamespace: " + clusterNamespace);
+
         if (clusterNamespace == null)
         {
             throw new IllegalStateException("Cluster namespace is required , please set namespace details in the properties file");
@@ -81,6 +85,8 @@ public class AppAbstract
      */
     private String getUrlForMinikube(String nameSpace, String runType) throws Exception
     {
+        logger.info("Retrieving URL for minikube...");
+
         String url = client.getMasterUrl().toString();
         url = url.replace("https", "http");
         int i = 0;
@@ -120,16 +126,20 @@ public class AppAbstract
      */
     private String getUrlForAWS(String nameSpace, String runType) throws Exception
     {
+        logger.info("Retrieving URL for AWS...");
+
         String url = null;
         int i = 0;
         long sleepCount = 0;
         while ((i <= RETRY_COUNT) & (url == null))
         {
             List<Service> service = client.services().inNamespace(nameSpace).list().getItems();
+            logger.info("Found " + service.size() + " services");
             for (Service each : service)
             {
                 if (each.getMetadata().getName().contains(runType))
                 {
+                    logger.info("Looking up hostname for service: " + each.getMetadata().getName());
                     if (each.getStatus().getLoadBalancer().getIngress().size() != 0)
                     {
                         url = each.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
