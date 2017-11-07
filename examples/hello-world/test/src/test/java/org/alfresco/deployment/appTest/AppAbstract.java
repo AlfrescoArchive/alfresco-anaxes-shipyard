@@ -13,6 +13,8 @@
 
 package org.alfresco.deployment.appTest;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Properties;
@@ -206,6 +208,7 @@ public class AppAbstract
         
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         CloseableHttpResponse response = null;
+        int TIMEOUT = 2000;
         int i = 0;
         while (i <= RETRY_COUNT)
         {
@@ -214,9 +217,9 @@ public class AppAbstract
                 logger.info("building request");
                 HttpGet getRequest = new HttpGet(url);
                 RequestConfig config = RequestConfig.custom()
-                            .setSocketTimeout(2000)
-                            .setConnectionRequestTimeout(2000)
-                            .setConnectTimeout(2000).build();
+                            .setSocketTimeout(TIMEOUT)
+                            .setConnectionRequestTimeout(TIMEOUT)
+                            .setConnectTimeout(TIMEOUT).build();
                 getRequest.setConfig(config);
                 logger.info("executing request");
                 response = httpClient.execute(getRequest);
@@ -231,7 +234,7 @@ public class AppAbstract
                 httpClient.close();
                 break;
             }
-            catch (UnknownHostException uhe)
+            catch (ConnectException|UnknownHostException|SocketTimeoutException ex)
             {
                 if (response != null) response.close();
                 logger.info("URL is not available, sleeping for " + (SLEEP_DURATION/1000) + " seconds, retry count: " + i);

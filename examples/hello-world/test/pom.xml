@@ -12,6 +12,10 @@
 		<com.googlecode.json-simple>1.1.1</com.googlecode.json-simple>
 		<common.lang>2.6</common.lang>
 		<fabric8.version>2.2.101</fabric8.version>
+      
+      <!-- Compile with Java 7, default is 5 -->
+      <maven.compiler.source>1.7</maven.compiler.source>
+      <maven.compiler.target>1.7</maven.compiler.target>
 	</properties>
 
 	<dependencies>
