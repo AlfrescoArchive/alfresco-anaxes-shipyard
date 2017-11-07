@@ -19,6 +19,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -210,14 +211,20 @@ public class AppAbstract
         {
             try
             {
-                logger.info("executing request");
+                logger.info("building request");
                 HttpGet getRequest = new HttpGet(url);
+                RequestConfig config = RequestConfig.custom()
+                            .setSocketTimeout(2000)
+                            .setConnectionRequestTimeout(2000)
+                            .setConnectTimeout(2000).build();
+                getRequest.setConfig(config);
+                logger.info("executing request");
                 response = httpClient.execute(getRequest);
+                logger.info("received response");
                 
                 // grab something from the response to trigger send
                 int status = response.getStatusLine().getStatusCode();
                 logger.info("response status code: " + status);
-                
                 
                 // any response here means the URL is accessible 
                 logger.info("URL is available, took " + i + " retries");
