@@ -213,6 +213,10 @@ public class AppAbstract
             {
                 response = httpClient.execute(getRequest);
                 
+                // grab something from the response to trigger send
+                response.getStatusLine();
+                response.close();
+                
                 // any response here means the URL is accessible 
                 logger.info("URL is available, took " + i + " retries");
                 httpClient.close();
