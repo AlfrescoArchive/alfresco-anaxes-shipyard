@@ -214,24 +214,16 @@ public class AppAbstract
         {
             try
             {
-                logger.info("building request");
                 HttpGet getRequest = new HttpGet(url);
                 RequestConfig config = RequestConfig.custom()
                             .setSocketTimeout(TIMEOUT)
                             .setConnectionRequestTimeout(TIMEOUT)
                             .setConnectTimeout(TIMEOUT).build();
                 getRequest.setConfig(config);
-                logger.info("executing request");
                 response = httpClient.execute(getRequest);
-                logger.info("received response");
-                
-                // grab something from the response to trigger send
-                int status = response.getStatusLine().getStatusCode();
-                logger.info("response status code: " + status);
                 
                 // any response here means the URL is accessible 
                 logger.info("URL is available, took " + i + " retries");
-                httpClient.close();
                 break;
             }
             catch (ConnectException|UnknownHostException|SocketTimeoutException ex)
@@ -242,6 +234,9 @@ public class AppAbstract
                 i++;
             }
         }
+        
+        // close the http client
+        httpClient.close();
         
         if (i > RETRY_COUNT)
         {
