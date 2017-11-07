@@ -49,10 +49,10 @@ public class AppUITest extends AppAbstract
         else
         {
             uiUrl = getUrlForAWS("ui");
-            
-            // wait for the URL to become available
-            waitForURL(uiUrl);
         }
+        
+        // wait for the URL to become available
+        waitForURL(uiUrl);
         
         logger.info("UI URL: " + uiUrl);
     }

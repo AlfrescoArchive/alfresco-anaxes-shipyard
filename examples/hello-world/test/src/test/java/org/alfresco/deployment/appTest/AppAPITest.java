@@ -63,10 +63,10 @@ public class AppAPITest extends AppAbstract
         else
         {
             restApiUrl = getUrlForAWS("backend");
-            
-            // wait for the URL to become available
-            waitForURL(restApiUrl);
         }
+        
+        // wait for the URL to become available
+        waitForURL(restApiUrl);
         
         // add the /hello to the base url
         StringBuffer buffer = new StringBuffer(restApiUrl);
