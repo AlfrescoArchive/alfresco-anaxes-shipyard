@@ -77,7 +77,7 @@ public class AppAPITest extends AppAbstract
         buffer.append("hello");
         restApiUrl = buffer.toString();
         
-        logger.info("Testing REST API URL: " + restApiUrl);
+        logger.info("REST API URL: " + restApiUrl);
     }
 
     /**
@@ -89,11 +89,15 @@ public class AppAPITest extends AppAbstract
     @Test(priority=0)
     public void testInvalidApiRequest() throws Exception
     {
+        logger.info("testInvalidApiRequest start");
+        
         client = HttpClientBuilder.create().build();
         HttpGet getRequest = new HttpGet(restApiUrl);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertFalse((response.getStatusLine().getStatusCode() == 200),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
+        
+        logger.info("testInvalidApiRequest end");
     }
 
     /**
@@ -106,10 +110,14 @@ public class AppAPITest extends AppAbstract
     @Test(priority=1)
     public void testValidApiRequest() throws Exception
     {
+        logger.info("testValidApiRequest start");
+        
         client = HttpClientBuilder.create().build();
         HttpGet getRequest = new HttpGet(restApiUrl + File.separator + "welcome");
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse("welcome", "Hello World!", response, 200);
+        
+        logger.info("testValidApiRequest start");
     }
 
     /**
@@ -122,6 +130,8 @@ public class AppAPITest extends AppAbstract
     @Test(priority=2)
     public void testHelloWorldApiRequest() throws Exception
     {
+        logger.info("testHelloWorldApiRequest start");
+        
         HttpGet getRequest;
         StringEntity jsonBody;
         String key = RandomStringUtils.randomAlphanumeric(4);
@@ -172,6 +182,8 @@ public class AppAPITest extends AppAbstract
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 404),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
         closeResponse();
+        
+        logger.info("testHelloWorldApiRequest end");
     }
 
     /**

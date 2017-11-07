@@ -54,7 +54,7 @@ public class AppUITest extends AppAbstract
             waitForURL(uiUrl);
         }
         
-        logger.info("Testing UI URL: " + uiUrl);
+        logger.info("UI URL: " + uiUrl);
     }
     
     /**
@@ -65,6 +65,8 @@ public class AppUITest extends AppAbstract
     @Test
     public void testHelloWorldAppUrl() throws Exception
     { 
+        logger.info("testHelloWorldAppUrl start");
+        
         CloseableHttpClient client = null;
         CloseableHttpResponse response= null;
         BufferedReader rd = null ;
@@ -92,5 +94,7 @@ public class AppUITest extends AppAbstract
             if (response != null) response.close();
             if (client != null) client.close();
         }
+        
+        logger.info("testHelloWorldAppUrl end");
     }
 }
