@@ -208,14 +208,16 @@ public class AppAbstract
         int i = 0;
         while (i <= RETRY_COUNT)
         {
-            HttpGet getRequest = new HttpGet(url);
             try
             {
+                logger.info("executing request");
+                HttpGet getRequest = new HttpGet(url);
                 response = httpClient.execute(getRequest);
                 
                 // grab something from the response to trigger send
-                response.getStatusLine();
-                response.close();
+                int status = response.getStatusLine().getStatusCode();
+                logger.info("response status code: " + status);
+                
                 
                 // any response here means the URL is accessible 
                 logger.info("URL is available, took " + i + " retries");
