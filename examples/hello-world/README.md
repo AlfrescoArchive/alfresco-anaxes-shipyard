@@ -53,7 +53,7 @@ You should see the output below.
 secret "quay-registry-secret" created
 </pre>
 
-5. Update the chart dependencies to pull the postgres chart used to deploy the db.
+5. Navigate to the 'hello-world/helm' folder and update the chart dependencies to pull the postgres chart used to deploy the db.
 
 ```bash
 helm dep update hello-world-app
@@ -72,7 +72,7 @@ Downloading postgresql from repo https://kubernetes-charts.storage.googleapis.co
 Deleting outdated charts
 </pre>
 
-6. Navigate to the 'hello-world/helm' folder and deploy the helm chart in your namespace.
+6. Deploy the helm chart in your namespace.
 
 If you're deploying to your local minikube use the following command:
 
