@@ -22,9 +22,9 @@ import { AppComponent } from './app.component';
 
 import {HttpModule} from '@angular/http';
 
-
 const appRoutes: Routes = [
-  { path: '', component: HomeComponent }
+  { path: '', redirectTo: 'hello/welcome', pathMatch: 'full' },
+  { path: 'hello/:id', component: HomeComponent }
 ];
 
 @NgModule({
