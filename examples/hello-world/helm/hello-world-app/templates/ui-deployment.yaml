@@ -23,9 +23,9 @@ spec:
           imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
           env:
             - name: HELLO_BACKEND_HOST
-              value: {{ template "hello-world.fullname" . }}-backend
+              value: {{ .Values.ui.api.host }}
             - name: HELLO_BACKEND_PORT
-              value: "{{ .Values.backend.image.internalPort }}"
+              value: "{{ .Values.ui.api.port }}"
           ports:
             - containerPort: {{ .Values.ui.image.internalPort }}
           livenessProbe:
