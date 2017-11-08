@@ -29,5 +29,4 @@ ui:
     externalPort: 80
   api:
     # These need to be overridden when deploying
-    host: minikube
-    port: 80
+    url: service

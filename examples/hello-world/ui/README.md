@@ -16,4 +16,4 @@ Build Docker Image:
 
 Run Docker:
 
-    docker run -p 4200:80 -e "HELLO_BACKEND_HOST=[backend-host]" -e "HELLO_BACKEND_PORT=[backend-port]" [image-name]:latest
+    docker run -p 4200:80 -e "HELLO_BACKEND_URL=[backend-url]" [image-name]:latest
