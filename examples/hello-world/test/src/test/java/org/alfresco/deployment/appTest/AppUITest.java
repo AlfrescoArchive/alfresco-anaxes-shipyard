@@ -114,7 +114,7 @@ public class AppUITest extends AppAbstract
             Assert.assertTrue(driver.getTitle().contains("Demo Application"),
                     String.format("The title is not displayed correctly and the result is [%s]", driver.getTitle()));
             Assert.assertTrue(driver.getPageSource().toString().contains("hello world"),
-                    String.format("The dom source does not contain hello world [%s]", driver.getPageSource().toString()));
+                    String.format("The dom source does not contain hello world "));
         }
         finally
         {
