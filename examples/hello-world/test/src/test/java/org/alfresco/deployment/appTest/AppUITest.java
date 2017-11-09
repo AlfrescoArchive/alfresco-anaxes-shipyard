@@ -18,6 +18,7 @@ package org.alfresco.deployment.appTest;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URL;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,6 +26,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -91,6 +94,32 @@ public class AppUITest extends AppAbstract
             if (rd != null) rd.close();
             if (response != null) response.close();
             if (client != null) client.close();
+        }
+    }
+    
+    /**
+     * Test to validate the UI dom is displayed correctly
+     * This test will create a selenium remote driver and validate that
+     * UI display the correct content
+     */
+    @Test
+    public void testHelloWorldUI() throws Exception
+    {
+        // I have defaulted to standalone container selenium hub
+        RemoteWebDriver driver = null;
+        try
+        {
+            driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.firefox());
+            driver.navigate().to(uiUrl);
+            Assert.assertTrue(driver.getTitle().contains("Demo Application"),
+                    String.format("The title is not displayed correctly and the result is [%s]", driver.getTitle()));
+            Assert.assertTrue(driver.getPageSource().toString().contains("hello world"),
+                    String.format("The dom source does not contain hello world [%s]", driver.getPageSource().toString()));
+        }
+        finally
+        {
+            if (driver != null)
+                driver.quit();
         }
     }
 }
