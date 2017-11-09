@@ -19,7 +19,6 @@ package org.alfresco.deployment.appTest;
 import java.io.File;
 
 import org.apache.commons.lang.RandomStringUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -31,11 +30,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 /**
  * regression test for sample App to validate the api request.
@@ -45,6 +46,39 @@ public class AppAPITest extends AppAbstract
     private static Log logger = LogFactory.getLog(AppAPITest.class);
     private CloseableHttpClient client;
     private CloseableHttpResponse response;
+    
+    private String restApiUrl;
+
+    @BeforeClass
+    public void setup() throws Exception
+    {
+        // do common setup
+        commonSetup();
+        
+        // get the appropriate URL
+        if (isMinikubeCluster())
+        {
+            restApiUrl = getUrlForMinikube("backend");
+        }
+        else
+        {
+            restApiUrl = getUrlForAWS("backend");
+        }
+        
+        // add the /hello to the base url
+        StringBuffer buffer = new StringBuffer(restApiUrl);
+        if (!restApiUrl.endsWith("/"))
+        {
+            buffer.append("/");
+        }
+        buffer.append("hello");
+        restApiUrl = buffer.toString();
+        
+        logger.info("REST API URL: " + restApiUrl);
+        
+        // wait for the URL to become available
+        waitForURL(restApiUrl);
+    }
 
     /**
      * Test to check if we pass a invalid app like just the url without body it
@@ -52,12 +86,11 @@ public class AppAPITest extends AppAbstract
      * 
      * @throws Exception
      */
-    @Test(priority = 0)
-    public void testInvalidAppRequestURL() throws Exception
+    @Test(priority=0)
+    public void testInvalidApiRequest() throws Exception
     {
-        logger.info("Test to validate the rest request for the following app :" + appUrl);
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl);
+        HttpGet getRequest = new HttpGet(restApiUrl);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertFalse((response.getStatusLine().getStatusCode() == 200),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
@@ -70,12 +103,11 @@ public class AppAPITest extends AppAbstract
      * @throws Exception
      * @author sprasanna
      */
-    @Test(priority = 1)
-    public void testValidAppRequestURL() throws Exception
+    @Test(priority=1)
+    public void testValidApiRequest() throws Exception
     {
-        logger.info("Test to validate the rest request for the following app :" + appUrl + "/welcome");
         client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl + File.separator + "welcome");
+        HttpGet getRequest = new HttpGet(restApiUrl + File.separator + "welcome");
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse("welcome", "Hello World!", response, 200);
     }
@@ -87,54 +119,55 @@ public class AppAPITest extends AppAbstract
      * 
      * @throws Exception
      */
-    @Test(priority = 2)
-    public void testHelloWorldAPI() throws Exception
+    @Test(priority=2)
+    public void testHelloWorldApiRequest() throws Exception
     {
         HttpGet getRequest;
         StringEntity jsonBody;
         String key = RandomStringUtils.randomAlphanumeric(4);
         String value = RandomStringUtils.randomAlphanumeric(4);
-        logger.info("Create request");
+        
+        // test message creation
         jsonBody = new StringEntity(generateJsonBody(key, value));
         client = HttpClientBuilder.create().build();
-        HttpPost postRequest = new HttpPost(appUrl);
+        HttpPost postRequest = new HttpPost(restApiUrl);
         postRequest.setHeader("Content-Type", "application/json");
         postRequest.setEntity(jsonBody);
         response = (CloseableHttpResponse) client.execute(postRequest);
         validateResponse(key, value, response, 201);
         closeResponse();
 
-        logger.info("Get request for created content");
-        getRequest = new HttpGet(appUrl + File.separator + key);
+        // retrieve new message
+        getRequest = new HttpGet(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse(key, value, response, 200);
         closeResponse();
 
-        logger.info("Update request for the same key " + key);
+        // update message
         value = RandomStringUtils.randomAlphanumeric(4);
         jsonBody = new StringEntity(generateJsonBody(key, value));
-        HttpPut putRequest = new HttpPut(appUrl + File.separator + key);
+        HttpPut putRequest = new HttpPut(restApiUrl + File.separator + key);
         putRequest.setHeader("Content-Type", "application/json");
         putRequest.setEntity(jsonBody);
         response = (CloseableHttpResponse) client.execute(putRequest);
         validateResponse(key, value, response, 200);
         closeResponse();
 
-        logger.info("Get request for updated content");
-        getRequest = new HttpGet(appUrl + File.separator + key);
+        // get updated message
+        getRequest = new HttpGet(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         validateResponse(key, value, response, 200);
         closeResponse();
 
-        logger.info("delete request for the same key " + key);
-        HttpDelete deleteRequest = new HttpDelete(appUrl + File.separator + key);
+        // delete message
+        HttpDelete deleteRequest = new HttpDelete(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(deleteRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 204),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));
         closeResponse();
 
-        logger.info("Get request for put content");
-        getRequest = new HttpGet(appUrl + File.separator + key);
+        // make sure message has been deleted
+        getRequest = new HttpGet(restApiUrl + File.separator + key);
         response = (CloseableHttpResponse) client.execute(getRequest);
         Assert.assertTrue((response.getStatusLine().getStatusCode() == 404),
                 String.format("The response code [%s] is incorrect", response.getStatusLine().getStatusCode()));

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.alfresco.deployment</groupId>
-	<artifactId>anaxes-hello-test</artifactId>
+	<artifactId>anaxes-hello-world-app-test</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	
 	<properties>
@@ -11,6 +11,11 @@
 		<apache.httpcomponents.httpclient>4.5.3</apache.httpcomponents.httpclient>
 		<com.googlecode.json-simple>1.1.1</com.googlecode.json-simple>
 		<common.lang>2.6</common.lang>
+		<fabric8.version>2.2.101</fabric8.version>
+      
+      <!-- Compile with Java 7, default is 5 -->
+      <maven.compiler.source>1.7</maven.compiler.source>
+      <maven.compiler.target>1.7</maven.compiler.target>
 	</properties>
 
 	<dependencies>
@@ -36,6 +41,11 @@
 			<artifactId>json-simple</artifactId>
 			<version>${com.googlecode.json-simple}</version>
 		</dependency>
+		<dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-api</artifactId>
+            <version>${fabric8.version}</version>
+        </dependency>
 	</dependencies>
 
     <build>
