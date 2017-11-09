@@ -6,9 +6,9 @@ registryPullSecrets: quay-registry-secret
 
 backend:
   image:
-    repository: quay.io/alfresco/anaxes-hello-service
+    repository: quay.io/alfresco/anaxes-hello-world-service
     tag: 0.1-SNAPSHOT
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     internalPort: 8080
   service:
     name: hello-world-app-backend
@@ -20,9 +20,9 @@ backend:
 
 ui:
   image:
-    repository: quay.io/alfresco/alfresco-sample-app-ui
+    repository: quay.io/alfresco/anaxes-hello-world-ui
     tag: 0.1-SNAPSHOT
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     internalPort: 80
   service:
     name: hello-world-app-ui
