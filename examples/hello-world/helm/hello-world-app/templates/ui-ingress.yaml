@@ -4,6 +4,7 @@ metadata:
   name: {{ template "hello-world.fullname" . }}-ui-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    ingress.kubernetes.io/rewrite-target: /
     ingress.kubernetes.io/ssl-redirect: "false"  
 spec:
   rules:

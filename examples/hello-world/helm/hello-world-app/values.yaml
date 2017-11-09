@@ -33,4 +33,4 @@ ui:
     path: /hello-ui
   api:
     # These may need to be overridden when deploying
-    url: hello-service
+    url: /hello-service
