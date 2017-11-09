@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -lt 1 ] ; then 
-  echo "usage: get-app-url.sh <release-name> [namespace]"
+  echo "usage: get-ui-url.sh <release-name> [namespace]"
   exit 1
 fi
 
