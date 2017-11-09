@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "hello-world.fullname" . }}-backend-ingress
+  name: {{ template "hello-world-backend.fullname" . }}-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
     ingress.kubernetes.io/rewrite-target: /
@@ -12,6 +12,6 @@ spec:
       paths:
       - path: {{ .Values.backend.ingress.path }}
         backend:
-          serviceName: {{ template "hello-world.fullname" . }}-backend
+          serviceName: {{ template "hello-world-backend.fullname" . }}
           servicePort: {{ .Values.backend.service.externalPort }}
 
