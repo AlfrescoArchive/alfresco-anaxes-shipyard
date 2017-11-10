@@ -83,7 +83,7 @@ helm install hello-world-app --namespace=example
 If you're deploying to an AWS cluster use the command below. This will cause Kubernetes to generate an Elastic Load Balancer providing access to the application and service.
 
 ```bash
-helm install hello-world-app --set ui.service.type=LoadBalancer --set backend.service.type=LoadBalancer --namespace=example
+helm install hello-world-app --namespace=example
 ```
 
 7. Check that the deployment worked by running the command below:
@@ -96,9 +96,11 @@ You should see output something similar to below. The first time you deploy the 
 
 <pre>
 NAME                                                       READY     STATUS    RESTARTS   AGE
-yucky-dragonfly-hello-world-app-backend-1490554866-6r84w   1/1       Running   0          1h
-yucky-dragonfly-hello-world-app-ui-2548061476-4szl0        1/1       Running   0          1h
-yucky-dragonfly-postgresql-925877059-5tk09                 1/1       Running   0          1h
+your-bison-hello-world-app-backend-433440179-bd31c         1/1       Running   0          37m
+your-bison-hello-world-app-ui-4187005864-wl4bx             1/1       Running   0          37m
+your-bison-nginx-ingress-controller-289934240-f2sh1        1/1       Running   0          37m
+your-bison-nginx-ingress-default-backend-714929657-7ds77   1/1       Running   0          37m
+your-bison-postgresql-400070053-8mxpw                      1/1       Running   0          37m
 </pre>
 
 ## Accessing the UI
@@ -201,4 +203,4 @@ To get to the dashboard if you're using minikube type <code>minikube dashboard</
 
 If the credentials are missing check they are present in ~/.docker/config.json, especially if you're running on a Mac as the "Securely store docker logins in macOS keychain" preference maybe enabled.
 
-If you get a response of <code>http://</code> from the <code>get-ui-url.sh</code> or <code>get-backend-url.sh</code> when deploying to a cluster on AWS, it either means you forgot to supply the <code>--set</code> parameters when deploying or the Elastic Load Balancer for the service failed to create successfully, this can sometimes be due to limits in your AWS account.
+If you get a response of <code>http://</code> from the <code>get-ui-url.sh</code> or <code>get-backend-url.sh</code> when deploying to a cluster on AWS, it either means the Elastic Load Balancer for the service failed to create successfully, this can sometimes be due to limits in your AWS account.
