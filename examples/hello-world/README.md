@@ -113,7 +113,7 @@ helm ls
 <code-root>/examples/hello-world/scripts/get-ui-url.sh [release] [namespace]
 ```
 
-1. Navigate to the returned URL to use the UI or add `/hello/welcome` to the URL to access the backend service's REST API. The screenshot below shows what you should see.
+1. Navigate to the returned URL to use the UI The screenshot below shows what you should see.
 
 ![UI](./diagrams/app-ui.png)
 
