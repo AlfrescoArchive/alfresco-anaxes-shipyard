@@ -49,7 +49,7 @@ public class AppAPITest extends AppAbstract
     
     private String restApiUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() throws Exception
     {
         // do common setup
@@ -58,11 +58,11 @@ public class AppAPITest extends AppAbstract
         // get the appropriate URL
         if (isMinikubeCluster())
         {
-            restApiUrl = getUrlForMinikube("backend");
+            restApiUrl = getUrlForMinikube();
         }
         else
         {
-            restApiUrl = getUrlForAWS("backend");
+            restApiUrl = getUrlForAWS();
         }
         
         // add the /hello to the base url
@@ -71,7 +71,7 @@ public class AppAPITest extends AppAbstract
         {
             buffer.append("/");
         }
-        buffer.append("hello");
+        buffer.append("hello-service/hello");
         restApiUrl = buffer.toString();
         
         logger.info("REST API URL: " + restApiUrl);

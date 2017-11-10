@@ -26,6 +26,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
@@ -38,7 +39,7 @@ public class AppUITest extends AppAbstract
     
     private String uiUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() throws Exception
     {
         // do common setup
@@ -47,12 +48,20 @@ public class AppUITest extends AppAbstract
         // get the appropriate URL
         if (isMinikubeCluster())
         {
-            uiUrl = getUrlForMinikube("ui");
+            uiUrl = getUrlForMinikube();
         }
         else
         {
-            uiUrl = getUrlForAWS("ui");
+            uiUrl = getUrlForAWS();
         }
+     // add the /hello to the base url
+        StringBuffer buffer = new StringBuffer(uiUrl);
+        if (!uiUrl.endsWith("/"))
+        {
+            buffer.append("/");
+        }
+        buffer.append("hello-ui/welcome");
+        uiUrl = buffer.toString();
         
         logger.info("UI URL: " + uiUrl);
         
@@ -113,8 +122,10 @@ public class AppUITest extends AppAbstract
             driver.navigate().to(uiUrl);
             Assert.assertTrue(driver.getTitle().contains("Demo Application"),
                     String.format("The title is not displayed correctly and the result is [%s]", driver.getTitle()));
-            Assert.assertTrue(driver.getPageSource().toString().contains("hello world"),
-                    String.format("The dom source does not contain hello world "));
+            // i have added a 1 second refresh time to before we collect the page source.. This is mainly used for aws
+            if(!isMinikubeCluster()) Thread.sleep(1000);
+           Assert.assertTrue(driver.findElement(By.tagName("body")).getText().contains("Hello World!"),
+                    String.format("The dom source does not contain'Hello World!'"));
         }
         finally
         {
