@@ -203,4 +203,4 @@ To get to the dashboard if you're using minikube type <code>minikube dashboard</
 
 If the credentials are missing check they are present in ~/.docker/config.json, especially if you're running on a Mac as the "Securely store docker logins in macOS keychain" preference maybe enabled.
 
-If you get a response of <code>http://</code> from the <code>get-ui-url.sh</code> or <code>get-backend-url.sh</code> when deploying to a cluster on AWS, it either means the Elastic Load Balancer for the service failed to create successfully, this can sometimes be due to limits in your AWS account.
+If you get a response of <code>http://</code> from the <code>get-ui-url.sh</code> or <code>get-backend-url.sh</code> when deploying to a cluster on AWS, it means the Elastic Load Balancer for the service failed to create successfully, this can sometimes be due to limits in your AWS account.
