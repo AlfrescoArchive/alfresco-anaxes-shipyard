@@ -1,8 +1,9 @@
-# Hello World Example 
+# Hello World Example
 
 To get familiar with how an Alfresco Engineer or a Solution Developer can build and use a deployment package for Kubernetes we have created a simple hello world app that you can use for reference as you get started.
 
 The application consists of several components:
+
 - Database to store the data, postgres in our case
 - Backend rest service to Create/Read/Update/Delete entries in the db
 - Frontend app as a UI for the backend service
@@ -26,22 +27,22 @@ The interactions between the components is shown in the following diagram:
 1. Create your working namespace:
 
 ```bash
-kubectl create namespace example 
+kubectl create namespace example
 ```
 
-2. Generate a base64 value for your dockercfg, this will allow Kubernetes to access quay.io
+1. Generate a base64 value for your dockercfg, this will allow Kubernetes to access quay.io
 
 ```bash
-cat ~/.docker/config.json | base64 
+cat ~/.docker/config.json | base64
 ```
 
 NOTE: If you're using Docker for Mac ensure your "Securely store docker logins in macOS keychain" preference is OFF (as shown in the diagram below) before running this step.
 
 [Docker Preferences](./diagrams/docker-preferences.png)
 
-3. Navigate to the 'examples' folder and insert the base64 string generated in the previous step to <code>.dockerconfigjson</code> in <code>secrets.yaml</code>
+1. Navigate to the 'examples' folder and insert the base64 string generated in the previous step to `.dockerconfigjson` in `secrets.yaml`
 
-4. Create your secret in your previously defined namespace.
+2. Create your secret in your previously defined namespace.
 
 ```bash
 kubectl create -f secrets.yaml --namespace example
@@ -49,11 +50,11 @@ kubectl create -f secrets.yaml --namespace example
 
 You should see the output below.
 
-<pre>
+```
 secret "quay-registry-secret" created
-</pre>
+```
 
-5. Navigate to the 'hello-world/helm' folder and update the chart dependencies to pull the postgres chart used to deploy the db.
+1. Navigate to the 'hello-world/helm' folder and update the chart dependencies to pull the postgres chart used to deploy the db.
 
 ```bash
 helm dep update hello-world-app
@@ -61,18 +62,19 @@ helm dep update hello-world-app
 
 You should see output something similar to below.
 
-<pre>
+```
 Hang tight while we grab the latest from your chart repositories...
 ...Unable to get an update from the "local" chart repository (http://127.0.0.1:8879/charts):
-        Get http://127.0.0.1:8879/charts/index.yaml: dial tcp 127.0.0.1:8879: getsockopt: connection refused
+    Get http://127.0.0.1:8879/charts/index.yaml: dial tcp 127.0.0.1:8879: getsockopt: connection refused
 ...Successfully got an update from the "stable" chart repository
 Update Complete. ⎈Happy Helming!⎈
-Saving 1 charts
+Saving 2 charts
 Downloading postgresql from repo https://kubernetes-charts.storage.googleapis.com
+Downloading nginx-ingress from repo https://kubernetes-charts.storage.googleapis.com
 Deleting outdated charts
-</pre>
+```
 
-6. Deploy the helm chart in your namespace.
+1. Deploy the helm chart in your namespace.
 
 If you're deploying to your local minikube use the following command:
 
@@ -86,22 +88,22 @@ If you're deploying to an AWS cluster use the command below. This will cause Kub
 helm install hello-world-app --namespace=example
 ```
 
-7. Check that the deployment worked by running the command below:
+1. Check that the deployment worked by running the command below:
 
 ```bash
 kubectl get pods --namespace example
 ```
 
-You should see output something similar to below. The first time you deploy the status column will say <code>ContainerCreating</code> for a while as it needs to download the docker image. If the status column shows an error take a look at the Troubleshooting section.
+You should see output something similar to below. The first time you deploy the status column will say `ContainerCreating` for a while as it needs to download the docker image. If the status column shows an error take a look at the Troubleshooting section.
 
-<pre>
+```
 NAME                                                       READY     STATUS    RESTARTS   AGE
 your-bison-hello-world-app-backend-433440179-bd31c         1/1       Running   0          37m
 your-bison-hello-world-app-ui-4187005864-wl4bx             1/1       Running   0          37m
 your-bison-nginx-ingress-controller-289934240-f2sh1        1/1       Running   0          37m
 your-bison-nginx-ingress-default-backend-714929657-7ds77   1/1       Running   0          37m
 your-bison-postgresql-400070053-8mxpw                      1/1       Running   0          37m
-</pre>
+```
 
 ## Accessing the UI
 
@@ -111,13 +113,13 @@ your-bison-postgresql-400070053-8mxpw                      1/1       Running   0
 helm ls
 ```
 
-2. Run the command below with the appropriate release name and namespace to get the base URL for the UI:
+1. Run the command below with the appropriate release name and namespace to get the base URL for the UI:
 
 ```bash
 <code-root>/examples/hello-world/scripts/get-ui-url.sh [release] [namespace]
 ```
 
-3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the backend service's REST API. The screenshot below shows what you should see.
+1. Navigate to the returned URL to use the UI or add `/hello/welcome` to the URL to access the backend service's REST API. The screenshot below shows what you should see.
 
 ![UI](./diagrams/app-ui.png)
 
@@ -129,13 +131,13 @@ helm ls
 helm ls
 ```
 
-2. Run the command below with the appropriate release name and namespace to get the base URL for the REST API:
+1. Run the command below with the appropriate release name and namespace to get the base URL for the REST API:
 
 ```bash
 <code-root>/examples/hello-world/scripts/get-backend-url.sh [release] [namespace]
 ```
 
-3. Use the following curl command to test the REST API.
+1. Use the following curl command to test the REST API.
 
 ```bash
 curl [url-from-step-2]/welcome
@@ -143,9 +145,9 @@ curl [url-from-step-2]/welcome
 
 You should see the following output:
 
-<pre>
+```
 {"key":"welcome","value":"Hello World!"}
-</pre>
+```
 
 ## Cleaning Up
 
@@ -155,13 +157,13 @@ You should see the following output:
 helm ls
 ```
 
-2. Run the command below with the appropriate release name to uninstall the deployment:
+1. Run the command below with the appropriate release name to uninstall the deployment:
 
 ```bash
 helm delete [release-name]
 ```
 
-3. Ensure everything has been removed by running the following command:
+1. Ensure everything has been removed by running the following command:
 
 ```bash
 helm status [release-name]
@@ -169,13 +171,13 @@ helm status [release-name]
 
 You should see the following output:
 
-<pre>
+```
 LAST DEPLOYED: Thu Nov  2 12:16:56 2017
 NAMESPACE: example
 STATUS: DELETED
-</pre>
+```
 
-4. Delete the namespace.
+1. Delete the namespace.
 
 ```bash
 kubectl delete namespace example
@@ -199,8 +201,8 @@ If the events indicate there is a problem fetching the docker image check that t
 
 ![Secret](./diagrams/secrets-in-dashboard.png)
 
-To get to the dashboard if you're using minikube type <code>minikube dashboard</code>. If you're using an AWS based Kubernetes cluster, type <code>kubectl proxy</code> and then navigate to <code>http://localhost:8081/ui</code> in a browser.
+To get to the dashboard if you're using minikube type `minikube dashboard`. If you're using an AWS based Kubernetes cluster, type `kubectl proxy` and then navigate to `<http://localhost:8081/ui>` in a browser.
 
 If the credentials are missing check they are present in ~/.docker/config.json, especially if you're running on a Mac as the "Securely store docker logins in macOS keychain" preference maybe enabled.
 
-If you get a response of <code>http://</code> from the <code>get-ui-url.sh</code> or <code>get-backend-url.sh</code> when deploying to a cluster on AWS, it means the Elastic Load Balancer for the service failed to create successfully, this can sometimes be due to limits in your AWS account.
+If you get a response of `http://` from the `get-ui-url.sh` or `get-backend-url.sh` when deploying to a cluster on AWS, it means the Elastic Load Balancer for the service failed to create successfully, this can sometimes be due to limits in your AWS account.
