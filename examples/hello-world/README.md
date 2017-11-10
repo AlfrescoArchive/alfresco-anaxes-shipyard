@@ -76,13 +76,7 @@ Deleting outdated charts
 
 1. Deploy the helm chart in your namespace.
 
-If you're deploying to your local minikube use the following command:
-
-```bash
-helm install hello-world-app --namespace=example
-```
-
-If you're deploying to an AWS cluster use the command below. This will cause Kubernetes to generate an Elastic Load Balancer providing access to the application and service.
+If you're deploying to your local minikube or to an AWS cluster use the following below. If deploying to an AWS cluster, this will cause Kubernetes to generate an Elastic Load Balancer providing access to the application and service.
 
 ```bash
 helm install hello-world-app --namespace=example
