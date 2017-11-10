@@ -134,7 +134,7 @@ helm ls
 1. Use the following curl command to test the REST API.
 
 ```bash
-curl [url-from-step-2]/welcome
+curl [url-from-step-2]
 ```
 
 You should see the following output:
