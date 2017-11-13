@@ -58,11 +58,11 @@ public class AppAPITest extends AppAbstract
         // get the appropriate URL
         if (isMinikubeCluster())
         {
-            restApiUrl = getUrlForMinikube();
+            restApiUrl = getUrlForMinikube("ingress-controller");
         }
         else
         {
-            restApiUrl = getUrlForAWS();
+            restApiUrl = getUrlForAWS("ingress-controller");
         }
         
         // add the /hello to the base url

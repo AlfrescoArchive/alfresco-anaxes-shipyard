@@ -48,11 +48,11 @@ public class AppUITest extends AppAbstract
         // get the appropriate URL
         if (isMinikubeCluster())
         {
-            uiUrl = getUrlForMinikube();
+            uiUrl = getUrlForMinikube("ingress-controller");
         }
         else
         {
-            uiUrl = getUrlForAWS();
+            uiUrl = getUrlForAWS("ingress-controller");
         }
      // add the /hello to the base url
         StringBuffer buffer = new StringBuffer(uiUrl);

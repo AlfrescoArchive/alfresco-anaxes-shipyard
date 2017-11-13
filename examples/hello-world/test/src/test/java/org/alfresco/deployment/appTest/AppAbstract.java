@@ -96,9 +96,10 @@ public class AppAbstract
     }
 
     /**
-     * Finds a service url running in minikube.
+     * Finds a service url running in minikube. This is a generic method 
+     * based on the service type it can find the node port. 
      */
-    protected String getUrlForMinikube() throws Exception
+    protected String getUrlForMinikube(String serviceType) throws Exception
     {
         String clusterUrl = client.getMasterUrl().toString();
         logger.info("cluster URL: " + clusterUrl);
@@ -113,7 +114,7 @@ public class AppAbstract
             logger.info("Found " + services.size() + " services");
             for (Service service : services)
             {
-                if (service.getMetadata().getName().contains("ingress-controller"))
+                if (service.getMetadata().getName().contains(serviceType))
                 {
                     logger.info("Looking up nodePort for service: " + service.getMetadata().getName());
                     if (service.getSpec().getPorts().size() != 0)
@@ -140,7 +141,7 @@ public class AppAbstract
         }
         else
         {
-            throw new IllegalStateException("Failed to find nodePort for ingress-controller '" +  
+            throw new IllegalStateException("Failed to find nodePort for runType '" + serviceType +    
                         "' in namespace '" + clusterNamespace + "' after " + sleepTotal + " seconds");
         }
     }
@@ -150,7 +151,7 @@ public class AppAbstract
      * 
      * @throws Exception
      */
-    protected String getUrlForAWS() throws Exception
+    protected String getUrlForAWS(String serviceType) throws Exception
     {
         logger.info("cluster URL: " + client.getMasterUrl().toString());
         
@@ -163,7 +164,7 @@ public class AppAbstract
             logger.info("Found " + services.size() + " services");
             for (Service service : services)
             {
-                if (service.getMetadata().getName().contains("ingress-controller"))
+                if (service.getMetadata().getName().contains(serviceType))
                 {
                     logger.info("Looking up hostname for service: " + service.getMetadata().getName());
                     if (service.getStatus().getLoadBalancer().getIngress().size() != 0)
@@ -186,7 +187,7 @@ public class AppAbstract
         
         if (url == null)
         {
-            throw new IllegalStateException("Failed to find url for ingress-controller'" +  
+            throw new IllegalStateException("Failed to find url for runType '" + serviceType +   
                         "' in namespace '" + clusterNamespace + "' after " + sleepTotal + " seconds");
         }
         
