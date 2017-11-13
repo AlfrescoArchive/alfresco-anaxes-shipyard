@@ -145,7 +145,7 @@ You should see the following output:
 {"key":"welcome","value":"Hello World!"}
 </pre>
 
-4. To create a new key trough the service use the following curl:
+4. To create a new key through the service use the following curl:
 
 ```bash
 curl -H "Content-Type: application/json" -d '{"key":"new-test-data","value":"Test 1,2,3"}' [url-from-step-2]
