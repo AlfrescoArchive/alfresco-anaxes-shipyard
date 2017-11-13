@@ -117,6 +117,7 @@ helm ls
 ![UI](./diagrams/app-ui.png)
 
 4. To access different keys in the db just change "welcome" to the key you've created and you should be able to see the value set for that key.
+Check out the next steps to find out how you can create a new key.
 
 ## Accessing the REST API
 
@@ -135,7 +136,7 @@ helm ls
 3. Use the following curl command to test the REST API.
 
 ```bash
-curl [url-from-step-2]
+curl [url-from-step-2]/welcome
 ```
 
 You should see the following output:
@@ -144,7 +145,17 @@ You should see the following output:
 {"key":"welcome","value":"Hello World!"}
 </pre>
 
-4. To access different keys in the db just change "welcome" to the key you've created and you should be able to see the value set for that key.
+4. To create a new key trough the service use the following curl:
+
+```bash
+curl -H "Content-Type: application/json" -d '{"key":"new-test-data","value":"Test 1,2,3"}' [url-from-step-2]
+```
+
+5. To access different keys in the db just change "welcome" to the key you've created and you should be able to see the value set for that key.
+
+```bash
+curl [url-from-step-2]/new-test-data
+```
 
 ## Cleaning Up
 
