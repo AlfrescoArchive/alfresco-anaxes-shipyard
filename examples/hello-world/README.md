@@ -17,9 +17,7 @@ The interactions between the components is shown in the following diagram:
 
 ## Prerequisites
 
-- A running Kubernetes cluster (this can be [minikube](https://kubernetes.io/docs/getting-started-guides/minikube/) or a cluster on [AWS](https://aws.amazon.com/blogs/compute/kubernetes-clusters-aws-kops/))
-- [Helm](https://github.com/kubernetes/helm/blob/master/docs/install.md) client is installed locally and deployed to your cluster
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) is installed and configured for your cluster
+A running Kubernetes cluster. You can get the cluster up and running using our ![Tutorial](../../docs/README.md) if you do not have one already.
 
 ## How to Deploy
 
@@ -156,6 +154,8 @@ curl -H "Content-Type: application/json" -d '{"key":"new-test-data","value":"Tes
 ```bash
 curl [url-from-step-2]/new-test-data
 ```
+For more examples on using the hello service you can check the ![postman collection](./service/src/test/postman/hello-service-test-collection.json).
+This collection can also imported in the ![Postman app](https://www.getpostman.com/docs/) and used there.
 
 ## Cleaning Up
 
