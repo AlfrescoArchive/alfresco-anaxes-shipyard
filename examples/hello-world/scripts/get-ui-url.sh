@@ -5,7 +5,7 @@ if [ $# -lt 1 ] ; then
   exit 1
 fi
 
-RELEASE=$1-hello-world-app-ui
+RELEASE=$1-nginx-ingress-controller
 
 if [ $# == 2 ] ; then 
   NAMESPACE="--namespace $2"
@@ -18,8 +18,8 @@ CONTEXT=$(kubectl config current-context)
 if [[ $CONTEXT == "minikube" ]] ; then
     IP=$(minikube ip)
     PORT=$(kubectl get service $RELEASE $NAMESPACE -o jsonpath={.spec.ports[0].nodePort})
-    echo "http://$IP:$PORT"
+    echo "http://$IP:$PORT/hello-ui/"
 else
-    URL=$(kubectl get services $RELEASE $NAMESPACE -o jsonpath={.status.loadBalancer.ingress[0].hostname})
-    echo "http://$URL"
+    DNSNAME=$(kubectl get services $RELEASE $NAMESPACE -o jsonpath={.status.loadBalancer.ingress[0].hostname})
+    echo "http://$DNSNAME/hello-ui/"
 fi

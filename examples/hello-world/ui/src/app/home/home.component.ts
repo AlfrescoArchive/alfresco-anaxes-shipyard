@@ -33,7 +33,7 @@ export class HomeComponent {
 
   constructor(private route: ActivatedRoute, private http:Http,
         appConfig: AppConfigService) {
-    this.apiUrl = appConfig.get('backEndHost') + '/';
+    this.apiUrl = appConfig.get('backEndHost') + '/hello/';
   }
 
   private ngOnInit() {

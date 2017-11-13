@@ -9,10 +9,10 @@ participant "REST API" as RA
 participant "Database" as DB
 
 U -> B: Navigate\nhomepage
-B -> UI: GET /hello/welcome
+B -> UI: GET /hello-ui/welcome
 UI -> B: Return page
 B -> B: Execute Javascript
-B -> RA: GET /hello/welcome
+B -> RA: GET /hello-service/welcome
 RA -> DB:Query table\nfor key "welcome"
 DB -> RA:Return value "Hello World!"
 |||

@@ -17,9 +17,7 @@ The interactions between the components is shown in the following diagram:
 
 ## Prerequisites
 
-- A running Kubernetes cluster (this can be [minikube](https://kubernetes.io/docs/getting-started-guides/minikube/) or a cluster on [AWS](https://aws.amazon.com/blogs/compute/kubernetes-clusters-aws-kops/))
-- [Helm](https://github.com/kubernetes/helm/blob/master/docs/install.md) client is installed locally and deployed to your cluster
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) is installed and configured for your cluster
+A running Kubernetes cluster. You can get the cluster up and running using our ![Tutorial](../../docs/README.md) if you do not have one already.
 
 ## How to Deploy
 
@@ -64,26 +62,21 @@ You should see output something similar to below.
 <pre>
 Hang tight while we grab the latest from your chart repositories...
 ...Unable to get an update from the "local" chart repository (http://127.0.0.1:8879/charts):
-        Get http://127.0.0.1:8879/charts/index.yaml: dial tcp 127.0.0.1:8879: getsockopt: connection refused
+	Get http://127.0.0.1:8879/charts/index.yaml: dial tcp 127.0.0.1:8879: getsockopt: connection refused
 ...Successfully got an update from the "stable" chart repository
 Update Complete. ⎈Happy Helming!⎈
-Saving 1 charts
+Saving 2 charts
 Downloading postgresql from repo https://kubernetes-charts.storage.googleapis.com
+Downloading nginx-ingress from repo https://kubernetes-charts.storage.googleapis.com
 Deleting outdated charts
 </pre>
 
 6. Deploy the helm chart in your namespace.
 
-If you're deploying to your local minikube use the following command:
+Whether you are deploying to minikube or to an AWS cluster use the command below. Keep in mind that when running on AWS the app will trigger Kubernetes to generate an Elastic Load Balancer providing access to the application and service, so you will probably have to wait a bit untill it gets created and you can access the application.
 
 ```bash
 helm install hello-world-app --namespace=example
-```
-
-If you're deploying to an AWS cluster use the command below. This will cause Kubernetes to generate an Elastic Load Balancer providing access to the application and service.
-
-```bash
-helm install hello-world-app --set ui.service.type=LoadBalancer --set backend.service.type=LoadBalancer --namespace=example
 ```
 
 7. Check that the deployment worked by running the command below:
@@ -96,9 +89,11 @@ You should see output something similar to below. The first time you deploy the 
 
 <pre>
 NAME                                                       READY     STATUS    RESTARTS   AGE
-yucky-dragonfly-hello-world-app-backend-1490554866-6r84w   1/1       Running   0          1h
-yucky-dragonfly-hello-world-app-ui-2548061476-4szl0        1/1       Running   0          1h
-yucky-dragonfly-postgresql-925877059-5tk09                 1/1       Running   0          1h
+your-bison-hello-world-app-backend-433440179-bd31c         1/1       Running   0          37m
+your-bison-hello-world-app-ui-4187005864-wl4bx             1/1       Running   0          37m
+your-bison-nginx-ingress-controller-289934240-f2sh1        1/1       Running   0          37m
+your-bison-nginx-ingress-default-backend-714929657-7ds77   1/1       Running   0          37m
+your-bison-postgresql-400070053-8mxpw                      1/1       Running   0          37m
 </pre>
 
 ## Accessing the UI
@@ -115,9 +110,12 @@ helm ls
 <code-root>/examples/hello-world/scripts/get-ui-url.sh [release] [namespace]
 ```
 
-3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the backend service's REST API. The screenshot below shows what you should see.
+3. Navigate to the returned URL to use the UI. The screenshot below shows what you should see.
 
 ![UI](./diagrams/app-ui.png)
+
+4. To access different keys in the db just change "welcome" to the key you've created and you should be able to see the value set for that key.
+Check out the next steps to find out how you can create a new key.
 
 ## Accessing the REST API
 
@@ -144,6 +142,20 @@ You should see the following output:
 <pre>
 {"key":"welcome","value":"Hello World!"}
 </pre>
+
+4. To create a new key through the service use the following curl:
+
+```bash
+curl -H "Content-Type: application/json" -d '{"key":"new-test-data","value":"Test 1,2,3"}' [url-from-step-2]
+```
+
+5. To access different keys in the db just change "welcome" to the key you've created and you should be able to see the value set for that key.
+
+```bash
+curl [url-from-step-2]/new-test-data
+```
+For more examples on using the hello service you can check the ![postman collection](./service/src/test/postman/hello-service-test-collection.json).
+This collection can also imported in the ![Postman app](https://www.getpostman.com/docs/) and used there.
 
 ## Cleaning Up
 
@@ -201,4 +213,4 @@ To get to the dashboard if you're using minikube type <code>minikube dashboard</
 
 If the credentials are missing check they are present in ~/.docker/config.json, especially if you're running on a Mac as the "Securely store docker logins in macOS keychain" preference maybe enabled.
 
-If you get a response of <code>http://</code> from the <code>get-ui-url.sh</code> or <code>get-backend-url.sh</code> when deploying to a cluster on AWS, it either means you forgot to supply the <code>--set</code> parameters when deploying or the Elastic Load Balancer for the service failed to create successfully, this can sometimes be due to limits in your AWS account.
+If you get a response of <code>http://</code> from the <code>get-ui-url.sh</code> or <code>get-backend-url.sh</code> when deploying to a cluster on AWS, it either means the Elastic Load Balancer for the service failed to create successfully, this can sometimes be due to limits in your AWS account.
