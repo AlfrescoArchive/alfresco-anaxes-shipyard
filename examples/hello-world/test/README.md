@@ -13,7 +13,7 @@ In order to set up selenium grid we can use the selenium standalone Firefox dock
 
 Following is the docker command to get the container
 
-docker run -d --name <name of the container> -p 4444:4444 selenium/standalone-firefox-debug
+    docker run -d --name <name of the container> -p 4444:4444 selenium/standalone-firefox-debug
 
 # Test run
 
@@ -25,4 +25,4 @@ docker run -d --name <name of the container> -p 4444:4444 selenium/standalone-fi
 
     mvn test -U -Dcluster.type=aws  -Dcluster.namespace=<namespace of cluster>  -DsuiteXml=app_suite_testng.xml
 
-*** app_suite_testng.xml - contains both the test related to backend and UI
+Note : app_suite_testng.xml - contains both the test related to backend and UI
