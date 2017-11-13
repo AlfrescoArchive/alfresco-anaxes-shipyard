@@ -1,4 +1,4 @@
-# How to run a Kubernetes cluster
+# How to Run a Kubernetes Cluster
 
 ## Locally via Minikube
 
