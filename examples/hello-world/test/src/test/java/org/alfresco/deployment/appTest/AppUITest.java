@@ -122,6 +122,7 @@ public class AppUITest extends AppAbstract
             driver.navigate().to(uiUrl);
             Assert.assertTrue(driver.getTitle().contains("Demo Application"),
                     String.format("The title is not displayed correctly and the result is [%s]", driver.getTitle()));
+            Thread.sleep(1000);
            Assert.assertTrue(driver.findElement(By.tagName("body")).getText().contains("Hello World!"),
                     String.format("The dom source does not contain'Hello World!'"));
         }
