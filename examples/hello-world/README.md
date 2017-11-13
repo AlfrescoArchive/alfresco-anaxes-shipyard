@@ -131,3 +131,9 @@ If the events indicate there is a problem fetching the docker image check that t
 To get to the dashboard if you're using minikube type <code>minikube dashboard</code>. If you're using an AWS based Kubernetes cluster, typically you'll use <code>https://api-server-hostname/ui</code>. You'll need to contact your administrator for authentication details or examine your local kubeconfig file.
 
 If the credentials are missing check they are present in ~/.docker/config.json, especially if you're running on a Mac as the "Securely store docker logins in macOS keychain" preference maybe enabled.
+
+If you have a [locally built docker image](../../docs/tips-and-tricks.md#using-locally-built-docker-image-in-minikube) you want to test you can prevent the latest image from being pulled by deploying with the following command:
+
+```bash
+helm install --set ui.image.pullPolicy=IfNotPresent --set backend.image.pullPolicy=IfNotPresent hello-world-app
+```
