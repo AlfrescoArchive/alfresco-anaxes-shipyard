@@ -122,8 +122,6 @@ public class AppUITest extends AppAbstract
             driver.navigate().to(uiUrl);
             Assert.assertTrue(driver.getTitle().contains("Demo Application"),
                     String.format("The title is not displayed correctly and the result is [%s]", driver.getTitle()));
-            // i have added a 1 second refresh time to before we collect the page source.. This is mainly used for aws
-            if(!isMinikubeCluster()) Thread.sleep(1000);
            Assert.assertTrue(driver.findElement(By.tagName("body")).getText().contains("Hello World!"),
                     String.format("The dom source does not contain'Hello World!'"));
         }
