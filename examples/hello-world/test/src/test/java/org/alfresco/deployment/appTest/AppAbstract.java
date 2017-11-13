@@ -186,7 +186,7 @@ public class AppAbstract
         
         if (url == null)
         {
-            throw new IllegalStateException("Failed to find url for ingress-controller '" +  
+            throw new IllegalStateException("Failed to find url for ingress-controller'" +  
                         "' in namespace '" + clusterNamespace + "' after " + sleepTotal + " seconds");
         }
         
@@ -218,7 +218,7 @@ public class AppAbstract
                             .setConnectTimeout(TIMEOUT).build();
                 getRequest.setConfig(config);
                 response = httpClient.execute(getRequest);
-                logger.info("response" + response.getStatusLine().getStatusCode());
+                logger.info("response code " + response.getStatusLine().getStatusCode());
                 // any response here means the URL is accessible 
                 logger.info("URL is available, took " + i + " retries");
                 break;
