@@ -2,5 +2,6 @@ dependencies:
   - name: postgresql
     version: ^0.8.3
     repository: https://kubernetes-charts.storage.googleapis.com
-    import-values:
-      - postgresPassword
+  - name: nginx-ingress
+    version: ^0.8.11
+    repository: https://kubernetes-charts.storage.googleapis.com

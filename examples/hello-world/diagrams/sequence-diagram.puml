@@ -5,22 +5,23 @@ Title: Hello World App Sequence Diagram
 actor "User" as U
 participant "Browser" as B
 participant "UI Layer" as UI
-participant "RestApi" as RA
+participant "REST API" as RA
 participant "Database" as DB
 
 U -> B: Navigate\nhomepage
-B -> UI: GET /homepage
-UI -> RA: GET /hello/welcome
+B -> UI: GET /hello-ui/welcome
+UI -> B: Return page
+B -> B: Execute Javascript
+B -> RA: GET /hello-service/welcome
 RA -> DB:Query table\nfor key "welcome"
 DB -> RA:Return value "Hello World!"
 |||
-RA -> UI:Response 200 OK
+RA -> B:Response 200 OK
 note right
 response format:
 {"test":<text-from-db>}
 end note
-UI -> B: Return\nhome page
-B -> U: Render\nhome page
+B -> U: Render\nwelcome message
 ||45||
 
 @enduml 

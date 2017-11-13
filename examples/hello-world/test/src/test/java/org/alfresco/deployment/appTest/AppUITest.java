@@ -26,46 +26,71 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class AppUITest extends AppAbstract
 {
     private static Log logger = LogFactory.getLog(AppUITest.class);
+    
+    private String uiUrl;
 
+    @BeforeClass
+    public void setup() throws Exception
+    {
+        // do common setup
+        commonSetup();
+        
+        // get the appropriate URL
+        if (isMinikubeCluster())
+        {
+            uiUrl = getUrlForMinikube("ui");
+        }
+        else
+        {
+            uiUrl = getUrlForAWS("ui");
+        }
+        
+        logger.info("UI URL: " + uiUrl);
+        
+        // wait for the URL to become available
+        waitForURL(uiUrl);
+    }
+    
     /**
      * Test to check the UI response is correct
      * @throws Exception
      * @throws
      */
     @Test
-    public void testApp() throws Exception
+    public void testHelloWorldAppUrl() throws Exception
     { 
         CloseableHttpClient client = null;
         CloseableHttpResponse response= null;
         BufferedReader rd = null ;
         try
         {
-        logger.info("Test the UI is working correctly");
-        client = HttpClientBuilder.create().build();
-        HttpGet getRequest = new HttpGet(appUrl);
-        response = client.execute(getRequest);
-        rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
-        StringBuffer result = new StringBuffer();
-        String line = "";
-        while ((line = rd.readLine()) != null)
-        {
-            result.append(line);
+            client = HttpClientBuilder.create().build();
+            HttpGet getRequest = new HttpGet(uiUrl);
+            response = client.execute(getRequest);
+            rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+    
+            StringBuffer result = new StringBuffer();
+            String line = "";
+            while ((line = rd.readLine()) != null)
+            {
+                result.append(line);
+            }
+            String htmlOutput = result.toString();
+            
+            Assert.assertFalse(htmlOutput.contains("error"), String.format("The page is not loaded correctly it contains error [%s]", htmlOutput));
+            Assert.assertTrue(htmlOutput.contains("<title>Demo Application</title>"), String.format("The title is not displayed correctly and the result is [%s]",htmlOutput));
         }
-        String htmlOutput = result.toString();
-        Assert.assertFalse(htmlOutput.contains("error"), String.format("The page is not loaded correctly it contains error [%s]", htmlOutput));
-        Assert.assertTrue(htmlOutput.contains("<title>Demo Application</title>"), String.format("The title is not displayed correctly and the result is [%s]",htmlOutput));
+        finally
+        {
+            if (rd != null) rd.close();
+            if (response != null) response.close();
+            if (client != null) client.close();
+        }
     }
-     finally
-     {
-         rd.close();
-         response.close();
-         client.close();
-     }
-   }
 }

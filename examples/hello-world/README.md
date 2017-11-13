@@ -5,7 +5,7 @@ To get familiar with how an Alfresco Engineer or a Solution Developer can build 
 The application consists of several components:
 - Database to store the data, postgres in our case
 - Backend rest service to Create/Read/Update/Delete entries in the db
-- Frontend app to proxy the backend service
+- Frontend app as a UI for the backend service
 
 The components, how they are packaged and deployed is shown in the diagram below:
 
@@ -17,9 +17,7 @@ The interactions between the components is shown in the following diagram:
 
 ## Prerequisites
 
-- A running Kubernetes cluster (this can be [minikube](https://kubernetes.io/docs/getting-started-guides/minikube/) or a cluster on [AWS](https://aws.amazon.com/blogs/compute/kubernetes-clusters-aws-kops/))
-- [Helm](https://github.com/kubernetes/helm/blob/master/docs/install.md) client is installed locally and deployed to your cluster
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) is installed and configured for your cluster
+A running Kubernetes cluster. You can get the cluster up and running using our ![Tutorial](../../docs/README.md) if you do not have one already.
 
 ## How to Deploy
 
@@ -29,22 +27,31 @@ The interactions between the components is shown in the following diagram:
 kubectl create namespace example 
 ```
 
-2. Generate a base64 value for your dockercfg, this will allow Kubernetes to access docker-internal.alfresco.com
+2. Generate a base64 value for your dockercfg, this will allow Kubernetes to access quay.io
 
 ```bash
 cat ~/.docker/config.json | base64 
 ```
 
-NOTE: If you're using Docker for Mac ensure your "Securely store docker logins in macOS keychain" preference is OFF before running this step.
+NOTE: If you're using Docker for Mac ensure your "Securely store docker logins in macOS keychain" preference is OFF (as shown in the diagram below) before running this step.
 
-3. Navigate to the helm folder and insert the base64 string generated in the previous step to <code>.dockerconfigjson</code> in <code>secrets.yaml</code>
+[Docker Preferences](./diagrams/docker-preferences.png)
+
+3. Navigate to the 'examples' folder and insert the base64 string generated in the previous step to <code>.dockerconfigjson</code> in <code>secrets.yaml</code>
 
 4. Create your secret in your previously defined namespace.
 
 ```bash
 kubectl create -f secrets.yaml --namespace example
 ```
-5. Update the chart dependencies to pull the postgres chart used to deploy the db.
+
+You should see the output below.
+
+<pre>
+secret "quay-registry-secret" created
+</pre>
+
+5. Navigate to the 'hello-world/helm' folder and update the chart dependencies to pull the postgres chart used to deploy the db.
 
 ```bash
 helm dep update hello-world-app
@@ -55,26 +62,21 @@ You should see output something similar to below.
 <pre>
 Hang tight while we grab the latest from your chart repositories...
 ...Unable to get an update from the "local" chart repository (http://127.0.0.1:8879/charts):
-        Get http://127.0.0.1:8879/charts/index.yaml: dial tcp 127.0.0.1:8879: getsockopt: connection refused
+	Get http://127.0.0.1:8879/charts/index.yaml: dial tcp 127.0.0.1:8879: getsockopt: connection refused
 ...Successfully got an update from the "stable" chart repository
 Update Complete. ⎈Happy Helming!⎈
-Saving 1 charts
+Saving 2 charts
 Downloading postgresql from repo https://kubernetes-charts.storage.googleapis.com
+Downloading nginx-ingress from repo https://kubernetes-charts.storage.googleapis.com
 Deleting outdated charts
 </pre>
 
 6. Deploy the helm chart in your namespace.
 
-If you're deploying to your local minikube use the following command:
+Whether you are deploying to minikube or to an AWS cluster use the command below. Keep in mind that when running on AWS the app will trigger Kubernetes to generate an Elastic Load Balancer providing access to the application and service, so you will probably have to wait a bit untill it gets created and you can access the application.
 
 ```bash
 helm install hello-world-app --namespace=example
-```
-
-If you're deploying to an AWS cluster use the command below. This will cause Kubernetes to generate an Elastic Load Balancer providing access to the application and service.
-
-```bash
-helm install hello-world-app --set ui.service.type=LoadBalancer --set backend.service.type=LoadBalancer --namespace=example
 ```
 
 7. Check that the deployment worked by running the command below:
@@ -87,12 +89,14 @@ You should see output something similar to below. The first time you deploy the 
 
 <pre>
 NAME                                                       READY     STATUS    RESTARTS   AGE
-yucky-dragonfly-hello-world-app-backend-1490554866-6r84w   1/1       Running   0          1h
-yucky-dragonfly-hello-world-app-ui-2548061476-4szl0        1/1       Running   0          1h
-yucky-dragonfly-postgresql-925877059-5tk09                 1/1       Running   0          1h
+your-bison-hello-world-app-backend-433440179-bd31c         1/1       Running   0          37m
+your-bison-hello-world-app-ui-4187005864-wl4bx             1/1       Running   0          37m
+your-bison-nginx-ingress-controller-289934240-f2sh1        1/1       Running   0          37m
+your-bison-nginx-ingress-default-backend-714929657-7ds77   1/1       Running   0          37m
+your-bison-postgresql-400070053-8mxpw                      1/1       Running   0          37m
 </pre>
 
-## Running the App
+## Accessing the UI
 
 1. Run the following command to get a list of your releases:
 
@@ -100,15 +104,92 @@ yucky-dragonfly-postgresql-925877059-5tk09                 1/1       Running   0
 helm ls
 ```
 
-2. Run the command below with the appropriate release name and namespace to get the base URL for the application:
+2. Run the command below with the appropriate release name and namespace to get the base URL for the UI:
 
 ```bash
-<code-root>/examples/hello-world/scripts/get-app-url.sh [release] [namespace]
+<code-root>/examples/hello-world/scripts/get-ui-url.sh [release] [namespace]
 ```
 
-3. Navigate to the returned URL to use the UI or add <code>/hello/welcome</code> to the URL to access the backend service's REST API. The screenshot below shows what you should see.
+3. Navigate to the returned URL to use the UI. The screenshot below shows what you should see.
 
 ![UI](./diagrams/app-ui.png)
+
+4. To access different keys in the db just change "welcome" to the key you've created and you should be able to see the value set for that key.
+Check out the next steps to find out how you can create a new key.
+
+## Accessing the REST API
+
+1. Run the following command to get a list of your releases:
+
+```bash
+helm ls
+```
+
+2. Run the command below with the appropriate release name and namespace to get the base URL for the REST API:
+
+```bash
+<code-root>/examples/hello-world/scripts/get-backend-url.sh [release] [namespace]
+```
+
+3. Use the following curl command to test the REST API.
+
+```bash
+curl [url-from-step-2]/welcome
+```
+
+You should see the following output:
+
+<pre>
+{"key":"welcome","value":"Hello World!"}
+</pre>
+
+4. To create a new key through the service use the following curl:
+
+```bash
+curl -H "Content-Type: application/json" -d '{"key":"new-test-data","value":"Test 1,2,3"}' [url-from-step-2]
+```
+
+5. To access different keys in the db just change "welcome" to the key you've created and you should be able to see the value set for that key.
+
+```bash
+curl [url-from-step-2]/new-test-data
+```
+For more examples on using the hello service you can check the ![postman collection](./service/src/test/postman/hello-service-test-collection.json).
+This collection can also imported in the ![Postman app](https://www.getpostman.com/docs/) and used there.
+
+## Cleaning Up
+
+1. Run the following command to get a list of your releases:
+
+```bash
+helm ls
+```
+
+2. Run the command below with the appropriate release name to uninstall the deployment:
+
+```bash
+helm delete [release-name]
+```
+
+3. Ensure everything has been removed by running the following command:
+
+```bash
+helm status [release-name]
+```
+
+You should see the following output:
+
+<pre>
+LAST DEPLOYED: Thu Nov  2 12:16:56 2017
+NAMESPACE: example
+STATUS: DELETED
+</pre>
+
+4. Delete the namespace.
+
+```bash
+kubectl delete namespace example
+```
 
 ## Troubleshooting
 
@@ -128,12 +209,8 @@ If the events indicate there is a problem fetching the docker image check that t
 
 ![Secret](./diagrams/secrets-in-dashboard.png)
 
-To get to the dashboard if you're using minikube type <code>minikube dashboard</code>. If you're using an AWS based Kubernetes cluster, typically you'll use <code>https://api-server-hostname/ui</code>. You'll need to contact your administrator for authentication details or examine your local kubeconfig file.
+To get to the dashboard if you're using minikube type <code>minikube dashboard</code>. If you're using an AWS based Kubernetes cluster, type <code>kubectl proxy</code> and then navigate to <code>http://localhost:8081/ui</code> in a browser.
 
 If the credentials are missing check they are present in ~/.docker/config.json, especially if you're running on a Mac as the "Securely store docker logins in macOS keychain" preference maybe enabled.
 
-If you have a [locally built docker image](../../docs/tips-and-tricks.md#using-locally-built-docker-image-in-minikube) you want to test you can prevent the latest image from being pulled by deploying with the following command:
-
-```bash
-helm install --set ui.image.pullPolicy=IfNotPresent --set backend.image.pullPolicy=IfNotPresent hello-world-app
-```
+If you get a response of <code>http://</code> from the <code>get-ui-url.sh</code> or <code>get-backend-url.sh</code> when deploying to a cluster on AWS, it either means the Elastic Load Balancer for the service failed to create successfully, this can sometimes be due to limits in your AWS account.
