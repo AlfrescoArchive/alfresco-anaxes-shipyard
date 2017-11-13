@@ -200,7 +200,7 @@ public class AppAbstract
      * 
      * @throws IllegalStateException
      */
-    protected void waitForURL(String url) throws Exception
+    protected void waitForURL(String url, int statusCode) throws Exception
     {
         logger.info("Waiting for '" + url + "' to become available...");
         
@@ -220,9 +220,19 @@ public class AppAbstract
                 getRequest.setConfig(config);
                 response = httpClient.execute(getRequest);
                 logger.info("response code " + response.getStatusLine().getStatusCode());
-                // any response here means the URL is accessible 
-                logger.info("URL is available, took " + i + " retries");
-                break;
+                if (response.getStatusLine().getStatusCode() == statusCode)
+                {
+                    // any response here means the URL is accessible 
+                    logger.info("URL is available, took " + i + " retries");
+                    break;
+                }
+                else
+                {
+                    if (response != null) response.close();
+                    logger.info("URL is available but does not match the status code (" + response.getStatusLine().getStatusCode() +"), sleeping for " + (SLEEP_DURATION/1000) + " seconds, retry count: " + i);
+                    Thread.sleep(SLEEP_DURATION);
+                    i++;
+                }
             }
             catch (ConnectException|UnknownHostException|SocketTimeoutException ex)
             {

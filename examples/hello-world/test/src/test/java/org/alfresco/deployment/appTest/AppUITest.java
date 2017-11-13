@@ -66,7 +66,7 @@ public class AppUITest extends AppAbstract
         logger.info("UI URL: " + uiUrl);
         
         // wait for the URL to become available
-        waitForURL(uiUrl);
+        waitForURL(uiUrl,200);
     }
     
     /**

@@ -77,7 +77,7 @@ public class AppAPITest extends AppAbstract
         logger.info("REST API URL: " + restApiUrl);
         
         // wait for the URL to become available
-        waitForURL(restApiUrl);
+        waitForURL(restApiUrl,405);
     }
 
     /**
