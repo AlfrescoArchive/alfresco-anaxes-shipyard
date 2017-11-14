@@ -19,13 +19,19 @@
 	</properties>
 
 	<dependencies>
+	 <!-- Test related dependency-->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>6.11</version>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-java</artifactId>
+        <version>3.7.1</version>
+   		 </dependency>
+		<!--  Http client related dependency -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -41,6 +47,7 @@
 			<artifactId>json-simple</artifactId>
 			<version>${com.googlecode.json-simple}</version>
 		</dependency>
+		<!--  Fabric8 dependency for kubernetes cluster validation -->
 		<dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-api</artifactId>

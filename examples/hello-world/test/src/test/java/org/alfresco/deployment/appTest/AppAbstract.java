@@ -96,12 +96,11 @@ public class AppAbstract
     }
 
     /**
-     * Finds a service url running in minikube.
+     * Finds a service url running in minikube. This is a generic method 
+     * based on the service type it can find the node port. 
      */
-    protected String getUrlForMinikube(String runType) throws Exception
+    protected String getUrlForMinikube(String serviceType) throws Exception
     {
-        logger.info("Retrieving " + runType + " URL for minikube...");
-
         String clusterUrl = client.getMasterUrl().toString();
         logger.info("cluster URL: " + clusterUrl);
         
@@ -115,7 +114,7 @@ public class AppAbstract
             logger.info("Found " + services.size() + " services");
             for (Service service : services)
             {
-                if (service.getMetadata().getName().contains(runType))
+                if (service.getMetadata().getName().contains(serviceType))
                 {
                     logger.info("Looking up nodePort for service: " + service.getMetadata().getName());
                     if (service.getSpec().getPorts().size() != 0)
@@ -142,7 +141,7 @@ public class AppAbstract
         }
         else
         {
-            throw new IllegalStateException("Failed to find nodePort for runType '" + runType + 
+            throw new IllegalStateException("Failed to find nodePort for runType '" + serviceType +    
                         "' in namespace '" + clusterNamespace + "' after " + sleepTotal + " seconds");
         }
     }
@@ -152,9 +151,8 @@ public class AppAbstract
      * 
      * @throws Exception
      */
-    protected String getUrlForAWS(String runType) throws Exception
+    protected String getUrlForAWS(String serviceType) throws Exception
     {
-        logger.info("Retrieving " + runType + " URL for AWS...");
         logger.info("cluster URL: " + client.getMasterUrl().toString());
         
         String url = null;
@@ -166,7 +164,7 @@ public class AppAbstract
             logger.info("Found " + services.size() + " services");
             for (Service service : services)
             {
-                if (service.getMetadata().getName().contains(runType))
+                if (service.getMetadata().getName().contains(serviceType))
                 {
                     logger.info("Looking up hostname for service: " + service.getMetadata().getName());
                     if (service.getStatus().getLoadBalancer().getIngress().size() != 0)
@@ -189,7 +187,7 @@ public class AppAbstract
         
         if (url == null)
         {
-            throw new IllegalStateException("Failed to find url for runType '" + runType + 
+            throw new IllegalStateException("Failed to find url for runType '" + serviceType +   
                         "' in namespace '" + clusterNamespace + "' after " + sleepTotal + " seconds");
         }
         
@@ -202,7 +200,7 @@ public class AppAbstract
      * 
      * @throws IllegalStateException
      */
-    protected void waitForURL(String url) throws Exception
+    protected void waitForURL(String url, int statusCode) throws Exception
     {
         logger.info("Waiting for '" + url + "' to become available...");
         
@@ -221,10 +219,20 @@ public class AppAbstract
                             .setConnectTimeout(TIMEOUT).build();
                 getRequest.setConfig(config);
                 response = httpClient.execute(getRequest);
-                
-                // any response here means the URL is accessible 
-                logger.info("URL is available, took " + i + " retries");
-                break;
+                logger.info("response code " + response.getStatusLine().getStatusCode());
+                if (response.getStatusLine().getStatusCode() == statusCode)
+                {
+                    // any response here means the URL is accessible 
+                    logger.info("URL is available, took " + i + " retries");
+                    break;
+                }
+                else
+                {
+                    if (response != null) response.close();
+                    logger.info("URL is available but does not match the status code (" + response.getStatusLine().getStatusCode() +"), sleeping for " + (SLEEP_DURATION/1000) + " seconds, retry count: " + i);
+                    Thread.sleep(SLEEP_DURATION);
+                    i++;
+                }
             }
             catch (ConnectException|UnknownHostException|SocketTimeoutException ex)
             {
@@ -243,4 +251,5 @@ public class AppAbstract
             throw new IllegalStateException("URL '" + url + "' is not available");
         }
     }
+    
 }
