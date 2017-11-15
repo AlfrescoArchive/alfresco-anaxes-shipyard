@@ -45,3 +45,16 @@ To switch to a different context type:
 ```bash
 kubectx [context-name]
 ```
+
+# SSH into AWS cluster
+
+If you followed the [steps](./running-a-cluster.md#in-aws-via-kops) to create an AWS cluster using kops you should have an SSH key available.
+
+Run the following commands using that key to access the remote master or node machines.
+
+```bash
+sh-add <your-path>/anaxes_bastion
+ssh-add -L
+ssh -A admin@<bastion_elb_a_record>
+ssh admin@<master/node_ip>
+```

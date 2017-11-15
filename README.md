@@ -24,6 +24,10 @@ The Alfresco [base Java docker image](https://github.com/Alfresco/alfresco-docke
 
 Similar to producing Docker images, components should also produce helm charts to package their deliverables. The Anaxes Shipyard project also provides some examples.
 
+## Architectural Decision Records (ADRs)
+
+Every architectural decision made as part of this project is being documented as an ADR, you can find them [here](./docs/adrs).
+
 # Getting Started
 
 ## How to Run a Kubernetes Cluster
