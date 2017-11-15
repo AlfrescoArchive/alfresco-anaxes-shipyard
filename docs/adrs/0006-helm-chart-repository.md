@@ -26,4 +26,4 @@ We decided that the most apropriate solution for our use case is Github Pages. W
 
 ## Consequences
 
-Using the official charts layout as a guide, create a repository called charts at https://github.com/Alfresco/charts. We will use the master branch. Also we will have a custom domain: kuberenetes-charts.alfresco.com. We will have stable and incubator as top-level folders and update the Anaxes Shipyard guidelines to describe how to use the Helm Repository. We will also change CI/CD pipeline to be able to push and pull charts to/from the Helm Repository.
+Using the official charts layout as a guide, we will create a repository called charts at https://github.com/Alfresco/charts. Also we will have a custom domain: kuberenetes-charts.alfresco.com. We will use stable and incubator as top-level folders and update the Anaxes Shipyard guidelines to describe how to use the Helm Repository. We will also change CI/CD pipeline to be able to push and pull charts to/from the Helm Repository.
