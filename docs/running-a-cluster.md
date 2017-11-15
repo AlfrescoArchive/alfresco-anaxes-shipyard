@@ -1,8 +1,10 @@
 # How to Run a Kubernetes Cluster
 
-## Locally via Minikube
+This page provides details on creating and running a Kubernetes cluster both locally for development, using Minikube and remotely on AWS, using kops.
 
-### Download Tools for Local Minikube Deployment
+# Locally via Minikube
+
+## Download Tools for Local Minikube Deployment
 
 1. Install Prerequisites for Minikube:
 
@@ -16,7 +18,7 @@
 
 1. Install [Minikube](https://github.com/kubernetes/minikube/releases).
 
-### Start Minikube
+## Start Minikube
 
 1. Start Kubernetes Cluster:
 
@@ -34,7 +36,7 @@ minikube start
  minikube dashboard
 ```
 
-### Stop and Delete Minikube Resources
+## Stop and Delete Minikube Resources
 
 1. Stop Kubernetes Cluster:
 
@@ -50,16 +52,16 @@ minikube delete
 
 *Notes*:
 
-1. Features that require a Cloud Provider will not work in Minikube. (e.g. LoadBalancers)
-1. Minikube runs a single-node Kubernetes cluster inside a VM on your laptop.
+* Features that require a Cloud Provider will not work in Minikube. (e.g. LoadBalancers)
+* Minikube runs a single-node Kubernetes cluster inside a VM on your laptop.
 
 *Useful resource*: [Running Kubernetes Locally via Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/).
 
-## In AWS via Kops
+# In AWS via Kops
 
-### Download Tools for AWS Deployment
+## Download Tools for AWS Deployment
 
-1. Install prerequisites for `kops`
+1. Install prerequisites for `kops`.
 
     a. [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
@@ -69,30 +71,50 @@ minikube delete
 
     d. A compatible version of [python](https://www.python.org)
 
-1. Install [kops](https://github.com/kubernetes/kops#installing)
+2. Install [kops](https://github.com/kubernetes/kops#installing).
 
-### Set Up and Start Kops Cluster
+## Set Up and Start Kops Cluster
 
-1. Set Up Required Resources
+1. Create an SSH key.
 
-    * Create [AWS resources](https://github.com/kubernetes/kops/blob/master/docs/aws.md#setup-your-environment) needed for your cluster.
+    ```bash
+    ssh-keygen -t rsa -b 4096 -C "anaxes_bastion" 
+    ```
 
-    Note: using a gossip-based cluster is simpler than one where you need to create DNS resources.
+2. [Set Up Required Resources](https://github.com/kubernetes/kops/blob/master/docs/aws.md#setup-your-environment) needed for your cluster.
 
-1. [Create the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#create-cluster-configuration)
+    Note: Using a gossip-based cluster is much simpler than creating a DNS based cluster.
+
+3. [Create the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#create-cluster-configuration) using the SSH key created in step 1.
 
     This will take a few minutes to create the EC2 instances, set up Kubernetes and make the ELB available.
 
-    Note: currently you need a default RSA ssh key prior to creating the cluster.
+4. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
 
-1. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
+5. Install the dashboard.
 
-### Stop and Delete AWS Resources
+    If you're setting up a production environment use the recommended approach which is more secure.
 
-1. [Delete the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#delete-the-cluster)
+    ```bash
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+    ```
+
+    To access the dashboard view [these instructions](https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.7.X-and-above).
+
+    If you're setting up a development environment use the alternative approach which makes access easier.
+
+    ```bash
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml
+    ```
+
+    To access the dashboard view [these instructions](https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.6.X-and-below).
+
+## Stop and Delete AWS Resources
+
+1. [Delete the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#delete-the-cluster).
 
     This deletes the EC2 instances and ELB.
 
-1. Delete the S3 Bucket
+2. Delete the S3 Bucket.
 
     If you followed the advice to create a versioned bucket, you will need to [delete all the versioned objects](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html) before deleting the bucket.
