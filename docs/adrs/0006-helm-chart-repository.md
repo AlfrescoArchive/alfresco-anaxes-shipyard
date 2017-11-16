@@ -4,7 +4,7 @@ Date: 2017-11-13
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
