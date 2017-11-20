@@ -39,6 +39,10 @@ usage: ${command_friendly_version} is configured via environment variables
 
   (Note that chart_source_dirs is a comma separated list, with no extraneous 
   whitespace.)
+
+  Extra environment variables for debugging include
+        helm_updater_cleanup='true'|'false' (default is 'true')
+        helm_updater_debug='true'|'false'
 EOF
 
   [ -n "${exit_value}" ] && exit "${exit_value}"
@@ -66,6 +70,10 @@ _exit () {
   shift
   _error "$*"
   exit "${exit_value}"
+}
+
+_debug () {
+  [ "${_debug_flag}" = "true" ] && _echo "[DEBUG] $*"
 }
 
 _info () {
@@ -110,6 +118,9 @@ _remove_tmp_dirs () {
     # for example, /tmp/ 
     local -r min_path_len=5
 
+    _debug "Contents of ${tmp_dir}"
+    [ "${_debug_flag}" = "true" ] && ls -l "${tmp_dir}"
+
     [ ${#tmp_dir} -gt ${min_path_len} ] && \
       [ -d "${tmp_dir}" ] && \
       rm -rf "${tmp_dir}"
@@ -121,6 +132,9 @@ _remove_tmp_dirs () {
     _remove_tmp_dirs_single "${dir}"
   done
 }
+
+# Global scope variables for Utility functions
+declare _debug_flag
 
 # ----------------------------------------------------------------------
 # Application specific functions
@@ -178,7 +192,8 @@ _package_charts () {
   do
     chart_source_dir=$(echo "${chart_source_dir}" | tr -d '\r\n')
     _info "Packaging ${chart_source_dir} into ${tmp_chart_dir}"
-    helm package --destination "${tmp_chart_dir}" "${chart_source_dir}" || return 1
+    helm package --dependency-update --destination "${tmp_chart_dir}" "${chart_source_dir}" || return 1
+
   done
 
   # Copy to git. This is ugly, and I'd prefer to have copied the
@@ -190,7 +205,6 @@ _package_charts () {
 
 # Create an updated index.yaml
 # The helm merge command has to run in the same folder as 
-
 # index.yaml, and the package, which is a bit rubbish
 _update_index () {
   _announce "${FUNCNAME[0]}" "$*"
@@ -203,6 +217,11 @@ _update_index () {
   local -r chart_dir_in_tmp_git_dir="${tmp_git_dir}${git_repo_subdir:+/${git_repo_subdir}}"
   local -r source_yaml="${chart_dir_in_tmp_git_dir}/index.yaml"
 
+  _debug "Contents of tmp chart dir ${tmp_chart_dir}"
+  [ "${helm_updater_debug}" = "true" ] && ls -l "${tmp_chart_dir}"
+  _debug "Contents of chart dir in tmp git dir ${chart_dir_in_tmp_git_dir}"
+  [ "${helm_updater_debug}" = "true" ] && ls -l "${chart_dir_in_tmp_git_dir}"
+
   # Get the correct index.yaml
   cp -f "${source_yaml}" "${tmp_chart_dir}"
 
@@ -211,17 +230,18 @@ _update_index () {
 
   # This merges this package into the (copy of) index.yaml
 
-  # FIXME Merging is failing.
-
-  cat index.yaml
-  ls .
+  _debug "Contents of index.yaml - pre-merge"
+  [ "${helm_updater_debug}" = "true" ] && cat index.yaml
+  _debug "Contents of tmp chart dir ${PWD}"
+  [ "${helm_updater_debug}" = "true" ] && ls -l .
 
   helm repo index \
     --merge index.yaml \
     --url "${helm_chart_repo}" \
     . || return 1
 
-  cat index.yaml
+  _debug "Contents of index.yaml - post-merge "
+  [ "${helm_updater_debug}" = "true" ] && cat index.yaml
 
   # Go back to whence we came
   popd &>> /dev/null
@@ -261,6 +281,16 @@ _publish_charts () {
 _check_variables () {
   _announce "${FUNCNAME[0]}"
 
+  ${helm_updater_debug:='false'}
+  ${helm_updater_cleanup:='true'}
+
+  # FIXME - I can't get this working in this function
+  # _debug_flag=${helm_updater_debug:-'false'}
+
+  # Announce what debugging settings are enabled
+  _debug "Debugging is on" 
+  _debug "helm_updater_cleanup is set to ${helm_updater_cleanup}"
+
   local error_message
 
   [ -z "${helm_chart_repo}" ] && error_message="helm_chart_repo is unset"
@@ -273,6 +303,13 @@ _check_variables () {
   return 1
 }
 
+# Wrapper around _remove_tmp_dirs() and more (if needed)
+_clean_up () {
+    _announce "${FUNCNAME[0]}" "$*"
+
+  [ "${helm_updater_cleanup}" = "true" ] && _remove_tmp_dirs "$@"
+}
+
 # Entry point of program after setting all the globals from command-line args
 main () {
   # Tidy up on exit
@@ -281,7 +318,7 @@ main () {
     local -r error_message="$2"
     local -r usage="$3"
 
-    _remove_tmp_dirs "${tmp_git_dir}" "${tmp_chart_dir}"
+    _clean_up "${tmp_git_dir}" "${tmp_chart_dir}"
     [ -n "${usage}" ] && _usage
     _exit "${exit_value}" "${error_message}"
   }
@@ -298,11 +335,13 @@ main () {
   # Create a temp directory to clone chart git repo into
   local tmp_git_dir
   tmp_git_dir=$(_mkdtemp) || _err_exit 1 "Creating git dir failed"
+  _debug "tmp_git_dir  = ${tmp_git_dir}"
 
   # Create a temp directory to package chart into and then merge chart 
   # index.yaml
   local tmp_chart_dir
   tmp_chart_dir=$(_mkdtemp) || _err_exit 1 "Creating chart dir failed"
+  _debug "tmp_chart_dir = ${tmp_chart_dir}"
 
   # Clone Source Git Repo for Helm Chart Repo
   message=$(_clone_charts "${tmp_git_dir}") || \
@@ -326,7 +365,7 @@ main () {
   _info "SUCCESS"
 
   # Tidy up at the end
-  # _remove_tmp_dirs "${tmp_git_dir}" "${tmp_chart_dir}"
+  _clean_up "${tmp_git_dir}" "${tmp_chart_dir}"
 
   exit 0
 }
@@ -352,6 +391,13 @@ declare git_branch
 declare git_repo_subdir
 declare git_commit_message
 declare chart_source_dirs
+# Debugging options
+declare helm_updater_debug
+declare helm_updater_cleanup
+
+# Global scope variables for Utility functions
+# FIXME - I can't get this working in a function
+_debug_flag=${helm_updater_debug:-'false'}
 
 # Call main() if we're not sourced
 [[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
