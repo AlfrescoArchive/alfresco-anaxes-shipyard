@@ -1,15 +1,13 @@
 # Guidelines
 
-The Anaxes project provides various guidelines from creating Docker images through to REST API design rules.
+The Anaxes project provides various guidelines from creating Docker images through to recommended project structures.
 
-## Docker Image Creation
+## Repositories
 
-TODO
+## Building
 
-## Helm Chart Creation
+## Testing
 
-TODO
+## Docker
 
-## REST API Design
-
-TODO
+## Helm Chart
