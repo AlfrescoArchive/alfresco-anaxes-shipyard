@@ -18,19 +18,3 @@ backend:
   ingress:
     path: /hello-service
 
-ui:
-  image:
-    repository: quay.io/alfresco/anaxes-hello-world-ui
-    tag: 0.1-SNAPSHOT
-    pullPolicy: Always
-    internalPort: 80
-  service:
-    name: hello-world-app-ui
-    # If running on AWS choose LoadBalancer as service Type
-    type: NodePort
-    externalPort: 80
-  ingress:
-    path: /hello-ui
-  api:
-    # These may need to be overridden when deploying
-    url: /hello-service
