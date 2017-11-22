@@ -187,7 +187,7 @@ _package_charts () {
   # Grab the commit message for chart_source_dir(s) - we assume that
   # all the charts being packaged are coming from a single git repo
   # This is a global.
-  git_commit_message="$(git -C "${chart_source_dirs_array[0]}" log --pretty=oneline --abbrev-commit --max-count=1)" || return 1
+  git_commit_message="$(git -C "${chart_source_dirs_array[0]}" log --pretty=format:%s --max-count=1)" || return 1
 
   # Package each chart into the tmp_chart_dir
   # We also copy them into the chart_dir in the tmp_git_dir
