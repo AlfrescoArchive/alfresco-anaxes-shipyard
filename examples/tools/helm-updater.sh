@@ -33,7 +33,6 @@ usage: ${command_friendly_version} is configured via environment variables
         git_repo='https://github.com/Alfresco/charts.git' \\
         git_branch='PROJECT-1234' \\
         git_repo_subdir='incubator' \\
-        git_commit_message='[PROJECT-1234] New feature in application-one' \\
         chart_source_dirs='application-one','application-two' \\
         ${command_name}
 
@@ -185,6 +184,11 @@ _package_charts () {
   local -a chart_source_dirs_array
   readarray -td, chart_source_dirs_array <<<"${chart_source_dirs}"
 
+  # Grab the commit message for chart_source_dir(s) - we assume that
+  # all the charts being packaged are coming from a single git repo
+  # This is a global.
+  git_commit_message="$(git -C "${chart_source_dirs_array[0]}" log --pretty=oneline --abbrev-commit --max-count=1)" || return 1
+
   # Package each chart into the tmp_chart_dir
   # We also copy them into the chart_dir in the tmp_git_dir
   local chart_source_dir
@@ -193,7 +197,6 @@ _package_charts () {
     chart_source_dir=$(echo "${chart_source_dir}" | tr -d '\r\n')
     _info "Packaging ${chart_source_dir} into ${tmp_chart_dir}"
     helm package --dependency-update --destination "${tmp_chart_dir}" "${chart_source_dir}" || return 1
-
   done
 
   # Copy to git. This is ugly, and I'd prefer to have copied the
