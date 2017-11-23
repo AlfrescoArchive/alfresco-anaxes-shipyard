@@ -21,11 +21,17 @@ The diagram below shows this in pictorial form and The [Hello World Service buil
 
 ![Build Plan Structure](./diagrams/build-plan.png)
 
+### Scripts
+
+The use of inline build scripts should be kept to a minimum (ideally avoided completely), having scripts under source control is best practice and allows developers to run the same actions the build performs.
+
+Hard-coded properties in scripts should also be avoided, externalize them in separate properties/yaml files.
+
 ### Publishing
 
-Publishing (releasing) an artifact must be performed by a manual release stage in the build plan, an example of this can be found [here](#TODO).
+Publishing (releasing) an artifact must be performed by a manual release stage in the build plan. The manual release stage must handle the manipulation of version numbers so that any in-development markers are removed, increment the version, move the artifact to it's stable container and tag the source repository appropriately. Java based projects, for example, will most likely use the [maven release plugin](http://maven.apache.org/maven-release/maven-release-plugin).
 
-Published artifacts must **NOT** be dependent on any SNAPSHOT versions.
+Published artifacts must **NOT** have any in-development dependencies.
 
 ### Security
 
