@@ -36,7 +36,7 @@ Every time a released image is updated a unique digest is created, the shortened
 
 The repository containing the Dockerfile must also be tagged with the shortened digest so that consumers can examine the exact state of a given image, if desired.
 
-TODO: Include diagram to demonstrate.
+TODO: Include diagram to demonstrate once versioning has been agreed.
 
 ### Image Creation
 
@@ -54,9 +54,9 @@ A [decision](../adrs/0002-docker-registry-for-internal-and-protected-images.md) 
 
 Stable, released images will be stored in an "alfresco" namespace, in-development images will be stored in an "alfresco-incubator" namespace.
 
-Access to Quay can be requested via an IT request.
+Access to Quay can be requested via a BDE ticket.
 
-As with code artifacts stored on Nexus, Enterprise customers are entitled to access the released protected images. The customer must first create an account on Quay.io and supply the username. An IT request can then be raised to give the customer access to the "alfresco" namespace.
+As with code artifacts stored on Nexus, Enterprise customers are entitled to access the released protected images. The customer must first create an account on Quay.io and supply the username. A BDE ticket can then be raised to give the customer access to the "alfresco" namespace.
 
 Credentials for pushing to both Quay and Docker Hub are provided via variables in Bamboo, credentials from individual user accounts should never be used in scripts or build plans.
 
