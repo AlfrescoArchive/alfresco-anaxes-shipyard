@@ -20,7 +20,7 @@ To avoid conflicts and make testing easier it's highly recommended to deploy int
 
 ### Deployment
 
-To test the deployment of Helm charts the usage of the [Fabric8 Java client](https://github.com/fabric8io/kubernetes-client) is recommended. It provides an API for interacting with Kubernetes clusters and can be used to verify pods were deployed as expected, for a working example examine [this project](https://github.com/Alfresco/alfresco-anaxes-hello-world-service).
+To test the deployment of Helm charts the usage of the [Fabric8 Java client](https://github.com/fabric8io/kubernetes-client) is recommended. It provides an API for interacting with Kubernetes clusters and can be used to verify pods were deployed as expected, for a working example examine [this project](https://github.com/Alfresco/alfresco-anaxes-hello-world).
 
 Any Kubernetes specific testing, for example, ensuring an ELB has been provisioned and is accessible, should be done in these tests.
 
