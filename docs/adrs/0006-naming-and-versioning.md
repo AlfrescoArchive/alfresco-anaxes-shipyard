@@ -4,7 +4,7 @@ Date: 2017-11-17
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
@@ -12,7 +12,7 @@ To ensure we use a consistent naming and versioning scheme for docker images and
 
 ## Decision
 
-The recommendations made in the [report] have been summarized below and formally stated in the [official guidelines](../guidelines/README.md).
+The recommendations made in the [report](https://ts.alfresco.com/share/s/DSA7dX-iSnG97AQkaftb2w) have been summarized below and formally stated in the [official guidelines](../guidelines/README.md).
 
 ### Docker
 
