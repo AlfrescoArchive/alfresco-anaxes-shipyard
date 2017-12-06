@@ -1,2 +1,0 @@
-Get the UI URL by running "scripts/get-ui-url.sh {{ .Release.Name }} {{ .Release.Namespace }}".
-Get the backend URL by running "scripts/get-backend-url.sh {{ .Release.Name }} {{ .Release.Namespace }}".
