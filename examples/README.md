@@ -9,7 +9,7 @@ For examples requiring protected Docker images at Quay.io your cluster must cont
 
 NOTE: If you're using Docker for Mac ensure your "Securely store docker logins in macOS keychain" preference is OFF (as shown in the diagram below) before running this step.
 
-[Docker Preferences](./diagrams/docker-preferences.png)
+![Docker Preferences](./diagrams/docker-preferences.png)
 
 1. Login with Docker to Quay.io with your credentials:
 
