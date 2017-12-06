@@ -77,25 +77,32 @@ In addition to the Docker [recommendations](https://docs.docker.com/engine/refer
 
 * All images produced and published by Alfresco must be prefixed with “alfresco-”, for example “alfresco-content-services”
 * All images produced and published by the Activiti open source project must be prefixed with “activiti-”, for example “activiti-cloud-runtime-bundle”
-* Images intended to be used as a starting point for other images should be prefixed with "alfresco-base-"
+* All images whose purpose is to be the starting point for other images should contain "base" in their name
 
 ### Versioning
 
-In-development images must be identified with a tag ending with "-SNAPSHOT" or "-JIRA-NUMBER" (for story/feature branches) and stored in the "alfresco-incubator" namespace.
+We will follow the approach adopted by the Docker community and provide a very specific version/tag that reflects the version of the artifact(s) being deployed as well as a set of "alias" versions for those that always want to use the most current version.
 
-The version number should reflect the version of the main artifact(s) the docker image is deploying. For example, our base Java image includes the OS and Java so the version would be similar to “oracle-8u151-centos-7.4”.
+Occasionally an image update is required to fix a bug in the Dockerfile or to fix a vulnerability in a package included in the image. In this scenario the approach the Docker community follows will be used, wherein the image gets updated with the same version/tag. Every time a released image is updated a unique digest is created, the shortened version of the digest must be used to create an additional tag of the image for those consumers that wish to rely on an exact image and avoid the “floating” version issue.
 
-Where appropriate “alias” versions should also be provided, for example, if consumers want to always use the latest Java update version they could use the “centos-7.4-oracle-8” version.
+To demonstrate with an example, the Content Services image may choose to use the following tags:
 
-Individual teams may choose how many alias versions they wish to provide.
+* alfresco-content-services:5.2.2.1
+* alfresco-content-services:5.2.2.1-a719933fb4df
+* alfresco-content-services:5.2.2
+* alfresco-content-services:5.2
 
-Occasionally an image update is required to fix a bug in the Dockerfile or to fix a vulnerability in a package included in the image. In this scenario the approach the Docker community follows must be used, wherein the image gets updated with the same version/tag.
+It will be left to individual teams to decide how many alias versions they want to provide.
 
-Every time a released image is updated a unique digest is created, the shortened version of the digest must be used to create an additional tag of the image for those consumers that wish to rely on an exact image and avoid the “floating” version issue. Using the Java base image example above the following tag would also be created “centos-7.4-oracle-8u151-882c834c0fba”.
+If multiple “flavors” of an image are to provided i.e. based on a different OS, the tag should include the version of each relevant artifact, following the Docker top-down format: ```<version>-<optional flavor>-<dependency>-<dependency flavor/version>....<dependency>-<dependency flavor/version>``` where .... represents each “layer”, the official [OpenJDK](https://hub.docker.com/_/openjdk) and [Tomcat](https://hub.docker.com/_/tomcat) images provide some good examples.
 
-The repository containing the Dockerfile must also be tagged with the shortened digest so that consumers can examine the exact state of a given image, if desired.
+The tag to be used will be specified in a properties file and a script will be used to apply the tag.
 
-TODO: Include diagram to demonstrate once versioning has been agreed.
+To prevent overwrites an image tag will be updated when a new product version or feature/story branch is created. During the development phase an image will use a "-SNAPSHOT" suffix on the product branch and a "-JIRA-NUMBER" suffix on feature/story branches. The suffix will be removed prior to creating a pull/merge request.
+
+Bamboo builds will push the in-development images on every build.
+
+A manual release stage will be provided in the build plan to push non-SNAPSHOT versions. An image tag and all it's aliases will be updated during release. This will also tag the GitHub repository with the tag containing the digest so that consumers can examine the exact state of a given image, if desired.
 
 ### Image Creation
 
@@ -103,7 +110,7 @@ The Anaxes Shipyard project provides some base images ([Java](https://github.com
 
 When building images on top ensure the Docker [best practices](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices) are followed and provide further common base images where appropriate.
 
-The image repository and tag should be defined in a [properties file](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/build.properties) so the versioning of the image is source controlled. It is highly recommended to use the built-in Bamboo Docker tasks and variables setup by the Delivery Engineering team. [This](https://bamboo.alfresco.com/bamboo/browse/PS-HWS) build plan can be used as a reference.
+The image repository and tag should be defined in a [properties file](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/build.properties) so the versioning of the image is source controlled. [This](https://bamboo.alfresco.com/bamboo/browse/PS-HWS) build plan can be used as a reference.
 
 In-development images can be pushed to the appropriate registry with every build, released images should only be pushed via the manual release stage.
 
@@ -111,11 +118,9 @@ In-development images can be pushed to the appropriate registry with every build
 
 A [decision](../adrs/0002-docker-registry-for-internal-and-protected-images.md) has been made to store all internal and protected images in [Quay.io](https://quay.io). All publicly accessible images will be stored in [Docker Hub](https://hub.docker.com).
 
-Stable, released images will be stored in an "alfresco" namespace, in-development images will be stored in an "alfresco-incubator" namespace.
-
 Access to Quay can be requested via a BDE ticket.
 
-As with code artifacts stored on Nexus, Enterprise customers are entitled to access the released protected images. The customer must first create an account on Quay.io and supply the username. A BDE ticket can then be raised to give the customer access to the "alfresco" namespace.
+As with code artifacts stored on Nexus, Enterprise customers are entitled to access the released protected images. The customer must first create an account on Quay.io and supply the username. Granting customer access to Quay can also be requested via a BDE ticket but it should be noted that inviting a customer to a team adds them to the Alfresco organization, inviting them to an individual repository is therefore recommended.
 
 Credentials for pushing to both Quay and Docker Hub are provided via variables in Bamboo, credentials from individual user accounts should never be used in scripts or build plans.
 
@@ -128,8 +133,6 @@ For deploying ADF Applications into production it is highly recommended to perfo
 As well as size and performance benefits this approach avoids the [node](https://hub.docker.com/r/_/node/) Docker image which at the time of writing has a number of un-fixable security vulnerabilities.
 
 The use of the Angular proxy feature is also discouraged as this prevents the back-end from being scaled independently from the front-end.
-
-TODO: Add details of ideal context path and "base href" for deployment?
 
 ## Helm Chart
 
