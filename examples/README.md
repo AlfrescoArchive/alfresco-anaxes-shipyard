@@ -36,3 +36,7 @@ You should see the output below.
 <pre>
 secret "quay-registry-secret" created
 </pre>
+
+## Examples
+
+* [Hello World](https://github.com/Alfresco/alfresco-anaxes-hello-world)
