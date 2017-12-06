@@ -1,5 +1,7 @@
 # Guidelines
 
+![Version Badge](https://img.shields.io/badge/Version-0.5-green.svg?style=flat-square)
+
 The Anaxes project provides various guidelines from creating Docker images through to recommended project structures.
 
 ## Repositories
