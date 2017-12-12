@@ -1,7 +1,5 @@
 
-# Examples
-
-## Prerequisites
+# Protected Images Secrets
 
 Most examples require a running Kubernetes cluster. You can get the cluster up and running using our ![Tutorial](https://github.com/Alfresco/alfresco-anaxes-shipyard/tree/master/docs/running-a-cluster.md) if you do not have one already.
 
@@ -23,9 +21,29 @@ docker login quay.io
 cat ~/.docker/config.json | base64
 ```
 
-3. Navigate to the 'examples' folder and insert the base64 string generated in the previous step to <code>.dockerconfigjson</code> in <code>secrets.yaml</code>
+3. Create the file <code>secrets.yaml</code>. Insert the following into the file
 
-4. Create your secret in your previously defined namespace.
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: quay-registry-secret
+type: kubernetes.io/dockerconfigjson
+data:
+# Docker registries config json in base64 to do this just run - cat ~/.docker/config.json | base64
+  .dockerconfigjson:
+```
+
+4. Add the base64 string generated in step 2 to <code>.dockerconfigjson</code> in <code>secrets.yaml</code>
+
+
+5. Create your working namespace:
+
+```bash
+kubectl create namespace example
+```
+
+6. Create your secret in your previously defined namespace.
 
 ```bash
 kubectl create -f secrets.yaml --namespace example
@@ -36,7 +54,3 @@ You should see the output below.
 <pre>
 secret "quay-registry-secret" created
 </pre>
-
-## Examples
-
-* [Hello World](https://github.com/Alfresco/alfresco-anaxes-hello-world)
