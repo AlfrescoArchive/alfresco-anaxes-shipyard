@@ -34,11 +34,18 @@ type: kubernetes.io/dockerconfigjson
 data:
 # Docker registries config json in base64 to do this just run - cat ~/.docker/config.json | base64
   .dockerconfigjson:
-``` 
+```
 
 4. Add the base64 string generated in step 2 to <code>.dockerconfigjson</code> in <code>secrets.yaml</code>
 
-5. Create your secret in your previously defined namespace.
+
+5. Create your working namespace:
+
+```bash
+kubectl create namespace example
+```
+
+6. Create your secret in your previously defined namespace.
 
 ```bash
 kubectl create -f secrets.yaml --namespace example
