@@ -1,7 +1,5 @@
 
-# Examples
-
-## Prerequisites
+# Protected Images Secrets
 
 Most examples require a running Kubernetes cluster. You can get the cluster up and running using our ![Tutorial](https://github.com/Alfresco/alfresco-anaxes-shipyard/tree/master/docs/running-a-cluster.md) if you do not have one already.
 
@@ -56,7 +54,3 @@ You should see the output below.
 <pre>
 secret "quay-registry-secret" created
 </pre>
-
-## Examples
-
-* [Hello World](https://github.com/Alfresco/alfresco-anaxes-hello-world)
