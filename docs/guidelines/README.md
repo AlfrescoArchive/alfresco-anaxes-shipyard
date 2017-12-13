@@ -126,6 +126,8 @@ As with code artifacts stored on Nexus, Enterprise customers are entitled to acc
 
 Credentials for pushing to both Quay and Docker Hub are provided via variables in Bamboo, credentials from individual user accounts should never be used in scripts or build plans.
 
+Read only credentials are also available for pulling images from Quay, these are used by [Helm charts](#secrets) to allow the Kubernetes cluster to pull protected images.
+
 One huge benefit of using Quay is the security scanning service it provides. After an image is updated it is scanned for known vulnerabilities and a report produced. This report should be monitored regularly and known vulnerabilities addressed as soon as possible.
 
 ## ADF Applications
@@ -177,3 +179,7 @@ To support the incubator to stable phases a repository typically has a stable an
 At the beginning of a charts life-cycle it should be pushed to an internal test repository and then pushed to the production repository when appropriate via a manual release stage in a build plan.
 
 If desired, a chart can be pushed to the incubator folder of the production repository to gather feedback, for example.
+
+### Secrets
+
+If a Helm chart needs to pull a protected image from Quay the common ```quay-registry-secret``` should be used, as described by the [secrets page](../../SECRETS.md).
