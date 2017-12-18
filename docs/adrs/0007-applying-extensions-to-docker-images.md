@@ -33,9 +33,9 @@ We investigated potential approaches for option 3 using volumes and initContaine
 
 ## Decision
 
-Given the number of disadvantages to applying extensions at runtime, customers are already used to applying their own extensions and they're having to learn a new deployment mechanism anyway, we are selecting the build time option.
+We will proceed with the build time option as there are a number of disadvantages to applying extensions at runtime, customers are already used to applying their own extensions and they're having to learn a new deployment mechanism anyway.
 
-As a company we will release a small number of images with and without common AMPs applied.
+We will release a small number of images with and without common AMPs applied.
 
 ## Consequences
 
