@@ -12,24 +12,15 @@ One of the main advantages of Docker images is their immutability. This means on
 
 Alfresco allows the core product to the enhanced via external modules in the form of [AMPs](https://docs.alfresco.com/5.2/concepts/dev-extensions-packaging-techniques-amps.html) or [simple JARs](https://docs.alfresco.com/5.2/concepts/dev-extensions-packaging-techniques-jar-files.html).
 
-This results in two big problems:
-* How do we release containers with every combination of AMP available?
-* How do customers apply their own extensions?
+This results in two big problems, how do we release containers with every combination of AMP available and how do customers apply their own extensions?
 
-We have three options:
-1. Apply extensions at build time, thus retaining the immutability advantage
-2. Apply extensions at runtime using a mechanism that doesn't change the contents of the container
-3. Apply extensions as the container initializes, breaking immutability.
+We have three options; apply extensions at build time (thus retaining the immutability advantage), apply extensions at runtime using a mechanism that doesn't change the contents of the container or apply extensions as the container initializes (breaking immutability).
 
-There are a number of disadvantages of applying extensions at runtime:
-* Immutability is lost (WAR file is changed)
-* Extension could fail to apply and prevent the container from starting
-* Slower startup time as AMP or JAR has to be fetched and applied
-* Potential security issue
+Applying extensions at build time means we will be forcing customers to build their own images depending on which official and custom extensions they require.
 
-Conversely, applying extensions at build time means we will be forcing customers to build their own images depending on which official and custom extensions they require.
+However, there are a number of disadvantages of applying extensions at runtime; The immutability advantage is lost (the WAR file is changed), an extension could fail to apply and prevent the container from starting, it has the potential to introduce performance issues as the AMP or JAR has to be fetched and applied and finally it opens a potential security hole as code can be applied to a container via a simple environment variable.
 
-We investigated potential approaches for option 3 using volumes and initContainers but this increases the complexity of the solution and doesn't resolve all the issues outlined above.
+We investigated potential approaches to keep the main container immutable by using volumes and initContainers but this increases the complexity of the solution and doesn't resolve all the issues outlined above.
 
 ## Decision
 
