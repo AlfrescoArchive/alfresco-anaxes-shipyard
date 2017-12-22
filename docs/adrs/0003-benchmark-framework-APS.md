@@ -9,10 +9,10 @@ Accepted
 ## Context
 
 ### Why benchmark test?
-In order to get a production ready deployment - https://issues.alfresco.com/jira/browse/PRODDEL-208 - we need to prove that system will be up and running for set of requirement defined in REQ project. Benchmark test are only to load the system based on REQ project and validate the same.
+In order to get a production ready deployment - [![Jira](https://img.shields.io/badge/Jira-PRIVATE-red.svg)](https://issues.alfresco.com/jira/browse/PRODDEL-208) - we need to prove that system will be up and running for set of requirement defined in REQ project. Benchmark test are only to load the system based on REQ project and validate the same.
 
-There are two-benchmark test frameworks available 
-*	APS Benchmark using Jmeter – provided by SE https://ts.alfresco.com/share/page/site/apsbenchmark/dashboard
+There are two-benchmark test frameworks available
+*	APS Benchmark using Jmeter – provided by SE [![APS Benchmark](https://img.shields.io/badge/APS Benchmark-PRIVATE-red.svg)]( https://ts.alfresco.com/share/page/site/apsbenchmark/dashboard)
 *	Write a benchmark test using the Alfresco community benchmark framework.
 	https://github.com/AlfrescoBenchmark/alfresco-benchmark
 
@@ -33,13 +33,13 @@ The current APS regression testing uses java script for REST API testing. They m
 1) Register Test Suite Definition to the management server.
 2) Create a test and run for the test suite.
 3) Schedule a run time for running the test- if not mentioned it will run immediately.
-4) Driver server will execute the test in alfresco server. 
+4) Driver server will execute the test in alfresco server.
 5) Record the execution time and the results in the mongo database.
 6) View the results in the management server.
 
-### Benchmark Test Driver 
+### Benchmark Test Driver
 
-*	The test driver should contain details about the test scenario we want to execute in the test-context.xml 
+*	The test driver should contain details about the test scenario we want to execute in the test-context.xml
 *	It should implement the event processor and load processor for executing the scenario.
 *	The event processor will load the scenarios and process the steps mentioned in scenario and load the results in the mongo db.
 *	The actual test scenarios can we written using TAS framework.
@@ -49,20 +49,20 @@ There are sample benchmark projects like Benchmark-claims where we can clone and
 
 TAS is a test automation framework written in JAVA, with a built in utility to help tester to write automation testing for RESTAPI. The tests are written using simple DSL language, where in for every REST request models are created and asserted for full JSON response.  
 These models can be reused for other testing such as  
-*	Data preparation for UI 
+*	Data preparation for UI
 *	Integration testing with other apps
 *	Benchmark testing
 
 ## Decision
 
-We will use the existing Jmeter benchmark test created by SE to prove that APS is production ready . 
+We will use the existing Jmeter benchmark test created by SE to prove that APS is production ready .
 As part of platfrom services team we are not planning to implementing new benchmark test for the deployment value bundle as it is not in scope.
-In the section below we have documented what is required to implement a new benchmark test for APS based on ACS. 
+In the section below we have documented what is required to implement a new benchmark test for APS based on ACS.
 
 ## Consequences
 
-As a result of this analysis we suggest APS team to add an item in their backlog to develop 
-new benchmark test using the Alfresco benchmark framework. 
+As a result of this analysis we suggest APS team to add an item in their backlog to develop
+new benchmark test using the Alfresco benchmark framework.
 
 ### Suggestion / Things to do  
 
@@ -74,7 +74,7 @@ As the current TAS is written for ACS, it would be good idea to extract common l
 
 #### Task for APS benchmark
 
-There are two types of benchmark we can perform 
+There are two types of benchmark we can perform
 *	UI scenario benchmark flow
 *	RESTAPI benchmark
 
@@ -87,6 +87,4 @@ Create the following benchmark driver for APS.
 
 #### UI benchmark Driver
 The APS protractor UI test should be modified to contain render login to make sure the page are loaded correctly before used in for benchmark flow.
-As benchmark driver is just a war file, need to write a new benchmark driver, which can use Nashorn framework to run the protractor java script page objects in java. 
-
-
+As benchmark driver is just a war file, need to write a new benchmark driver, which can use Nashorn framework to run the protractor java script page objects in java.

@@ -6,7 +6,7 @@ Whilst this project is primarliy aimed at internal engineering teams the content
 
 # What's in This Project?
 
-This section describes the parts Anaxes Shipyard is comprised of and provides links to where you'll find more information. 
+This section describes the parts Anaxes Shipyard is comprised of and provides links to where you'll find more information.
 
 ## Guidelines
 
@@ -16,7 +16,7 @@ To ensure we have a consistent approach to building, deploying and running deliv
 
 Components of the Alfresco platform should produce [Docker](https://www.docker.com) images as part of their build and release pipeline. In order to eliminate duplication and provide consistency the Anaxes Shipyard project will define several base Docker images that components can use as the starting point for their images.
 
-The Alfresco [base Java docker image](https://github.com/Alfresco/alfresco-docker-base-java) defines the starting point for any product/service that requires Java.
+The Alfresco [![base Java docker image](https://img.shields.io/badge/alfresco--docker--base--java-PRIVATE-red.svg)](https://github.com/Alfresco/alfresco-docker-base-java) defines the starting point for any product/service that requires Java.
 
 ## Helm Charts
 
