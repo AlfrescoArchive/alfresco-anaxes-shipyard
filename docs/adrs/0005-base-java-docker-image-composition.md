@@ -26,7 +26,7 @@ While Alpine is an attractive choice due to its simplicity, it may be more diffi
 
 While distribution workarounds mentioned above were considered, it was felt that they are not common practice and are likely to produce more problems than they solve.
 
-The summary [![report of the comparison](https://img.shields.io/badge/report of the comparison-PRIVATE-red.svg)](https://ts.alfresco.com/share/s/bqDcnHWpSrSGybJhMxf93A) contains more details.
+The summary [![report of the comparison](https://img.shields.io/badge/report%20of%20the%20comparison-PRIVATE-red.svg)](https://ts.alfresco.com/share/s/bqDcnHWpSrSGybJhMxf93A) contains more details.
 
 The base image Dockerfile is [![Dockerfile](https://img.shields.io/badge/Dockerfile-PRIVATE-red.svg)](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/Dockerfile).
 

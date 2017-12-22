@@ -24,7 +24,7 @@ The REST API of Quay.io allows our organization to potentially automate user pro
 
 Additionally, Quay / CoreOS seems strongly committed to their SaaS offering while Docker seems entirely focused on their Enterprise ‘on-prem’ product.
 
-The summary [![report of the comparison](https://img.shields.io/badge/report of the comparison-PRIVATE-red.svg)](https://ts.alfresco.com/share/s/mVAV1sGIReC_iqgMN0GGnQ) also contains reference links to the full investigation.
+The summary [![report of the comparison](https://img.shields.io/badge/report%20of%20the%20comparison-PRIVATE-red.svg)](https://ts.alfresco.com/share/s/mVAV1sGIReC_iqgMN0GGnQ) also contains reference links to the full investigation.
 
 ## Consequences
 
