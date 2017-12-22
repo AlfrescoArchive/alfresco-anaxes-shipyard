@@ -28,7 +28,7 @@ While distribution workarounds mentioned above were considered, it was felt that
 
 The summary [![report of the comparison](https://img.shields.io/badge/report%20of%20the%20comparison-PRIVATE-red.svg)](https://ts.alfresco.com/share/s/bqDcnHWpSrSGybJhMxf93A) contains more details.
 
-The base image Dockerfile is [![Dockerfile](https://img.shields.io/badge/Dockerfile-PRIVATE-red.svg)](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/Dockerfile).
+The base image Dockerfile is [here](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/Dockerfile).
 
 ## Consequences
 

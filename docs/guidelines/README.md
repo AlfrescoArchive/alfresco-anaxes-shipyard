@@ -108,11 +108,11 @@ A manual release stage will be provided in the build plan to push non-SNAPSHOT v
 
 ### Image Creation
 
-The Anaxes Shipyard project provides some base images ([![Java](https://img.shields.io/badge/alfresco--docker--base--java-PRIVATE-red.svg)](https://github.com/Alfresco/alfresco-docker-base-java), [![Tomcat](https://img.shields.io/badge/alfresco--docker--base--tomcat-PRIVATE-red.svg)](https://github.com/Alfresco/alfresco-docker-base-tomcat)) that should be used wherever possible.
+The Anaxes Shipyard project provides some base images ([Java](https://github.com/Alfresco/alfresco-docker-base-java), [Tomcat](https://github.com/Alfresco/alfresco-docker-base-tomcat)) that should be used wherever possible.
 
 When building images on top ensure the Docker [best practices](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices) are followed and provide further common base images where appropriate.
 
-The image repository and tag should be defined in a [![properties file](https://img.shields.io/badge/properties%20file-PRIVATE-red.svg)](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/build.properties) so the versioning of the image is source controlled.
+The image repository and tag should be defined in a [properties file](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/build.properties) so the versioning of the image is source controlled.
 
 This [![Bamboo build plan](https://img.shields.io/badge/Bamboo%20build%20plan-PRIVATE-red.svg)](https://bamboo.alfresco.com/bamboo/browse/PS-HWS) can be used as a reference.
 
