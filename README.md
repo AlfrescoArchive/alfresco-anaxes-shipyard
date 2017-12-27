@@ -6,7 +6,7 @@ Whilst this project is primarliy aimed at internal engineering teams the content
 
 # What's in This Project?
 
-This section describes the parts Anaxes Shipyard is comprised of and provides links to where you'll find more information. 
+This section describes the parts Anaxes Shipyard is comprised of and provides links to where you'll find more information.
 
 ## Guidelines
 
