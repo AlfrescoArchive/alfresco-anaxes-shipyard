@@ -26,15 +26,14 @@ While Alpine is an attractive choice due to its simplicity, it may be more diffi
 
 While distribution workarounds mentioned above were considered, it was felt that they are not common practice and are likely to produce more problems than they solve.
 
-The summary [report of the comparison](https://ts.alfresco.com/share/s/bqDcnHWpSrSGybJhMxf93A) contains more details.
+The summary [![report of the comparison](https://img.shields.io/badge/report%20of%20the%20comparison-PRIVATE-red.svg)](https://ts.alfresco.com/share/s/bqDcnHWpSrSGybJhMxf93A) contains more details.
 
 The base image Dockerfile is [here](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/Dockerfile).
 
 ## Consequences
 
-### Support 
+### Support
 It’s unclear what the expectations are around our support of the OS and Java included in this image, especially around security issues.  The Platform Services team should review this further with support.
 
 ### Legal
 As with most Linux-based OSes, there are GPL components which, again, we could be considered as distributing, so we should have legal determine any risk there or with using Oracle JRE even though there is a precedence with our installer.
-

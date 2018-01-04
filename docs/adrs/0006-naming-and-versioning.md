@@ -12,7 +12,7 @@ To ensure we use a consistent naming and versioning scheme for docker images and
 
 ## Decision
 
-The recommendations made in the [report](https://ts.alfresco.com/share/s/K9xN7IxnRsuQqyb5QqF2Bw) have been summarized below and formally stated in the [official guidelines](../guidelines/README.md).
+The recommendations made in the [![report](https://img.shields.io/badge/report-PRIVATE-red.svg)](https://ts.alfresco.com/share/s/K9xN7IxnRsuQqyb5QqF2Bw) have been summarized below and formally stated in the [official guidelines](../guidelines/README.md).
 
 ### Docker
 

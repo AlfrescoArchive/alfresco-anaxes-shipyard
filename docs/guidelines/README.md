@@ -6,7 +6,7 @@ The Anaxes project provides various guidelines from creating Docker images throu
 
 ## Repositories
 
-There are no further guidelines regarding repositories over and above the [standard policies](https://w3.alfresco.com/confluence/pages/viewpage.action?spaceKey=AEO&title=Code+Storage+Policies+and+Locations).
+There are no further guidelines regarding repositories over and above the [![standard policies](https://img.shields.io/badge/standard%20policies-PRIVATE-red.svg)](https://w3.alfresco.com/confluence/pages/viewpage.action?spaceKey=AEO&title=Code+Storage+Policies+and+Locations).
 
 However, it is highly recommended to manage the deployment artifacts in a separate GitHub repository and suffix the repository name with "-deployment".
 
@@ -14,7 +14,7 @@ For example, the deployment artifacts for the code in "alfresco-dsync-services" 
 
 ## Building
 
-In order to have a consistent, repeatable, audited process every artifact must be built and published by a build plan, ideally in [Bamboo](https://bamboo.alfresco.com).
+In order to have a consistent, repeatable, audited process every artifact must be built and published by a build plan, ideally in [![Bamboo](https://img.shields.io/badge/Bamboo-PRIVATE-red.svg)](https://bamboo.alfresco.com).
 
 ### Plans
 
@@ -25,7 +25,7 @@ Ideally there should be separate build plans for the code artifact, the Docker i
 * Build Helm Chart
 * Deploy & Test
 
-The diagram below shows this in pictorial form and The [Hello World Service build plan](https://bamboo.alfresco.com/bamboo/browse/PS-HWS) can be used as an illustrative example.
+The diagram below shows this in pictorial form and The [![Hello World Service build plan](https://img.shields.io/badge/Hello%20World%20Service%20build%20plan-PRIVATE-red.svg)](https://bamboo.alfresco.com/bamboo/browse/PS-HWS) can be used as an illustrative example.
 
 ![Build Plan Structure](./diagrams/build-plan.png)
 
@@ -112,7 +112,9 @@ The Anaxes Shipyard project provides some base images ([Java](https://github.com
 
 When building images on top ensure the Docker [best practices](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices) are followed and provide further common base images where appropriate.
 
-The image repository and tag should be defined in a [properties file](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/build.properties) so the versioning of the image is source controlled. [This](https://bamboo.alfresco.com/bamboo/browse/PS-HWS) build plan can be used as a reference.
+The image repository and tag should be defined in a [properties file](https://github.com/Alfresco/alfresco-docker-base-java/blob/master/build.properties) so the versioning of the image is source controlled.
+
+This [![Bamboo build plan](https://img.shields.io/badge/Bamboo%20build%20plan-PRIVATE-red.svg)](https://bamboo.alfresco.com/bamboo/browse/PS-HWS) can be used as a reference.
 
 In-development images can be pushed to the appropriate registry with every build, released images should only be pushed via the manual release stage.
 
