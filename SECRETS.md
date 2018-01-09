@@ -3,7 +3,7 @@
 
 Most examples require a running Kubernetes cluster. You can get the cluster up and running using our [Tutorial](https://github.com/Alfresco/alfresco-anaxes-shipyard/tree/master/docs/running-a-cluster.md) if you do not have one already.
 
-For examples requiring protected Docker images at Quay.io your cluster must contain a secret with credentials to be able to pull those images:
+For example, if your cluster is using protected Docker images at Quay.io your cluster must have access to a secret with credentials to be able to pull those images:
 
 NOTE: If you're using Docker for Mac ensure your "Securely store docker logins in macOS keychain" preference is OFF (as shown in the diagram below) before running this step.
 
