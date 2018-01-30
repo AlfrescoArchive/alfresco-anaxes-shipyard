@@ -1,4 +1,4 @@
-# 6. Naming and Versioning
+# 7. Naming and Versioning
 
 Date: 2017-11-17
 
