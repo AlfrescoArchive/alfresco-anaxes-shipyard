@@ -1,4 +1,4 @@
-# 7. Applying Extensions to Docker Images
+# 8. Applying Extensions to Docker Images
 
 Date: 2017-12-18
 

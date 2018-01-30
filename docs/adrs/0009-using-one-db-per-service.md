@@ -1,4 +1,4 @@
-# 8. Using one database per service
+# 9. Using one database per service
 
 Date: 2018-01-10
 
