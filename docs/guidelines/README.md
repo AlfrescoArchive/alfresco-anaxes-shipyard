@@ -172,6 +172,23 @@ New charts must start in the incubator state. Once they have been verified and t
 
 As a best practice, Charts should define both a readiness and health probe as this helps Kubernetes maintain a healthy system.
 
+Stable charts should meet the following requirements:
+
+* All the required charts must be pinned to a specific version
+* Must pass the linter (helm lint)
+* Should include source GitHub repositories for images used in the Chart
+* All security vulnerabilities have passed the security team assessment.
+* Should include an in-depth README.md, including:
+  * Short description of the Chart
+  * Any prerequisites or requirements
+  * Customization: explaining options in values.yaml and their defaults
+* Should include a short NOTES.txt where appropriate including:
+  * Any relevant post-installation information for the Chart
+  * Instructions on how to access the application or service provided by the Chart
+* Should avoid alpha features of Kubernetes
+
+We encourage to follow as many [best practices](https://github.com/kubernetes/helm/tree/master/docs/chart_best_practices) from the Kubernetes community as possible.
+
 ### Repository
 
 Like Maven and Docker, Helm can host charts in a repository, this makes dependency handling much simpler.
