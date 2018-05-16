@@ -187,7 +187,7 @@ Stable charts should meet the following requirements:
   * Instructions on how to access the application or service provided by the Chart
 * Should avoid alpha features of Kubernetes
 
-We encourage to follow as many [best practices](https://github.com/kubernetes/helm/tree/master/docs/chart_best_practices) from the Kubernetes community as possible.
+We encourage developers to follow as many [best practices](https://github.com/kubernetes/helm/tree/master/docs/chart_best_practices) from the Kubernetes community as possible.
 
 ### Repository
 
