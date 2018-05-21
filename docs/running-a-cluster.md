@@ -69,8 +69,7 @@ minikube delete
 
     c. [AWS CLI](https://aws.amazon.com/cli/) (Note: install `awscli`, and not `aws-shell`).
 
-    d. A compatible version of [python](https://www.python.org)
-
+   
 2. Install [kops](https://github.com/kubernetes/kops#installing).
 
 ## Set Up and Start Kops Cluster
@@ -85,10 +84,32 @@ minikube delete
 
     Note: Using a gossip-based cluster is much simpler than creating a DNS based cluster.
 
-3. [Create the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#create-cluster-configuration) using the SSH key created in step 1.
+3. Create the cluster using the SSH key created in step 1 and AWS s3 bucket created 
+   in step 2.
 
-    This will take a few minutes to create the EC2 instances, set up Kubernetes and make the ELB available.
+   Note this will take a few minutes to create the EC2 instances, set up Kubernetes and make the ELB available.
 
+   ```bash
+   export KOPS_NAME="<my kops name>"
+   export KOPS_STATE_STORE="s3://<my s3 bucket name>"
+   
+   kops create cluster \
+     --ssh-public-key ps-cluster.pub \
+     --name $KOPS_NAME \
+     --state $KOPS_STATE_STORE \
+     --node-count 2 \
+     --zones eu-west-1a,eu-west-1b \
+     --master-zones eu-west-1a,eu-west-1b,eu-west-1c \
+     --cloud aws \
+     --node-size m4.xlarge \
+     --master-size t2.medium \
+     -v 10 \
+     --kubernetes-version "1.8.4" \
+     --bastion \
+     --topology private \
+     --networking weave \
+     --yes
+   ```
 4. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
 
 5. Install the dashboard.
@@ -109,6 +130,9 @@ minikube delete
 
     To access the dashboard view [these instructions](https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.6.X-and-below).
 
+Provided all the steps were a success, the deployed cluster topology should be similar to that of 
+[Kops demo](https://github.com/kris-nova/kops-demo/tree/master/ha-master-private-subdomain):
+![](https://github.com/kris-nova/kops-demo/raw/master/ha-master-private-subdomain/k8s-aws-ha-private-master-sub.png)
 ## Stop and Delete AWS Resources
 
 1. [Delete the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#delete-the-cluster).
