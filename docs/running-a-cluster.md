@@ -2,6 +2,23 @@
 
 This page provides details on creating and running a Kubernetes cluster both locally for development, using Minikube and remotely on AWS, using kops.
 
+## Recommended Prerequisite Versions
+
+Procedures described in this document require some prerequisites. Where
+required, the following prerequisite versions are recommended:
+
+| Prerequisite   |   Version    |
+| ---------------|:-----------: | 
+| Docker         | 17.0.9.1     | 
+| Kubernetes     | 1.8.4        | 
+| Kubectl        | 1.8.4        | 
+| Helm           | 2.8.2        | 
+| Kops           | 1.8.1        |
+| Minikube       | 0.25.0       |
+
+Any discrepancies between the installed and recommended prerequisite version
+may cause your deployments to fail.
+
 # Locally via Minikube
 
 ## Download Tools for Local Minikube Deployment
@@ -26,7 +43,8 @@ This page provides details on creating and running a Kubernetes cluster both loc
 minikube start
 ```
 
-*Note*: When starting Minikube it is recommended to give it plenty of memory for hosting containers. You can do this by adding parameter --memory=6144 to minikube start command.
+*Note*: When starting Minikube it is recommended to give it plenty of memory for hosting containers. 
+You can do this by adding parameter `--memory=6144` to minikube start command.
 
 2. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
 
@@ -130,9 +148,9 @@ minikube delete
 
     To access the dashboard view [these instructions](https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.6.X-and-below).
 
-Provided all the steps were a success, the deployed cluster topology should be similar to that of 
+Provided all the steps were successful, deployed cluster topology should be similar to that of the
 [Kops demo](https://github.com/kris-nova/kops-demo/tree/master/ha-master-private-subdomain):
-![](https://github.com/kris-nova/kops-demo/raw/master/ha-master-private-subdomain/k8s-aws-ha-private-master-sub.png)
+![Kops demo topology](https://github.com/kris-nova/kops-demo/raw/master/ha-master-private-subdomain/k8s-aws-ha-private-master-sub.png)
 ## Stop and Delete AWS Resources
 
 1. [Delete the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#delete-the-cluster).
