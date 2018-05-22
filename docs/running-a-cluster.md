@@ -19,62 +19,6 @@ required, the following prerequisite versions are recommended:
 Any discrepancies between the installed and recommended prerequisite version
 may cause your deployments to fail.
 
-# Locally via Minikube
-
-## Download Tools for Local Minikube Deployment
-
-1. Install Prerequisites for Minikube:
-
-    a. [Hypervisor](https://kubernetes.io/docs/tasks/tools/install-minikube/#install-a-hypervisor)
-
-    b. [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-
-    c. [Helm Client](https://docs.helm.sh/using_helm/#installing-helm)
-
-    d. [Docker](https://docs.docker.com/engine/installation/#desktop)
-
-1. Install [Minikube](https://github.com/kubernetes/minikube/releases).
-
-## Start Minikube
-
-1. Start Kubernetes Cluster:
-
-```bash
-minikube start
-```
-
-*Note*: When starting Minikube it is recommended to give it plenty of memory for hosting containers. 
-You can do this by adding parameter `--memory=6144` to minikube start command.
-
-2. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
-
-3. If you want to access the dashboard:
-
-```bash
- minikube dashboard
-```
-
-## Stop and Delete Minikube Resources
-
-1. Stop Kubernetes Cluster:
-
-```bash
-minikube stop
-```
-
-2. Delete Kubernetes Cluster:
-
-```bash
-minikube delete
-```
-
-*Notes*:
-
-* Features that require a Cloud Provider will not work in Minikube. (e.g. LoadBalancers)
-* Minikube runs a single-node Kubernetes cluster inside a VM on your laptop.
-
-*Useful resource*: [Running Kubernetes Locally via Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/).
-
 # In AWS via Kops
 
 ## Download Tools for AWS Deployment
@@ -160,3 +104,60 @@ Provided all the steps were successful, deployed cluster topology should be simi
 2. Delete the S3 Bucket.
 
     If you followed the advice to create a versioned bucket, you will need to [delete all the versioned objects](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html) before deleting the bucket.
+
+# Locally via Minikube
+
+## Download Tools for Local Minikube Deployment
+
+1. Install Prerequisites for Minikube:
+
+    a. [Hypervisor](https://kubernetes.io/docs/tasks/tools/install-minikube/#install-a-hypervisor)
+
+    b. [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+    c. [Helm Client](https://docs.helm.sh/using_helm/#installing-helm)
+
+    d. [Docker](https://docs.docker.com/engine/installation/#desktop)
+
+1. Install [Minikube](https://github.com/kubernetes/minikube/releases).
+
+## Start Minikube
+
+1. Start Kubernetes Cluster:
+
+```bash
+minikube start
+```
+
+*Note*: When starting Minikube it is recommended to give it plenty of memory for hosting containers. 
+You can do this by adding parameter `--memory=6144` to minikube start command.
+
+2. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
+
+3. If you want to access the dashboard:
+
+```bash
+ minikube dashboard
+```
+
+## Stop and Delete Minikube Resources
+
+1. Stop Kubernetes Cluster:
+
+```bash
+minikube stop
+```
+
+2. Delete Kubernetes Cluster:
+
+```bash
+minikube delete
+```
+
+*Notes*:
+
+* Features that require a Cloud Provider will not work in Minikube. (e.g. LoadBalancers)
+* Minikube runs a single-node Kubernetes cluster inside a VM on your laptop.
+
+*Useful resource*: [Running Kubernetes Locally via Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/).
+
