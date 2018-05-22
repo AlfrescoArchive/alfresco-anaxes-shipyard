@@ -2,6 +2,109 @@
 
 This page provides details on creating and running a Kubernetes cluster both locally for development, using Minikube and remotely on AWS, using kops.
 
+## Recommended Prerequisite Versions
+
+Procedures described in this document require some prerequisites. Where
+required, the following prerequisite versions are recommended:
+
+| Prerequisite   |   Version    |
+| ---------------|:-----------: | 
+| Docker         | 17.0.9.1     | 
+| Kubernetes     | 1.8.4        | 
+| Kubectl        | 1.8.4        | 
+| Helm           | 2.8.2        | 
+| Kops           | 1.8.1        |
+| Minikube       | 0.25.0       |
+
+Any discrepancies between the installed and recommended prerequisite version
+may cause your deployments to fail.
+
+# In AWS via Kops
+
+## Download Tools for AWS Deployment
+
+1. Install prerequisites for `kops`.
+
+    a. [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+    b. [Helm Client](https://docs.helm.sh/using_helm/#installing-helm)
+
+    c. [AWS CLI](https://aws.amazon.com/cli/) (Note: install `awscli`, and not `aws-shell`).
+
+   
+2. Install [kops](https://github.com/kubernetes/kops#installing).
+
+## Set Up and Start Kops Cluster
+
+1. Create an SSH key.
+
+    ```bash
+    ssh-keygen -t rsa -b 4096 -C "anaxes_bastion" 
+    ```
+
+2. [Set Up Required Resources](https://github.com/kubernetes/kops/blob/master/docs/aws.md#setup-your-environment) needed for your cluster.
+
+    Note: Using a gossip-based cluster is much simpler than creating a DNS based cluster.
+
+3. Create the cluster using the SSH key created in step 1 and AWS s3 bucket created 
+   in step 2.
+
+   Note this will take a few minutes to create the EC2 instances, set up Kubernetes and make the ELB available.
+
+   ```bash
+   export KOPS_NAME="<my kops name>"
+   export KOPS_STATE_STORE="s3://<my s3 bucket name>"
+   
+   kops create cluster \
+     --ssh-public-key ps-cluster.pub \
+     --name $KOPS_NAME \
+     --state $KOPS_STATE_STORE \
+     --node-count 2 \
+     --zones eu-west-1a,eu-west-1b \
+     --master-zones eu-west-1a,eu-west-1b,eu-west-1c \
+     --cloud aws \
+     --node-size m4.xlarge \
+     --master-size t2.medium \
+     -v 10 \
+     --kubernetes-version "1.8.4" \
+     --bastion \
+     --topology private \
+     --networking weave \
+     --yes
+   ```
+4. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
+
+5. Install the dashboard.
+
+    If you're setting up a production environment use the recommended approach which is more secure.
+
+    ```bash
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+    ```
+
+    To access the dashboard view [these instructions](https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.7.X-and-above).
+
+    If you're setting up a development environment use the alternative approach which makes access easier.
+
+    ```bash
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml
+    ```
+
+    To access the dashboard view [these instructions](https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.6.X-and-below).
+
+Provided all the steps were successful, deployed cluster topology should be similar to that of the
+[Kops demo](https://github.com/kris-nova/kops-demo/tree/master/ha-master-private-subdomain):
+![Kops demo topology](https://github.com/kris-nova/kops-demo/raw/master/ha-master-private-subdomain/k8s-aws-ha-private-master-sub.png)
+## Stop and Delete AWS Resources
+
+1. [Delete the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#delete-the-cluster).
+
+    This deletes the EC2 instances and ELB.
+
+2. Delete the S3 Bucket.
+
+    If you followed the advice to create a versioned bucket, you will need to [delete all the versioned objects](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html) before deleting the bucket.
+
 # Locally via Minikube
 
 ## Download Tools for Local Minikube Deployment
@@ -26,7 +129,8 @@ This page provides details on creating and running a Kubernetes cluster both loc
 minikube start
 ```
 
-*Note*: When starting Minikube it is recommended to give it plenty of memory for hosting containers. You can do this by adding parameter --memory=6144 to minikube start command.
+*Note*: When starting Minikube it is recommended to give it plenty of memory for hosting containers. 
+You can do this by adding parameter `--memory=6144` to minikube start command.
 
 2. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
 
@@ -57,64 +161,3 @@ minikube delete
 
 *Useful resource*: [Running Kubernetes Locally via Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/).
 
-# In AWS via Kops
-
-## Download Tools for AWS Deployment
-
-1. Install prerequisites for `kops`.
-
-    a. [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-
-    b. [Helm Client](https://docs.helm.sh/using_helm/#installing-helm)
-
-    c. [AWS CLI](https://aws.amazon.com/cli/) (Note: install `awscli`, and not `aws-shell`).
-
-    d. A compatible version of [python](https://www.python.org)
-
-2. Install [kops](https://github.com/kubernetes/kops#installing).
-
-## Set Up and Start Kops Cluster
-
-1. Create an SSH key.
-
-    ```bash
-    ssh-keygen -t rsa -b 4096 -C "anaxes_bastion" 
-    ```
-
-2. [Set Up Required Resources](https://github.com/kubernetes/kops/blob/master/docs/aws.md#setup-your-environment) needed for your cluster.
-
-    Note: Using a gossip-based cluster is much simpler than creating a DNS based cluster.
-
-3. [Create the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#create-cluster-configuration) using the SSH key created in step 1.
-
-    This will take a few minutes to create the EC2 instances, set up Kubernetes and make the ELB available.
-
-4. Install [(Helm) Tiller](https://docs.helm.sh/using_helm/#installing-tiller).
-
-5. Install the dashboard.
-
-    If you're setting up a production environment use the recommended approach which is more secure.
-
-    ```bash
-    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-    ```
-
-    To access the dashboard view [these instructions](https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.7.X-and-above).
-
-    If you're setting up a development environment use the alternative approach which makes access easier.
-
-    ```bash
-    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml
-    ```
-
-    To access the dashboard view [these instructions](https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.6.X-and-below).
-
-## Stop and Delete AWS Resources
-
-1. [Delete the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#delete-the-cluster).
-
-    This deletes the EC2 instances and ELB.
-
-2. Delete the S3 Bucket.
-
-    If you followed the advice to create a versioned bucket, you will need to [delete all the versioned objects](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html) before deleting the bucket.
