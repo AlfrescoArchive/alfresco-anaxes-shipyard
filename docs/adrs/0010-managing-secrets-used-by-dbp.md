@@ -1,4 +1,4 @@
-# 9. Managing secrets used by DBP within the K8S deployment
+# 10. Managing secrets used by DBP within the K8S deployment
 
 Date: 2018-05-29
 
@@ -34,5 +34,7 @@ The third posible layer of security would be a k8s integration with an external 
 ## Decision
 
 
+
 ## Consequences
+
 
