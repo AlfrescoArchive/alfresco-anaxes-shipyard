@@ -1,3 +1,6 @@
+# This project has now been Archived
+
+
 # Welcome to Anaxes Shipyard
 
 The purpose of the Anaxes Shipyard project is to provide a set of guidelines, best practices and artifacts Alfresco engineering teams can use to produce deliverables ready for deployment into [Kubernetes](https://kubernetes.io).
